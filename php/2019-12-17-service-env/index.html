@@ -128,6 +128,12 @@
 <p>また、デプロイ後以下のエラーが発生したので、app.yamlにはそれぞれのキャッシュファイルの保存場所を指定しています。<br><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/56921310/laravel-on-app-engine-standard-the-srv-bootstrap-cache-directory-must-be-prese">Laravel on App Engine Standard: The /srv/bootstrap/cache directory must be present and writable</a></p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">APP_SERVICES_CACHE:</span> <span class="string">/tmp/services.php</span></span><br><span class="line"><span class="attr">APP_PACKAGES_CACHE:</span> <span class="string">/tmp/packages.php</span></span><br><span class="line"><span class="attr">APP_CONFIG_CACHE:</span> <span class="string">/tmp/config.php</span></span><br><span class="line"><span class="attr">APP_ROUTES_CACHE:</span> <span class="string">/tmp/routes.php</span></span><br></pre></td></tr></table></figure>
 
+<p>もう一つ以下のエラーが発生することがありました。  </p>
+<p><code>The /workspace/bootstrap/cache directory must be present and writable. </code></p>
+<p>これについてはcomposer.jsonのpost-autoload-dumpに<code>&quot;mkdir -p ./bootstrap/cache/&quot;</code>を追加して対処しました。  </p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;post-autoload-dump&quot;</span>: [</span><br><span class="line">    <span class="string">&quot;mkdir -p ./bootstrap/cache/&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Illuminate\\Foundation\\ComposerScripts::postAutoloadDump&quot;</span>,</span><br><span class="line">    <span class="string">&quot;@php artisan package:discover --ansi&quot;</span></span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+
+
 <h2 id="開発用"><a href="#開発用" class="headerlink" title="開発用"></a>開発用</h2><p>Homesteadで開発。<br>重いクエリとか見るのに以下のデバッグバーが必須。<br><a target="_blank" rel="noopener" href="https://github.com/barryvdh/laravel-debugbar">barryvdh/laravel-debugbar</a></p>
 <p>Cloud SQLのテーブルとかを操作したいのでAdminerをLaravelで使用できる以下を導入してます。<br><a target="_blank" rel="noopener" href="https://github.com/onecentlin/laravel-adminer">onecentlin/laravel-adminer</a></p>
 
