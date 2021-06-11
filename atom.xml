@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>kido Tech Blog</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://kido0617.github.io/"/>
+  <updated>2021-06-10T15:00:00.000Z</updated>
+  <id>https://kido0617.github.io/</id>
+  
+  <author>
+    <name>kido</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>オフセットを使い髪の毛や触手などの揺れ物を作る</title>
+    <link href="https://kido0617.github.io/spine/2021-06-11-tentacle/"/>
+    <id>https://kido0617.github.io/spine/2021-06-11-tentacle/</id>
+    <published>2021-06-10T15:00:00.000Z</published>
+    <updated>2021-06-10T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>こういう感じの揺れ物を作ります。</p><p><video src="/img/2021-06-11-tentacle/finish.mp4" width="600"  controls></video></p><h2 id="作り方"><a href="#作り方" class="headerlink" title="作り方"></a>作り方</h2><p>サンプルとして適当にボーンを置きます。</p><p><img src="/img/2021-06-11-tentacle/1.jpg" alt="step1"></p><p>以下に工程の動画を載せています。<br>全ボーンを選択し、一気に同じ角度だけ回転させて起点と終点と作り、ループアニメーションを作ります。<br>そこから、ドープシートにあるオフセットボタンを押します。<br>このオフセットの機能を使い、ボーンの根本から徐々にずらしていきます。<br>力の伝わりが少しずつ遅れるのを表現します。  </p><p><video src="/img/2021-06-11-tentacle/creating.mp4" width="1000"  controls></video></p><h2 id="問題点"><a href="#問題点" class="headerlink" title="問題点"></a>問題点</h2><p>上手な人のメイキング動画を観ていたら、このテクニックを使用していました。<br>このやり方だとそれっぽいのは作れるのですが、狙ったアニメーションが作れないです。<br>起点と終点を作ったときから完成形がどう動くかが想像しづらいのです。思ったより揺れなかったり揺れすぎてしまったりします。<br>オフセットを設定してからだとアニメーションを付け直すのが難しくて、いつも作り直しています。<br>どうするのがベストか知りたいところです。</p><h2 id="使用バージョン"><a href="#使用バージョン" class="headerlink" title="使用バージョン"></a>使用バージョン</h2><p>Spine 3.8.99</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;こういう感じの揺れ物を作ります。&lt;/p&gt;
+&lt;p&gt;&lt;video src=&quot;/img/2021-06-11-tentacle/finish.mp4&quot; width=&quot;600&quot;  controls&gt;&lt;/video&gt;&lt;/p&gt;
+&lt;h2 id=&quot;作り方&quot;&gt;&lt;a href=&quot;#作り方&quot; c
+      
+    
+    </summary>
+    
+    
+      <category term="Spine" scheme="https://kido0617.github.io/categories/Spine/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>細かいTips2</title>
+    <link href="https://kido0617.github.io/spine/2021-02-01-tips2/"/>
+    <id>https://kido0617.github.io/spine/2021-02-01-tips2/</id>
+    <published>2021-01-31T15:00:00.000Z</published>
+    <updated>2021-01-31T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="ボーンの描画順序"><a href="#ボーンの描画順序" class="headerlink" title="ボーンの描画順序"></a>ボーンの描画順序</h2><p>ボーンをメッシュに割り当てた後、下図のように曲げたときにメッシュ同士が重なる場合があります。  </p><p><img src="/img/2021-02-01-tips2/bind1.png" alt="メッシュの描画順序"></p><p>この重なった描画順序を変えたい場合、bindしたボーンの順番を変える必要があります。<br>例えば、以下のようにbindしたボーンの順番を変えてみます。</p><p><img src="/img/2021-02-01-tips2/bind-order.png" alt="bindの順番"></p><p>そうすると最初の図のメッシュは以下のようになり、ボーン2にbindされたメッシュは描画順序が上になります。</p><p><img src="/img/2021-02-01-tips2/bind2.png" alt="メッシュの描画順序2"></p><h2 id="コピペと複製"><a href="#コピペと複製" class="headerlink" title="コピペと複製"></a>コピペと複製</h2><p>Hierarchy上で<code>Ctrl + C</code>、<code>Ctrl + V</code>を押してコピペしても複製はできません。<br>Transformの値（回転とか位置とか）がコピーされるからです。<br>同じ座標にオブジェクトを配置するときは便利ですが、複製するにはTreeビュー下部にあるDuplicateボタンを押す必要があります。<br>最初、アニメーションを複製したいときにどうやって複製すればいいか迷いました。</p><p><img src="/img/2021-02-01-tips2/duplicate.png" alt="複製"></p><h2 id="コンストレイントの順序"><a href="#コンストレイントの順序" class="headerlink" title="コンストレイントの順序"></a>コンストレイントの順序</h2><p>パスコンストレイントとIKコンストレイントを併用しているときに、IKが効かなくなることがありました。<br>これはコンストレイントの順序が影響によるものでした。<br>下図のようにパスコンストレイント-&gt;IKコンストレイントの順番ならIKが効くのですが、逆だとIKが効きませんでした。<br>順序に関しては<a href="http://ja.esotericsoftware.com/spine-constraints">公式に記載</a>があります。</p><p><img src="/img/2021-02-01-tips2/constraint-order.png" alt="constraint-oder"></p><h2 id="使用バージョン"><a href="#使用バージョン" class="headerlink" title="使用バージョン"></a>使用バージョン</h2><p>Spine 3.8.99</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;ボーンの描画順序&quot;&gt;&lt;a href=&quot;#ボーンの描画順序&quot; class=&quot;headerlink&quot; title=&quot;ボーンの描画順序&quot;&gt;&lt;/a&gt;ボーンの描画順序&lt;/h2&gt;&lt;p&gt;ボーンをメッシュに割り当てた後、下図のように曲げたときにメッシュ同士が重なる場合があります。
+      
+    
+    </summary>
+    
+    
+      <category term="Spine" scheme="https://kido0617.github.io/categories/Spine/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>細かいTips1</title>
+    <link href="https://kido0617.github.io/spine/2021-01-29-tips/"/>
+    <id>https://kido0617.github.io/spine/2021-01-29-tips/</id>
+    <published>2021-01-28T15:00:00.000Z</published>
+    <updated>2021-01-28T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="自動バックアップ"><a href="#自動バックアップ" class="headerlink" title="自動バックアップ"></a>自動バックアップ</h2><p>Spineには自動バックアップの機能があります。<br>F12で開くSettingsメニューの下図の場所から開くことができます。  </p><p><img src="/img/2021-01-29-tips/backup.png" alt="自動バックアップ"></p><p>デフォルトでは15分間隔で自動バックアップが行われます。<br>ただ、このバックアップはSpineのプロジェクトファイルだけでimagesフォルダはバックアップの対象ではありません。  </p><h2 id="グラフのプリセットの共有"><a href="#グラフのプリセットの共有" class="headerlink" title="グラフのプリセットの共有"></a>グラフのプリセットの共有</h2><p>アニメーションを作成するときに使うグラフですが、プリセットを作ることができます。<br>このプリセットはプロジェクトをまたいでも保存されているので便利です。<br>しかし、他人とこれを共有する機能がありません。<br>プリセットはWindowsでは<code>C:\Users\ユーザ名\Spine\prefs.json</code>に下図のようにデータとして保存されています(下図はjsonデータをフォーマットして見やすくしています)。  </p><p><img src="/img/2021-01-29-tips/preset.png" alt="プリセットの共有"></p><p>このjsonファイルのgraphPresetsの値をコピーして渡せば、一応他人とも共有できそうです。</p><h2 id="ドープシートで全キーを表示する"><a href="#ドープシートで全キーを表示する" class="headerlink" title="ドープシートで全キーを表示する"></a>ドープシートで全キーを表示する</h2><p>アニメーションを作成しているときに、ドープシートで全キーの調整をしたかったのですが、全キーを表示する方法がわかりませんでした(選択しているボーンのキーしか表示されない）<br>スペースキーを押すと選択が解除されるので、これで全キーを見ることができます。  </p><p>参考 : <a href="http://ja.esotericsoftware.com/forum/How-to-show-all-bones-in-the-Dopesheet-59">How to show all bones in the Dopesheet</a></p><h2 id="PhotoshopToSpineでインポート後のファイル"><a href="#PhotoshopToSpineでインポート後のファイル" class="headerlink" title="PhotoshopToSpineでインポート後のファイル"></a>PhotoshopToSpineでインポート後のファイル</h2><p>PhotoshopToSpineを使うとimagesフォルダと設定用のjsonファイルが生成されます。<br>jsonファイルを使ってSpineからインポートするのですが、インポート後はpsdファイルもjsonファイルもspineプロジェクト側からは参照しません。  </p><h2 id="パーツの追加読み込み"><a href="#パーツの追加読み込み" class="headerlink" title="パーツの追加読み込み"></a>パーツの追加読み込み</h2><p>製作中にパーツを追加したくなった場合、psdを修正し、PhotoshopToSpineを使ってエクスポートし直します。<br>jsonファイルを最初にインポートしたときと同様の手順を踏むと以下のように、既存のスケルトンに追加するか、新たなスケルトンを作るか選択できます。<br>既にあるパーツは無視する設定もあるので、新たに追加したものだけを読み込めます。</p><p><img src="/img/2021-01-29-tips/add.png" alt="追加読み込み"></p><h2 id="使用バージョン"><a href="#使用バージョン" class="headerlink" title="使用バージョン"></a>使用バージョン</h2><p>Spine 3.8.99</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;自動バックアップ&quot;&gt;&lt;a href=&quot;#自動バックアップ&quot; class=&quot;headerlink&quot; title=&quot;自動バックアップ&quot;&gt;&lt;/a&gt;自動バックアップ&lt;/h2&gt;&lt;p&gt;Spineには自動バックアップの機能があります。&lt;br&gt;F12で開くSettingsメニュー
+      
+    
+    </summary>
+    
+    
+      <category term="Spine" scheme="https://kido0617.github.io/categories/Spine/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>IK作成時にボーンがずれないようにする</title>
+    <link href="https://kido0617.github.io/spine/2021-01-28-ik-making/"/>
+    <id>https://kido0617.github.io/spine/2021-01-28-ik-making/</id>
+    <published>2021-01-27T15:00:00.000Z</published>
+    <updated>2021-01-27T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="クリックでIKのターゲットを作成した時のずれ"><a href="#クリックでIKのターゲットを作成した時のずれ" class="headerlink" title="クリックでIKのターゲットを作成した時のずれ"></a>クリックでIKのターゲットを作成した時のずれ</h2><p>IKを作成する際、親子ボーンを選択したあとに適当なスペースをクリックすると、IKのターゲットが作成されます。<br>しかし、位置が正確でないためボーンが微妙にずれます。<br>選択したボーンの先端の位置にIKのターゲットが作成できれば、ずれないのですが、ボーンの先端の位置を取得することができません。  </p><p><img src="/img/2021-01-28-ik-making/click.png" alt="IKターゲットの作成"></p><h2 id="既存のボーンをターゲットにする"><a href="#既存のボーンをターゲットにする" class="headerlink" title="既存のボーンをターゲットにする"></a>既存のボーンをターゲットにする</h2><p>IKを作成するときにHierarchyから既存のボーンを選択すると、それをIKのターゲットにできます。<br>これを用いて正確な位置にIKターゲットを作成します。  </p><ol><li>HierarchyからIKの先端になるボーンを選択します。  </li><li>下図のようにHierarchy下部のNewからボーンを選択し、ボーンを作成します。<br>この手順で作成したボーンは親ボーンの先端位置に正確に作成されます。</li></ol><p><img src="/img/2021-01-28-ik-making/new-bone.png" alt="IKターゲットの作成"></p><p><img src="/img/2021-01-28-ik-making/bone3.png" alt="bone3はbone2の先端位置に作成される"></p><ol start="3"><li>作成したボーンを別の階層に移動させます(IKターゲットはIK対象のボーンの子にすることはできません)</li></ol><p><img src="/img/2021-01-28-ik-making/move.png" alt="ボーンを移動する"></p><ol start="4"><li>親子ボーンを選択し、IKコンストレイントを作成します。その際、作成したボーンを選択します。</li></ol><p>これで正確な位置にIKのターゲットを作成することができました。</p><h2 id="使用バージョン"><a href="#使用バージョン" class="headerlink" title="使用バージョン"></a>使用バージョン</h2><p>Spine 3.8.99</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://ja.esotericsoftware.com/forum/Create-IK-target-at-the-tip-of-the-bone-10405?sid=db41d7c3c8a9de240009e01c9f7ed5bb&p=46851">Create IK target at the tip of the bone</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;クリックでIKのターゲットを作成した時のずれ&quot;&gt;&lt;a href=&quot;#クリックでIKのターゲットを作成した時のずれ&quot; class=&quot;headerlink&quot; title=&quot;クリックでIKのターゲットを作成した時のずれ&quot;&gt;&lt;/a&gt;クリックでIKのターゲットを作成した時の
+      
+    
+    </summary>
+    
+    
+      <category term="Spine" scheme="https://kido0617.github.io/categories/Spine/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>原点調整</title>
+    <link href="https://kido0617.github.io/spine/2021-01-27-origin/"/>
+    <id>https://kido0617.github.io/spine/2021-01-27-origin/</id>
+    <published>2021-01-26T15:00:00.000Z</published>
+    <updated>2021-01-26T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="PhotoshopToSpineの原点"><a href="#PhotoshopToSpineの原点" class="headerlink" title="PhotoshopToSpineの原点"></a>PhotoshopToSpineの原点</h2><p>PhotoshopからSpine用にデータをエクスポートするのに<a href="https://github.com/EsotericSoftware/spine-scripts/tree/master/photoshop">PhotoshopToSpine</a>を使用しますが、このときの原点はPhotoshopの定規(Ruler)の(0,0)の位置を基準とします。<br>Photoshopのメニューの「表示」から「定規」を選択すると画面の上左に座標が表示されます。<br>定規の原点を移動させるには下図のように左上の地点からドラッグすると十字表示になり、ドラッグを離すとその位置が原点になります。  </p><p><img src="/img/2021-01-27-origin/ruler.png" alt="定規の調整"></p><p>しかし、この定規の位置は保存されないので、ガイドを作成しておくと良いと思います。<br>「表示」から「新規ガイド」を選択し、水平方向と垂直方向をそれぞれ作成します。<br>定規の位置に青い線が引かれ、このガイドは保存されます。<br>次に開いたときは、定規の位置を調整するときにガイドの線にスナップされるので原点を復元できます。</p><h2 id="Spine上での原点調整"><a href="#Spine上での原点調整" class="headerlink" title="Spine上での原点調整"></a>Spine上での原点調整</h2><p>すべてのパーツをドラッグして矩形選択し、移動させれば原点を調整できます。<br>しかし、この方法だと非表示のパーツなど選択漏れがあったりした場合、すべてのパーツを移動できない可能性があります。<br>これを回避する手順を示します。  </p><ol><li>Hierarchyからrootを選択し、rootを動かしてキャラ全体の原点を合わせます。</li><li>次に下図のようにCompensateで画像とボーンをONにします。こうすると画像もボーンも動かず、rootの座標だけを変更できます。<br>この状態でTranslateの値を0,0にすればrootの座標が原点に移動します。</li></ol><p><img src="/img/2021-01-27-origin/compensate.png" alt="rootの調整"></p><p>終わったら忘れずにCompensateをOffにしておきます。</p><p>しかし、この方法だとPhotoshop側で新たにパーツを追加した場合に対応できないので注意が必要です。<br>rootの位置が変わっているので追加したパーツの位置がずれます。<br>Photoshop側で定規の位置を調整するやり方の方が変更に強い気がします。  </p><h2 id="使用バージョン"><a href="#使用バージョン" class="headerlink" title="使用バージョン"></a>使用バージョン</h2><p>Spine 3.8.99</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;PhotoshopToSpineの原点&quot;&gt;&lt;a href=&quot;#PhotoshopToSpineの原点&quot; class=&quot;headerlink&quot; title=&quot;PhotoshopToSpineの原点&quot;&gt;&lt;/a&gt;PhotoshopToSpineの原点&lt;/h2&gt;&lt;p&gt;Ph
+      
+    
+    </summary>
+    
+    
+      <category term="Spine" scheme="https://kido0617.github.io/categories/Spine/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>コンポーネントの順番をスクリプトから並び替える</title>
+    <link href="https://kido0617.github.io/unity/2020-12-30-order-component/"/>
+    <id>https://kido0617.github.io/unity/2020-12-30-order-component/</id>
+    <published>2020-12-29T15:00:00.000Z</published>
+    <updated>2020-12-29T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="UnityEditorInternal-ComponentUtility"><a href="#UnityEditorInternal-ComponentUtility" class="headerlink" title="UnityEditorInternal.ComponentUtility"></a>UnityEditorInternal.ComponentUtility</h2><p>インスペクタに表示されているコンポーネントの順番はドラッグしたり、右クリックメニューからMove Up や Move Downを選択すると動かすことができます。<br>この動作を以下のエディタスクリプトから実行することができます。</p><ul><li>UnityEditorInternal.ComponentUtility.MoveComponentUp(component);</li><li>UnityEditorInternal.ComponentUtility.MoveComponentDown(component);</li></ul><p>Move Up と Downしかないので少し自由に動かしづらいです。<br>私はこれらを使ってインスペクタに表示されるコンポーネントをソートするということをしています。  </p><p>コンポーネントの順番は見やすさもありますが、GetComponentsで取得したときの返り値にも影響します。<br>GetComponentsで取得したときのコンポーネントの順番はインスペクタの順番であることが保証されているからです。<br><a href="https://docs.unity3d.com/Manual/UsingTheInspector.html?_ga=2.84041243.325931642.1609116201-486307593.1604365260">このページ</a>に以下のように記載があります。  </p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">The order you give to components in the Inspector window is </span><br><span class="line">the order you need to use when querying components in your user scripts. </span><br><span class="line">If you query the components programmatically, you’ll get the order you see in the Inspector.</span><br></pre></td></tr></table></figure><h2 id="使用バージョン"><a href="#使用バージョン" class="headerlink" title="使用バージョン"></a>使用バージョン</h2><p>Unity 2019.4.14</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;UnityEditorInternal-ComponentUtility&quot;&gt;&lt;a href=&quot;#UnityEditorInternal-ComponentUtility&quot; class=&quot;headerlink&quot; title=&quot;UnityEditorInternal.
+      
+    
+    </summary>
+    
+    
+      <category term="Unity" scheme="https://kido0617.github.io/categories/Unity/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Smart Inspectorの紹介</title>
+    <link href="https://kido0617.github.io/unity/2020-12-30-smart-inspector/"/>
+    <id>https://kido0617.github.io/unity/2020-12-30-smart-inspector/</id>
+    <published>2020-12-29T15:00:00.000Z</published>
+    <updated>2020-12-29T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="シンプルなインスペクタ"><a href="#シンプルなインスペクタ" class="headerlink" title="シンプルなインスペクタ"></a>シンプルなインスペクタ</h2><p>コンポーネントをたくさんつけるとインスペクタが縦に長くなりすぎて、見通しが悪くなります。<br>そういうときにシンプルにインスペクタの表示をしてくれる<a href="https://assetstore.unity.com/packages/tools/utilities/smart-inspector-140945?locale=ja-JP">Smart Inspector</a>が便利かもしれません。  </p><p>以下のような独自にインスペクタのウィンドウを表示できます。<br>元のインスペクタは維持されるので併用可能です。  </p><p><img src="/img/2020-12-30-smart-inspector/inspector.png" alt="表示"></p><p>Openボタンを押すと以下のようにコンポーネントを単体で表示できます。</p><p><img src="/img/2020-12-30-smart-inspector/open.png" alt="Open"></p><p>コンポーネントの値をいじるのに1ステップ増えるので使い所は限られるかもしれませんが、最近使っています。  </p><h2 id="使用バージョン"><a href="#使用バージョン" class="headerlink" title="使用バージョン"></a>使用バージョン</h2><p>Unity 2019.4.14</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;シンプルなインスペクタ&quot;&gt;&lt;a href=&quot;#シンプルなインスペクタ&quot; class=&quot;headerlink&quot; title=&quot;シンプルなインスペクタ&quot;&gt;&lt;/a&gt;シンプルなインスペクタ&lt;/h2&gt;&lt;p&gt;コンポーネントをたくさんつけるとインスペクタが縦に長くなりすぎて、見
+      
+    
+    </summary>
+    
+    
+      <category term="Unity" scheme="https://kido0617.github.io/categories/Unity/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>環境依存系のエラー調査など</title>
+    <link href="https://kido0617.github.io/rpgmaker/2020-12-27-errorandfix2020/"/>
+    <id>https://kido0617.github.io/rpgmaker/2020-12-27-errorandfix2020/</id>
+    <published>2020-12-26T15:00:00.000Z</published>
+    <updated>2020-12-26T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>最近調査したツクールMVのエラーのログです。<br>解決できていないので、一応情報として残しておきます。<br>稀に発生するのか環境依存なのか、通常発生しないため調査困難なものです。  </p><h2 id="ロードできない問題"><a href="#ロードできない問題" class="headerlink" title="ロードできない問題"></a>ロードできない問題</h2><p>セーブしたファイルをロードしようとしてもブザーが鳴り、ロードできないという現象です。<br>該当のセーブファイルを確認すると以下のようにデータが壊れていました。<br>容量はあるように見えますが、全部0で埋められています。  </p><p><img src="/img/2020-12-27-errorandfix2020/zero.png" alt="セーブファイル"></p><p>セーブファイルが壊れているのでロードの問題ではなく、セーブ時の問題なのですが、発生条件はよくわかりませんでした。<br>ツクールのセーブは、セーブが実行される直前に.bakファイルが生成されます。<br>セーブに失敗した場合、そのbakファイルからセーブを復元するのですが、それも作用してはいないようです。<br>セーブファイルが壊れているのでセーブ時にゲームが落ちたとかありえるのかもしれませんが、発生時の状況も不明でこれ以上は無理でした。</p><h2 id="音の再生時のエラー"><a href="#音の再生時のエラー" class="headerlink" title="音の再生時のエラー"></a>音の再生時のエラー</h2><p>以下のエラーが発生しました。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Uncaught RangeError: Failed to execute &#x27;start&#x27; on &#x27;AudioBufferSouceNode&#x27;: The offset provided (-22089.3) is less than the minimum bound (0)</span><br></pre></td></tr></table></figure><p>これは音声ファイルの再生位置をマイナスで再生しようとしたときに生じるエラーです。<br>例えばコンソールに<code>AudioManager.playBgm(&#123;name: &quot;Battle1&quot;, volume : 90, pitch: 100&#125;, -200);</code>のように打つとエラーを起こせます。<br>ですが、プロジェクトを見てもマイナス位置で再生しようとするような場面もなく、発生条件不明でした。<br><code>WebAudio.prototype._startPlaying</code>メソッドの引数に<code>offset</code>があり、これがマイナスの場合、0にするような処理を追加すればとりあえずエラーは出なくなるので、一旦これで対処しました。</p><h2 id="起動しない問題"><a href="#起動しない問題" class="headerlink" title="起動しない問題"></a>起動しない問題</h2><p>exeファイルをダブルクリックしてもゲームが起動せず、同フォルダ内に<code>debug.log</code>が生成されます。<br>ログには以下のように記載されていました。  </p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[WARNING:minidump_to_upload_parameters.cc(66)] duplicate annotation name metrics_client_id, discarding value 43cecd601cc84e9e9bbac5991f952aff</span><br><span class="line">[ERROR:http_transport_win.cc(175)] WinHttpCrackUrl: URL は認識されているプロトコルを使用していません (0x2ee6)</span><br></pre></td></tr></table></figure><p>これはSteamで配信されているMV製のゲームやnw.jsを採用しているゲームでも報告があるのですが、明確な解決手段は示されていませんでした。  </p><p>nw.jsのバージョンを上げると解決するという話もありましたが、リリース後のゲームにそれを適用するのは厳しいです。<br>解決するかどうかもわからず、別の問題が発生した場合、問題の切り分けが難しくなります。<br>デプロイの工程も複雑になるのでこの手段は採用しませんでした。</p><p>別の解決方法としてWindows XP (Service Pack 3)互換モードにしたら、起動したというものがありました。<br>互換モードの切り替えはexeファイルのプロパティから選択できます。<br>掲示板を見るとこの手段で2人解決した報告があるので、興味深いです。<br>これで本当に解決するかどうかは手元に再現環境がないので定かではありませんが、試す価値はあるかもしれません。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h2&gt;&lt;p&gt;最近調査したツクールMVのエラーのログです。&lt;br&gt;解決できていないので、一応情報として残しておきます。&lt;br&gt;稀に発生するのか環境依存なの
+      
+    
+    </summary>
+    
+    
+      <category term="RPGツクールMV" scheme="https://kido0617.github.io/categories/RPGMakerMV/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Kris&#39; Favorite Assets が便利</title>
+    <link href="https://kido0617.github.io/unity/2020-08-29-krisFavoriteAssets/"/>
+    <id>https://kido0617.github.io/unity/2020-08-29-krisFavoriteAssets/</id>
+    <published>2020-08-28T15:00:00.000Z</published>
+    <updated>2020-08-28T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="お気に入り登録アセット"><a href="#お気に入り登録アセット" class="headerlink" title="お気に入り登録アセット"></a>お気に入り登録アセット</h2><p>プロジェクトビューにファイルがたくさんあると目当てのアセットを選ぶのに苦労します。<br>検索しても良いですが、お気に入りをリスト表示していてワンクリックで飛べると便利です。<br>それを叶えてくれるアセットが<a href="https://assetstore.unity.com/packages/tools/utilities/kris-favorite-assets-143105">Kris’ Favorite Assets</a>です。<br>しかも無料アセットです。</p><p>以下のようなウィンドウで管理するようになっていて、本当にシンプル。<br>追加したいアセットをプロジェクトビューで選択してPin(お気に入り登録)するだけです。<br>登録したアセットは選択すればプロジェクトビューで選択され、スクロールしてくれます。<br>さらにPingボタンを押すと選択されずにスクロールしてくれるので、Inspectorの表示が変わることなくアセットを探すことができます。</p><p><img src="/img/2020-08-29-krisFavoriteAssets/window.png" alt="表示"></p><p>加えて、このアセットは以下のように一つのソースファイルで構成されているのも良いです。<br>お気に入り登録したアセットはEditorPrefsに保存しているようで、特にファイルが生成されるということもないです。</p><p><img src="/img/2020-08-29-krisFavoriteAssets/list.png" alt="表示"></p><h2 id="同機能の他アセット"><a href="#同機能の他アセット" class="headerlink" title="同機能の他アセット"></a>同機能の他アセット</h2><p>有料ですが、お気に入り登録ができるアセットに<a href="https://assetstore.unity.com/packages/tools/utilities/favorites-tab-s-4237">Favorites Tab[s]</a> があり、こちらも所持しています。<br>こちらは有料だけあってシーンビューのファイルもお気に入り登録できたり、分類分けできたりして高機能です。<br>ただそこまで丁寧に分けることもなく、単純にお気に入り登録したいだけなので、<code>Kris&#39; Favorite Assets</code>の方が私には合っていました。  </p><h2 id="使用バージョン"><a href="#使用バージョン" class="headerlink" title="使用バージョン"></a>使用バージョン</h2><p>Unity 2019.4.5  </p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;お気に入り登録アセット&quot;&gt;&lt;a href=&quot;#お気に入り登録アセット&quot; class=&quot;headerlink&quot; title=&quot;お気に入り登録アセット&quot;&gt;&lt;/a&gt;お気に入り登録アセット&lt;/h2&gt;&lt;p&gt;プロジェクトビューにファイルがたくさんあると目当てのアセットを選ぶの
+      
+    
+    </summary>
+    
+    
+      <category term="Unity" scheme="https://kido0617.github.io/categories/Unity/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>キー操作でUIのナビゲーションをループさせる</title>
+    <link href="https://kido0617.github.io/unity/2020-08-10-loop-navigation/"/>
+    <id>https://kido0617.github.io/unity/2020-08-10-loop-navigation/</id>
+    <published>2020-08-09T15:00:00.000Z</published>
+    <updated>2020-08-09T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p><img src="/img/2020-08-10-loop-navigation/Buttons.png" alt="ボタン"></p><p>キーの上下でカーソル移動させる際、上図のようにボタンが並んでいるときに最上部から最下部にループしたいケースがあります。<br>UIコンポーネントには下図のようにナビゲーションの設定項目があるのですが、これらを設定しても自動でループの表現はできません。<br>Navigation項目をExplicitに設定して各遷移先を明示的に指定すれば可能ですが、手間なので自動で設定するようにします。  </p><p><img src="/img/2020-08-10-loop-navigation/ButtonInspector.png" alt="ナビゲーション設定"></p><h2 id="ナビゲーションを自動設定"><a href="#ナビゲーションを自動設定" class="headerlink" title="ナビゲーションを自動設定"></a>ナビゲーションを自動設定</h2><p><img src="/img/2020-08-10-loop-navigation/Hierarchy.png" alt="ヒエラルキー"></p><p>レイアウトグループを使うことを考えると、ヒエラルキーの順番とボタンの順番は一致しているので、この順番どおりにナビゲーションを設定します。<br>以下のようなコードを書いて、ボタンの親のオブジェクトにつけます(上図でいうCanvas)。<br>ボタンなどはSelectableクラスを継承しているのでこれを取得して、全てにナビゲーションモードをExplicitにして遷移先を設定します。  </p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">LoopMenu</span> : <span class="title">MonoBehaviour</span> &#123;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="comment">//子のボタンやスライダーなど操作可能なコンポーネントを取得する</span></span><br><span class="line">    <span class="keyword">var</span> selects = GetComponentsInChildren&lt;Selectable&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; selects.Length; i++) &#123;</span><br><span class="line">      <span class="keyword">var</span> nav = selects[i].navigation;</span><br><span class="line">      nav.mode = Navigation.Mode.Explicit;</span><br><span class="line">      nav.selectOnUp = selects[i == <span class="number">0</span> ? selects.Length - <span class="number">1</span> : i - <span class="number">1</span>];</span><br><span class="line">      nav.selectOnDown = selects[(i + <span class="number">1</span>) % selects.Length];</span><br><span class="line">      selects[i].navigation = nav;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="他のケース"><a href="#他のケース" class="headerlink" title="他のケース"></a>他のケース</h2><p>例えば、interactableでないボタンは除外する場合は、子のselectableを取得したあとに、以下のようにFilterすれば良いと思います。</p><p><code>selects = selects.Where((s) =&gt; s.interactable).ToArray();</code></p><p>また、あまりないと思いますが、ヒエラルキーの順番と一致しない場合はpositionでソートするという方法も考えられます。</p><h2 id="使用バージョン"><a href="#使用バージョン" class="headerlink" title="使用バージョン"></a>使用バージョン</h2><p>Unity 2019.4.5  </p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/img/2020-08-10-loop-navigation/Buttons.png&quot; alt=&quot;ボタン&quot;&gt;&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+      <category term="Unity" scheme="https://kido0617.github.io/categories/Unity/"/>
+    
+    
+  </entry>
+  
+</feed>

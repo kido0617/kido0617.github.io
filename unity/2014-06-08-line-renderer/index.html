@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  
+  <title>2D画面に線を引く Line Renderer | Unity | kido Tech Blog</title>
+  
+  <meta name="description" content="Unity2D で 線を引きたかったので、Line Renderer を使ってみることにした。「Add Component」 → 「Effects」→ 「Line Renderer」で追加できる。 Positions で 始点と終点の座標を指定し、Parameters で 色や太さを指定できる。Unity4.5を使っているが、2DでEffectsを使うには Sorting Layer と Orde">
+  <meta name="author" content="kido">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="2D画面に線を引く Line Renderer | Unity | kido Tech Blog">
+  <meta property="og:url" content="https://kido0617.github.io/unity/2014-06-08-line-renderer/">
+  <meta property="og:site_name" content="kido Tech Blog">
+  <meta property="og:description" content="Unity2D で 線を引きたかったので、Line Renderer を使ってみることにした。「Add Component」 → 「Effects」→ 「Line Renderer」で追加できる。 Positions で 始点と終点の座標を指定し、Parameters で 色や太さを指定できる。Unity4.5を使っているが、2DでEffectsを使うには Sorting Layer と Orde">
+  <meta property="og:image" content="https://kido0617.github.io/css/images/ogp.png">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:image" content="https://kido0617.github.io/css/images/twitter-summary.png" />
+  <meta name="twitter:creator" content="@kido0617">
+
+
+  <link rel="alternate" href="/atom.xml" title="kido Tech Blog" type="application/atom+xml">
+  <link rel="icon" href="/favicon.ico">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-46760030-4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-46760030-4');
+  </script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <span id="logo-wrap">
+        <a href="/" id="logo">kido Tech Blog</a>
+      </span>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+          
+  
+    <ul vocab="https://schema.org/" typeof="BreadcrumbList" class="breadcrumb">
+      
+        <li property="itemListElement" typeof="ListItem">
+          
+            <a property="item" typeof="WebPage" href="/"><span property="name">ホーム</span></a>
+          
+          <meta property="position" content="0" />
+          
+            &gt;
+          
+        </li>
+      
+        <li property="itemListElement" typeof="ListItem">
+          
+            <a property="item" typeof="WebPage" href="/categories/Unity/"><span property="name">Unity</span></a>
+          
+          <meta property="position" content="1" />
+          
+            &gt;
+          
+        </li>
+      
+        <li property="itemListElement" typeof="ListItem">
+          
+            <span property="name">2D画面に線を引く Line Renderer</span>
+          
+          <meta property="position" content="2" />
+          
+        </li>
+      
+    </ul>
+  
+        <section id="main"><article id="post-unity/2014-06-08-line-renderer" class="article article-type-post">
+  <div class="article-inner">
+    <header class="article-header">
+      <h1 class="article-title">2D画面に線を引く Line Renderer</h1>
+      <div class="article-meta">
+        <a class="article-category-link" href="/categories/Unity/">Unity</a>
+        <span class="article-date">
+          公開日:<time datetime="2014-06-07T15:00:00.000Z">2014-06-08</time>
+        </span>
+      </div>
+    </header>
+    <div class="article-entry">
+      <p>Unity2D で 線を引きたかったので、Line Renderer を使ってみることにした。<br>「Add Component」 → 「Effects」→ 「Line Renderer」で追加できる。</p>
+<p>Positions で 始点と終点の座標を指定し、Parameters で 色や太さを指定できる。<br>Unity4.5を使っているが、2DでEffectsを使うには Sorting Layer と Order In Layer をスクリプトから指定しないといけない。<br>例えば、以下のように指定する。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LineRenderer line = GetComponent&lt;LineRenderer&gt;();</span><br><span class="line">line.renderer.sortingLayerName = <span class="string">&quot;Effect&quot;</span>;</span><br><span class="line">line.renderer.sortingOrder = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>そして、Line Renderer の Materials を指定しなければいけない。<br>例えば、インスペクタビューからLine Rendererの Materials に Sprites-Defaultを指定する。<br>これで色もちゃんと反映されるし、描画もちゃんとされる。</p>
+<h2 id="確認バージョン"><a href="#確認バージョン" class="headerlink" title="確認バージョン"></a>確認バージョン</h2><p>Unity 4.5</p>
+
+    </div>
+    <footer class="article-footer">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fkido0617.github.io%2Funity%2F2014-06-08-line-renderer%2F" class="article-share-twitter" target="_blank" title="Twitter">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
+        <path d="M512 113.2c-18.8 8.4-39.1 14-60.3 16.5 21.7-13 38.3-33.6 46.2-58.1-20.3 12-42.8 20.8-66.7 25.5-19.2-20.4-46.5-33.1-76.7-33.1-58 0-105 47-105 105 0 8.2 0.9 16.2 2.7 23.9-87.3-4.4-164.7-46.2-216.5-109.8-9 15.5-14.2 33.6-14.2 52.8 0 36.4 18.5 68.6 46.7 87.4-17.2-0.5-33.4-5.3-47.6-13.1 0 0.4 0 0.9 0 1.3 0 50.9 36.2 93.4 84.3 103-8.8 2.4-18.1 3.7-27.7 3.7-6.8 0-13.3-0.7-19.8-1.9 13.4 41.7 52.2 72.1 98.1 73-36 28.2-81.2 45-130.5 45-8.5 0-16.8-0.5-25.1-1.5 46.6 29.9 101.8 47.2 161.1 47.2 193.2 0 298.9-160.1 298.9-298.9 0-4.6-0.1-9.1-0.3-13.6 20.5-14.7 38.3-33.2 52.4-54.3z"></path>
+        </svg>
+      </a>
+      <a href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fkido0617.github.io%2Funity%2F2014-06-08-line-renderer%2F" class="article-share-facebook" target="_blank" title="Facebook">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
+        <path d="M304 96h80v-96h-80c-61.757 0-112 50.243-112 112v48h-64v96h64v256h96v-256h80l16-96h-96v-48c0-8.673 7.327-16 16-16z"></path>
+        </svg>
+      </a>
+    </footer>
+     
+  <aside class="footer-ad">
+    <div class="ad-title">広告</div>
+    <div class="ad-squares">
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <!-- 336 X 280 -->
+      <ins class="adsbygoogle"
+          style="display:inline-block;width:336px;height:280px"
+          data-ad-client="ca-pub-1232486070209734"
+          data-ad-slot="9417597408"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <!-- 336 X 280 -->
+      <ins class="adsbygoogle"
+          style="display:inline-block;width:336px;height:280px"
+          data-ad-client="ca-pub-1232486070209734"
+          data-ad-slot="9417597408"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </aside>
+
+  </div>
+</article>
+
+
+  <section class="archives-wrap">
+    <div class="archive-title-wrap">
+      <span class="archive-title">Unityカテゴリの記事</span>
+    </div>
+    <div class="archives">
+      
+        
+        <a class="archive-article-block"  href="/unity/2020-12-30-order-component/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2020-12-29T15:00:00.000Z">2020-12-30</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">コンポーネントの順番をスクリプトから並び替える</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2020-12-30-smart-inspector/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2020-12-29T15:00:00.000Z">2020-12-30</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">Smart Inspectorの紹介</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2020-08-29-krisFavoriteAssets/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2020-08-28T15:00:00.000Z">2020-08-29</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">Kris&#39; Favorite Assets が便利</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2020-08-10-loop-navigation/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2020-08-09T15:00:00.000Z">2020-08-10</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">キー操作でUIのナビゲーションをループさせる</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2020-08-08-update-sprite-asset/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2020-08-07T15:00:00.000Z">2020-08-08</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">TextMeshProのSprite Assetを更新する</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2020-07-21-physicsdraw2d/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2020-07-20T15:00:00.000Z">2020-07-21</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">UnityPhysicsDebugDraw2D が便利</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2020-07-20-color-manage/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2020-07-19T15:00:00.000Z">2020-07-20</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">色管理を考える</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2020-03-31-unity-tips/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2020-03-30T15:00:00.000Z">2020-03-31</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">細かいTips</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2020-03-29-build-script/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2020-03-28T15:00:00.000Z">2020-03-29</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">ビルドスクリプトを書く</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2019-12-03-animator-culling/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2019-12-02T15:00:00.000Z">2019-12-03</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">AnimatorのCulling Modeでハマった話</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2018-09-25-vectrosity/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-09-24T15:00:00.000Z">2018-09-25</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">Vectrosityを使ってUGUI上で線や円のアニメーションをする</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2018-08-05-spreadsheet-doget/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-08-04T15:00:00.000Z">2018-08-05</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">スプレッドシートからjsonデータを読み込む</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2018-08-02-fungus-custom-command/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-08-01T15:00:00.000Z">2018-08-02</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">ビジュアルノベルアセットFungusにコマンドを追加してカスタマイズする</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2018-08-01-skinnedmesh-bounds/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-07-31T15:00:00.000Z">2018-08-01</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">Skinned Mesh Renderer の Boundsについて</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2018-06-30-build-scenes/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-06-29T15:00:00.000Z">2018-06-30</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">シーンごとにビルド結果の容量を出す</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2018-04-05-scene-quality/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-04-04T15:00:00.000Z">2018-04-05</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">シーンビューにクオリティ設定のスライダーを出すエディタ拡張</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2018-04-04-file-headers/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-04-03T15:00:00.000Z">2018-04-04</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">ビルド結果のFile headersが大きい理由</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2017-12-13-fungus-rpg/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2017-12-12T15:00:00.000Z">2017-12-13</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">フリーのビジュアルノベルアセットFungusを使ってRPGのイベントを作る</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2017-12-08-move-to-view/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2017-12-07T15:00:00.000Z">2017-12-08</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">Move To View を改良する</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2017-08-22-fungus/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2017-08-21T15:00:00.000Z">2017-08-22</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">フリーのビジュアルノベルアセットのFungusが便利</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2016-07-06-visual-studio-auto-format/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2016-07-05T15:00:00.000Z">2016-07-06</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">Visual Studio で保存時にフォーマットする</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2015-09-04-spreadsheet-loader/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2015-09-03T15:00:00.000Z">2015-09-04</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">スプレッドシートからデータを読み込む</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2015-01-12-easy-save2-serialize/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2015-01-11T15:00:00.000Z">2015-01-12</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">Easy Save2 で シリアライズされたクラスを保存する</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2015-01-03-shader-hue-shift/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2015-01-02T15:00:00.000Z">2015-01-03</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">ShaderでSpriteの色相をシフトする</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2015-01-02-sprite-hue-shift/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2015-01-01T15:00:00.000Z">2015-01-02</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">Sprite、Texture の 色相をシフトする</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2014-12-27-ugui-button-highlighted/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2014-12-26T15:00:00.000Z">2014-12-27</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">uGUIのButtonをクリック時にハイライトのままになる</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2014-12-23-ugui-canvas-group/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2014-12-22T15:00:00.000Z">2014-12-23</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">uGUIのCanvas Groupを使って透過処理をしたり、操作を制限する</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2014-12-21-my-config/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2014-12-20T15:00:00.000Z">2014-12-21</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">自作のコンフィグ画面に必要なもの</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2014-12-10-ugui-toggle-button/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2014-12-09T15:00:00.000Z">2014-12-10</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">uGUIでトグルなボタンを作る</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2014-12-07-ugui-dynamically-create-button/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2014-12-06T15:00:00.000Z">2014-12-07</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">uGUI で動的にボタンを作る</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2014-11-15-easy-save2/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2014-11-14T15:00:00.000Z">2014-11-15</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">Easy Save2 を使ってみる</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2014-10-13-csv-localize/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2014-10-12T15:00:00.000Z">2014-10-13</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">csv読み込んで ローカライズ</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2014-10-12-load-level-addtive/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2014-10-11T15:00:00.000Z">2014-10-12</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">LoadLevelAdditive で共通シーンを加算</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2014-10-05-unity-screen-color/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2014-10-04T15:00:00.000Z">2014-10-05</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">画面全体に色をかける</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2014-09-30-any-state/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2014-09-29T15:00:00.000Z">2014-09-30</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">Any State でどこからでも遷移できるようにする</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2014-09-27-itween-stop/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2014-09-26T15:00:00.000Z">2014-09-27</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">iTween のStop ではまる</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2014-06-29-sprite-multiple-border/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2014-06-28T15:00:00.000Z">2014-06-29</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">sprite の multiple で 境界がおかしくなる</span>
+  </div>
+</a>
+      
+        
+        
+        <a class="archive-article-block"  href="/unity/2014-06-13-renderer-material/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2014-06-07T15:00:00.000Z">2014-06-08</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">Renderer の Materials を スクリプトから設定する</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/unity/2014-06-02-scroll-background/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2014-06-01T15:00:00.000Z">2014-06-02</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">背景をスクロールさせる</span>
+  </div>
+</a>
+      
+    </div>
+  </section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap ad-widget">
+  <div class="widget-title">広告</div>
+  
+    <div class="widget">
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <!-- レスポンシブ -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-1232486070209734"
+          data-ad-slot="6900476205"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  
+</div>
+
+
+
+  
+    <div class="widget-wrap">
+  <div class="widget-title">Author</div>
+  <div class="widget">
+    kido (<a target="_blank" rel="noopener" href="https://twitter.com/kido0617">@kido0617</a>) / <a href="/portfolio" target="_blank">ポートフォリオ</a>
+  </div>
+</div>
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget-title">アーカイブ</div>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a><span class="archive-list-count">28</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014</a><span class="archive-list-count">27</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013</a><span class="archive-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget-title">カテゴリ</div>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/GCP/">GCP</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Go/">Golang</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/RPGMakerMV/">RPGツクールMV</a><span class="category-list-count">35</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/RPGMakerVXAce/">RPGツクールVXAce</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Salesforce/">Salesforce</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spine/">Spine</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Unity/">Unity</a><span class="category-list-count">40</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/WordPress/">WordPress</a><span class="category-list-count">15</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/">その他</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TyranoScript/">ティラノスクリプト</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    <div class="widget-wrap">
+  <div class="widget-title">Search</div>
+  <div class="widget">
+    <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+      <div><label for="searchQ">Google検索</label></div>
+      <input type="search" id="searchQ" name="q" class="search-form-input" placeholder="入力してください"></label>
+      <button type="submit" class="search-form-submit" aria-label="search">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 512 512">
+        <path d="M496.131 435.698l-121.276-103.147c-12.537-11.283-25.945-16.463-36.776-15.963 28.628-33.534 45.921-77.039 45.921-124.588 0-106.039-85.961-192-192-192s-192 85.961-192 192 85.961 192 192 192c47.549 0 91.054-17.293 124.588-45.922-0.5 10.831 4.68 24.239 15.963 36.776l103.147 121.276c17.661 19.623 46.511 21.277 64.11 3.678s15.946-46.449-3.677-64.11zM192 320c-70.692 0-128-57.308-128-128s57.308-128 128-128 128 57.308 128 128-57.307 128-128 128z"></path>
+        </svg>
+      </button>
+      <input type="hidden" name="sitesearch" value="https://kido0617.github.io">
+    </form>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 kido (<a target="_blank" rel="noopener" href="https://twitter.com/kido0617">@kido0617</a>)<br>
+    </div>
+  </div>
+</footer>
+    </div>
+  </div>
+</body>
+</html>

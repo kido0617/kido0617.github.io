@@ -1,0 +1,1092 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="sitemap.xsl"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <url>
+        <loc>https://kido0617.github.io/</loc>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+    </url>
+
+
+    <url>
+        <loc>https://kido0617.github.io/spine/2021-06-11-tentacle/</loc>
+        <lastmod>2021-06-10T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/spine/2021-02-01-tips2/</loc>
+        <lastmod>2021-01-31T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/spine/2021-01-29-tips/</loc>
+        <lastmod>2021-01-28T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/spine/2021-01-28-ik-making/</loc>
+        <lastmod>2021-01-27T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/spine/2021-01-27-origin/</loc>
+        <lastmod>2021-01-26T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2020-12-30-order-component/</loc>
+        <lastmod>2020-12-29T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2020-12-30-smart-inspector/</loc>
+        <lastmod>2020-12-29T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2020-12-27-errorandfix2020/</loc>
+        <lastmod>2020-12-26T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2020-08-29-krisFavoriteAssets/</loc>
+        <lastmod>2020-08-28T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2020-08-10-loop-navigation/</loc>
+        <lastmod>2020-08-09T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2020-08-08-update-sprite-asset/</loc>
+        <lastmod>2020-08-07T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2020-07-21-physicsdraw2d/</loc>
+        <lastmod>2020-07-20T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2020-07-20-color-manage/</loc>
+        <lastmod>2020-07-19T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2020-03-31-unity-tips/</loc>
+        <lastmod>2020-03-30T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2020-03-29-build-script/</loc>
+        <lastmod>2020-03-28T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/others/2020-03-28-real-environment/</loc>
+        <lastmod>2020-03-27T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2020-02-21-iconset-size/</loc>
+        <lastmod>2020-02-19T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2019-12-20-game-loop/</loc>
+        <lastmod>2019-12-19T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2019-12-20-refresh-map/</loc>
+        <lastmod>2019-12-19T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/php/2019-12-17-service-env/</loc>
+        <lastmod>2019-12-16T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/server/2019-12-16-gae-image-upload-slow/</loc>
+        <lastmod>2019-12-15T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/php/2019-12-09-laravel-test-view/</loc>
+        <lastmod>2019-12-08T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/php/2019-12-08-intervention-image-variation/</loc>
+        <lastmod>2019-12-07T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/php/2019-12-08-laravel-route-cache-error/</loc>
+        <lastmod>2019-12-07T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/server/2019-12-07-gae-https-only/</loc>
+        <lastmod>2019-12-06T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/wordpress/2019-12-07-gae-wordpress2/</loc>
+        <lastmod>2019-12-06T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/tyrano/2019-12-06-label-jumper/</loc>
+        <lastmod>2019-12-05T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2019-12-05-recent-plugins/</loc>
+        <lastmod>2019-12-04T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/php/2019-12-03-laravel-RedirectIfAuthenticated/</loc>
+        <lastmod>2019-12-02T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2019-12-03-animator-culling/</loc>
+        <lastmod>2019-12-02T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2019-12-02-picture-number/</loc>
+        <lastmod>2019-12-01T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/tyrano/2019-12-02-save-chara-name/</loc>
+        <lastmod>2019-12-01T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/wordpress/2019-12-02-gae-wordpress/</loc>
+        <lastmod>2019-12-01T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/js/2019-12-01-firebase-form-upload/</loc>
+        <lastmod>2019-11-30T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2019-12-01-big-bgs/</loc>
+        <lastmod>2019-11-30T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2019-10-11-test-report/</loc>
+        <lastmod>2019-10-10T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2019-09-25-voidfilter/</loc>
+        <lastmod>2019-09-24T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2019-03-13-restart-common/</loc>
+        <lastmod>2019-03-12T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/tyrano/2018-12-29-rightclick-button/</loc>
+        <lastmod>2018-12-28T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2018-12-24-menu-map-screenshot/</loc>
+        <lastmod>2018-12-23T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2018-12-08-event-test-meta/</loc>
+        <lastmod>2018-12-07T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2018-12-03-version-id/</loc>
+        <lastmod>2018-12-02T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/tyrano/2018-10-03-plugin-macro-work1/</loc>
+        <lastmod>2018-10-02T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2018-09-25-vectrosity/</loc>
+        <lastmod>2018-09-24T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2018-09-24-plugin-usage/</loc>
+        <lastmod>2018-09-23T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2018-09-19-save-equips/</loc>
+        <lastmod>2018-09-18T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/tyrano/2018-09-10-wa-freeze/</loc>
+        <lastmod>2018-09-09T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2018-08-20-tint/</loc>
+        <lastmod>2018-08-19T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2018-08-16-rotate-hue/</loc>
+        <lastmod>2018-08-15T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2018-08-05-save-bgs-vxace/</loc>
+        <lastmod>2018-08-04T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2018-08-05-spreadsheet-doget/</loc>
+        <lastmod>2018-08-04T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2018-08-03-random-treasure-vxace/</loc>
+        <lastmod>2018-08-02T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/tyrano/2018-08-02-make-plugin/</loc>
+        <lastmod>2018-08-01T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2018-08-02-fungus-custom-command/</loc>
+        <lastmod>2018-08-01T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/js/2018-08-01-gas-crawler/</loc>
+        <lastmod>2018-07-31T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2018-08-01-skinnedmesh-bounds/</loc>
+        <lastmod>2018-07-31T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/others/2018-07-22-firefox-ext/</loc>
+        <lastmod>2018-07-21T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2018-07-05-debug-shortcut-vxace/</loc>
+        <lastmod>2018-07-04T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2018-07-04-debug-shortcut/</loc>
+        <lastmod>2018-07-03T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2018-07-01-rvpacker/</loc>
+        <lastmod>2018-06-30T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2018-06-30-build-scenes/</loc>
+        <lastmod>2018-06-29T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2018-06-19-save-bgs/</loc>
+        <lastmod>2018-06-18T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2018-04-05-scene-quality/</loc>
+        <lastmod>2018-04-04T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2018-04-04-file-headers/</loc>
+        <lastmod>2018-04-03T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2018-03-27-enemy-default-state/</loc>
+        <lastmod>2018-03-26T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/tyrano/2018-03-26-nico-text/</loc>
+        <lastmod>2018-03-25T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2017-12-13-fungus-rpg/</loc>
+        <lastmod>2017-12-12T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2017-12-08-move-to-view/</loc>
+        <lastmod>2017-12-07T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2017-12-07-outside-window/</loc>
+        <lastmod>2017-12-06T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2017-11-17-niconico-like-text/</loc>
+        <lastmod>2017-11-16T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2017-09-18-texteditor/</loc>
+        <lastmod>2017-09-17T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2017-08-22-fungus/</loc>
+        <lastmod>2017-08-21T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2017-07-14-window-manager/</loc>
+        <lastmod>2017-07-13T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2017-07-09-gauge/</loc>
+        <lastmod>2017-07-08T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2017-06-26-calc/</loc>
+        <lastmod>2017-06-25T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2017-05-08-reservetransfer/</loc>
+        <lastmod>2017-05-07T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2017-05-08-scene-attr/</loc>
+        <lastmod>2017-05-07T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2017-05-03-contents-blt/</loc>
+        <lastmod>2017-05-02T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2017-05-02-spreadsheet/</loc>
+        <lastmod>2017-05-01T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2017-04-17-random-treasure/</loc>
+        <lastmod>2017-04-16T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2017-04-13-get-all-items/</loc>
+        <lastmod>2017-04-12T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2017-04-13-tween/</loc>
+        <lastmod>2017-04-12T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2017-04-12-custom-save/</loc>
+        <lastmod>2017-04-11T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/rpgmaker/2017-04-12-loadbitmap/</loc>
+        <lastmod>2017-04-11T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/js/2017-02-13-gas-6-minutes/</loc>
+        <lastmod>2017-02-12T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/go/2017-02-04-sansan/</loc>
+        <lastmod>2017-02-03T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/salesforce/2017-02-03-salesforce-unable-create-name/</loc>
+        <lastmod>2017-02-02T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/salesforce/2017-02-02-salesforce-rest-api/</loc>
+        <lastmod>2017-02-01T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/salesforce/2017-02-01-salesforce-refresh-token/</loc>
+        <lastmod>2017-01-31T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/wordpress/2016-08-19-wordpress-selinux/</loc>
+        <lastmod>2016-08-18T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/js/2016-08-17-aes/</loc>
+        <lastmod>2016-08-16T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/go/2016-08-10-reverse-proxy/</loc>
+        <lastmod>2016-08-09T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/go/2016-08-08-map-copy/</loc>
+        <lastmod>2016-08-07T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/go/2016-07-18-oauth2/</loc>
+        <lastmod>2016-07-17T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2016-07-06-visual-studio-auto-format/</loc>
+        <lastmod>2016-07-05T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/server/2016-06-29-ansible-vagrant/</loc>
+        <lastmod>2016-06-28T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/others/2015-09-17-reflection-attribute/</loc>
+        <lastmod>2015-09-16T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2015-09-04-spreadsheet-loader/</loc>
+        <lastmod>2015-09-03T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2015-01-12-easy-save2-serialize/</loc>
+        <lastmod>2015-01-11T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2015-01-03-shader-hue-shift/</loc>
+        <lastmod>2015-01-02T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2015-01-02-sprite-hue-shift/</loc>
+        <lastmod>2015-01-01T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2014-12-27-ugui-button-highlighted/</loc>
+        <lastmod>2014-12-26T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2014-12-23-ugui-canvas-group/</loc>
+        <lastmod>2014-12-22T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2014-12-21-my-config/</loc>
+        <lastmod>2014-12-20T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2014-12-10-ugui-toggle-button/</loc>
+        <lastmod>2014-12-09T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2014-12-07-ugui-dynamically-create-button/</loc>
+        <lastmod>2014-12-06T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2014-11-15-easy-save2/</loc>
+        <lastmod>2014-11-14T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/wordpress/2014-11-10-wordpress-user-authority/</loc>
+        <lastmod>2014-11-09T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/wordpress/2014-11-03-wordpress-redirect-loop/</loc>
+        <lastmod>2014-11-02T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2014-10-13-csv-localize/</loc>
+        <lastmod>2014-10-12T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2014-10-12-load-level-addtive/</loc>
+        <lastmod>2014-10-11T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2014-10-05-unity-screen-color/</loc>
+        <lastmod>2014-10-04T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2014-09-30-any-state/</loc>
+        <lastmod>2014-09-29T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2014-09-27-itween-stop/</loc>
+        <lastmod>2014-09-26T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/wordpress/2014-08-28-wordpress-posttype-image/</loc>
+        <lastmod>2014-08-27T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/wordpress/2014-08-13-wordpress-postname-order/</loc>
+        <lastmod>2014-08-12T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/wordpress/2014-08-10-wordpress-metabox/</loc>
+        <lastmod>2014-08-09T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/wordpress/2014-08-06-wordpress-js-load/</loc>
+        <lastmod>2014-08-05T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/wordpress/2014-08-05-wordpress-preview-change/</loc>
+        <lastmod>2014-08-04T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/wordpress/2014-08-04-wordpress-title-change/</loc>
+        <lastmod>2014-08-03T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2014-06-29-sprite-multiple-border/</loc>
+        <lastmod>2014-06-28T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2014-06-08-line-renderer/</loc>
+        <lastmod>2014-06-07T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2014-06-13-renderer-material/</loc>
+        <lastmod>2014-06-07T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/unity/2014-06-02-scroll-background/</loc>
+        <lastmod>2014-06-01T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/wordpress/2014-04-23-wordpress-cft-dynamic-selectbox/</loc>
+        <lastmod>2014-04-22T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/wordpress/2014-03-23-wordpress-delete-post/</loc>
+        <lastmod>2014-03-22T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/wordpress/2014-03-21-wordpress-cft-file-validation/</loc>
+        <lastmod>2014-03-20T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/wordpress/2014-03-09-wordpress-hidden/</loc>
+        <lastmod>2014-03-08T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/others/2013-02-04-nexus7-android/</loc>
+        <lastmod>2013-02-03T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/others/2013-02-01-wordnet/</loc>
+        <lastmod>2013-01-31T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/others/2013-01-20-visual-c-prompt/</loc>
+        <lastmod>2013-01-19T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/others/2013-01-12-coherency/</loc>
+        <lastmod>2013-01-14T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/others/2013-01-15-word-recognition/</loc>
+        <lastmod>2013-01-14T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/others/2013-01-06-c-fork/</loc>
+        <lastmod>2013-01-05T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/php/2013-01-06-file-sort-by-created/</loc>
+        <lastmod>2013-01-05T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+</urlset>
+<!-- XML Sitemap generated by Hexo SEO Friendly Sitemap Generator -->

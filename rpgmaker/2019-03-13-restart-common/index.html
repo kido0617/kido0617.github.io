@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  
+  <title>並列実行中のコモンを最初から実行するプラグイン | RPGツクールMV | kido Tech Blog</title>
+  
+  <meta name="description" content="概要並列実行中のコモンイベントを中断し、最初から実行します。   ・プラグインコマンド 1RestartCommon 3   ダウンロード動作バージョン: RPGツクールMV1.6以上 こちら ライセンスReleased under the MIT license">
+  <meta name="author" content="kido">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="並列実行中のコモンを最初から実行するプラグイン | RPGツクールMV | kido Tech Blog">
+  <meta property="og:url" content="https://kido0617.github.io/rpgmaker/2019-03-13-restart-common/">
+  <meta property="og:site_name" content="kido Tech Blog">
+  <meta property="og:description" content="概要並列実行中のコモンイベントを中断し、最初から実行します。   ・プラグインコマンド 1RestartCommon 3   ダウンロード動作バージョン: RPGツクールMV1.6以上 こちら ライセンスReleased under the MIT license">
+  <meta property="og:image" content="https://kido0617.github.io/css/images/ogp.png">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:image" content="https://kido0617.github.io/css/images/twitter-summary.png" />
+  <meta name="twitter:creator" content="@kido0617">
+
+
+  <link rel="alternate" href="/atom.xml" title="kido Tech Blog" type="application/atom+xml">
+  <link rel="icon" href="/favicon.ico">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-46760030-4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-46760030-4');
+  </script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <span id="logo-wrap">
+        <a href="/" id="logo">kido Tech Blog</a>
+      </span>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+          
+  
+    <ul vocab="https://schema.org/" typeof="BreadcrumbList" class="breadcrumb">
+      
+        <li property="itemListElement" typeof="ListItem">
+          
+            <a property="item" typeof="WebPage" href="/"><span property="name">ホーム</span></a>
+          
+          <meta property="position" content="0" />
+          
+            &gt;
+          
+        </li>
+      
+        <li property="itemListElement" typeof="ListItem">
+          
+            <a property="item" typeof="WebPage" href="/categories/RPGMakerMV/"><span property="name">RPGツクールMV</span></a>
+          
+          <meta property="position" content="1" />
+          
+            &gt;
+          
+        </li>
+      
+        <li property="itemListElement" typeof="ListItem">
+          
+            <span property="name">並列実行中のコモンを最初から実行するプラグイン</span>
+          
+          <meta property="position" content="2" />
+          
+        </li>
+      
+    </ul>
+  
+        <section id="main"><article id="post-rpgmaker/2019-03-13-restart-common" class="article article-type-post">
+  <div class="article-inner">
+    <header class="article-header">
+      <h1 class="article-title">並列実行中のコモンを最初から実行するプラグイン</h1>
+      <div class="article-meta">
+        <a class="article-category-link" href="/categories/RPGMakerMV/">RPGツクールMV</a>
+        <span class="article-date">
+          公開日:<time datetime="2019-03-12T15:00:00.000Z">2019-03-13</time>
+        </span>
+      </div>
+    </header>
+    <div class="article-entry">
+      <h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>並列実行中のコモンイベントを中断し、最初から実行します。  </p>
+<p>・プラグインコマンド</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RestartCommon 3</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="ダウンロード"><a href="#ダウンロード" class="headerlink" title="ダウンロード"></a>ダウンロード</h2><p>動作バージョン: <code>RPGツクールMV1.6</code>以上</p>
+<p><a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/RestartCommon/RestartCommon.js">こちら</a></p>
+<h2 id="ライセンス"><a href="#ライセンス" class="headerlink" title="ライセンス"></a>ライセンス</h2><p>Released under the MIT license</p>
+
+    </div>
+    <footer class="article-footer">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fkido0617.github.io%2Frpgmaker%2F2019-03-13-restart-common%2F" class="article-share-twitter" target="_blank" title="Twitter">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
+        <path d="M512 113.2c-18.8 8.4-39.1 14-60.3 16.5 21.7-13 38.3-33.6 46.2-58.1-20.3 12-42.8 20.8-66.7 25.5-19.2-20.4-46.5-33.1-76.7-33.1-58 0-105 47-105 105 0 8.2 0.9 16.2 2.7 23.9-87.3-4.4-164.7-46.2-216.5-109.8-9 15.5-14.2 33.6-14.2 52.8 0 36.4 18.5 68.6 46.7 87.4-17.2-0.5-33.4-5.3-47.6-13.1 0 0.4 0 0.9 0 1.3 0 50.9 36.2 93.4 84.3 103-8.8 2.4-18.1 3.7-27.7 3.7-6.8 0-13.3-0.7-19.8-1.9 13.4 41.7 52.2 72.1 98.1 73-36 28.2-81.2 45-130.5 45-8.5 0-16.8-0.5-25.1-1.5 46.6 29.9 101.8 47.2 161.1 47.2 193.2 0 298.9-160.1 298.9-298.9 0-4.6-0.1-9.1-0.3-13.6 20.5-14.7 38.3-33.2 52.4-54.3z"></path>
+        </svg>
+      </a>
+      <a href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fkido0617.github.io%2Frpgmaker%2F2019-03-13-restart-common%2F" class="article-share-facebook" target="_blank" title="Facebook">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
+        <path d="M304 96h80v-96h-80c-61.757 0-112 50.243-112 112v48h-64v96h64v256h96v-256h80l16-96h-96v-48c0-8.673 7.327-16 16-16z"></path>
+        </svg>
+      </a>
+    </footer>
+     
+  <aside class="footer-ad">
+    <div class="ad-title">広告</div>
+    <div class="ad-squares">
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <!-- 336 X 280 -->
+      <ins class="adsbygoogle"
+          style="display:inline-block;width:336px;height:280px"
+          data-ad-client="ca-pub-1232486070209734"
+          data-ad-slot="9417597408"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <!-- 336 X 280 -->
+      <ins class="adsbygoogle"
+          style="display:inline-block;width:336px;height:280px"
+          data-ad-client="ca-pub-1232486070209734"
+          data-ad-slot="9417597408"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </aside>
+
+  </div>
+</article>
+
+
+  <section class="archives-wrap">
+    <div class="archive-title-wrap">
+      <span class="archive-title">RPGツクールMVカテゴリの記事</span>
+    </div>
+    <div class="archives">
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2020-12-27-errorandfix2020/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2020-12-26T15:00:00.000Z">2020-12-27</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">環境依存系のエラー調査など</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2020-02-21-iconset-size/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2020-02-19T15:00:00.000Z">2020-02-20</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">アイコンセットの画像が大きすぎると黒い四角が表示される</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2019-12-20-game-loop/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2019-12-19T15:00:00.000Z">2019-12-20</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">ゲームループの話</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2019-12-20-refresh-map/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2019-12-19T15:00:00.000Z">2019-12-20</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">マップのリフレッシュの話</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2019-12-05-recent-plugins/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2019-12-04T15:00:00.000Z">2019-12-05</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">最近制作した細かいプラグイン</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2019-12-02-picture-number/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2019-12-01T15:00:00.000Z">2019-12-02</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">ツクールのピクチャ番号の扱いについて</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2019-12-01-big-bgs/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2019-11-30T15:00:00.000Z">2019-12-01</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">容量の大きい音声ファイルをロードするとクラッシュする</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2019-10-11-test-report/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2019-10-10T15:00:00.000Z">2019-10-11</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">テストのレポートを作るプラグイン</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2019-09-25-voidfilter/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2019-09-24T15:00:00.000Z">2019-09-25</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">フィルタをかけると画面全体が拡大されてしまう</span>
+  </div>
+</a>
+      
+        
+        
+        <a class="archive-article-block"  href="/rpgmaker/2018-12-24-menu-map-screenshot/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-12-23T15:00:00.000Z">2018-12-24</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">メニューとマップのスクリーンショットについて</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2018-12-08-event-test-meta/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-12-07T15:00:00.000Z">2018-12-08</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">イベントのテストでエラーになるプラグインのケース</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2018-12-03-version-id/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-12-02T15:00:00.000Z">2018-12-03</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">ロードした結果が異なる場合がある</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2018-09-24-plugin-usage/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-09-23T15:00:00.000Z">2018-09-24</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">プラグインの使用状況を出すプラグイン</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2018-09-19-save-equips/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-09-18T15:00:00.000Z">2018-09-19</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">装備を記憶、ロードするプラグイン</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2018-08-20-tint/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-08-19T15:00:00.000Z">2018-08-20</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">ピクチャの色あいを変えるプラグイン</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2018-08-16-rotate-hue/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-08-15T15:00:00.000Z">2018-08-16</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">ピクチャの色相を変えるプラグイン</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2018-07-04-debug-shortcut/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-07-03T15:00:00.000Z">2018-07-04</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">デバッグ画面にショートカットキーを追加するプラグイン</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2018-06-19-save-bgs/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-06-18T15:00:00.000Z">2018-06-19</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">BGSを保存・再開するプラグイン</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2018-03-27-enemy-default-state/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-03-26T15:00:00.000Z">2018-03-27</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">敵キャラにデフォルトのステートを付与するプラグイン</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2017-12-07-outside-window/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2017-12-06T15:00:00.000Z">2017-12-07</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">ゲーム画面外演出を考える</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2017-11-17-niconico-like-text/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2017-11-16T15:00:00.000Z">2017-11-17</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">ニコニコっぽいテキストを表示するプラグイン</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2017-09-18-texteditor/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2017-09-17T15:00:00.000Z">2017-09-18</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">一括入力がしやすいテキストエディタプラグインの紹介</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2017-07-14-window-manager/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2017-07-13T15:00:00.000Z">2017-07-14</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">ウィンドウをたくさん出すプラグイン</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2017-07-09-gauge/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2017-07-08T15:00:00.000Z">2017-07-09</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">マスクを使ってゲージを作る</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2017-06-26-calc/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2017-06-25T15:00:00.000Z">2017-06-26</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">複雑な計算式はプラグインで記述する</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2017-05-08-reservetransfer/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2017-05-07T15:00:00.000Z">2017-05-08</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">シーンからマップに場所移動</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2017-05-08-scene-attr/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2017-05-07T15:00:00.000Z">2017-05-08</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">シーンに引数を渡す</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2017-05-03-contents-blt/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2017-05-02T15:00:00.000Z">2017-05-03</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">ウィンドウに画像を表示する</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2017-05-02-spreadsheet/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2017-05-01T15:00:00.000Z">2017-05-02</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">スプレッドシートからjsonにしてツクールに取り込む</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2017-04-17-random-treasure/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2017-04-16T15:00:00.000Z">2017-04-17</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">ランダムにアイテムを取得するプラグイン(MV版)</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2017-04-13-get-all-items/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2017-04-12T15:00:00.000Z">2017-04-13</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">全てのアイテムを取得するプラグイン</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2017-04-13-tween/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2017-04-12T15:00:00.000Z">2017-04-13</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">TweenプラグインのTorigoya_Tween.jsが便利</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2017-04-12-custom-save/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2017-04-11T15:00:00.000Z">2017-04-12</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">独自のデータをセーブする</span>
+  </div>
+</a>
+      
+        
+        <a class="archive-article-block"  href="/rpgmaker/2017-04-12-loadbitmap/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2017-04-11T15:00:00.000Z">2017-04-12</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">loadBitmapを使うときはsmoothに注意する</span>
+  </div>
+</a>
+      
+    </div>
+  </section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap ad-widget">
+  <div class="widget-title">広告</div>
+  
+    <div class="widget">
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <!-- レスポンシブ -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-1232486070209734"
+          data-ad-slot="6900476205"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  
+</div>
+
+
+
+  
+    <div class="widget-wrap">
+  <div class="widget-title">Author</div>
+  <div class="widget">
+    kido (<a target="_blank" rel="noopener" href="https://twitter.com/kido0617">@kido0617</a>) / <a href="/portfolio" target="_blank">ポートフォリオ</a>
+  </div>
+</div>
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget-title">アーカイブ</div>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a><span class="archive-list-count">28</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014</a><span class="archive-list-count">27</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013</a><span class="archive-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget-title">カテゴリ</div>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/GCP/">GCP</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Go/">Golang</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/RPGMakerMV/">RPGツクールMV</a><span class="category-list-count">35</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/RPGMakerVXAce/">RPGツクールVXAce</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Salesforce/">Salesforce</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spine/">Spine</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Unity/">Unity</a><span class="category-list-count">40</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/WordPress/">WordPress</a><span class="category-list-count">15</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/">その他</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TyranoScript/">ティラノスクリプト</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    <div class="widget-wrap">
+  <div class="widget-title">Search</div>
+  <div class="widget">
+    <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+      <div><label for="searchQ">Google検索</label></div>
+      <input type="search" id="searchQ" name="q" class="search-form-input" placeholder="入力してください"></label>
+      <button type="submit" class="search-form-submit" aria-label="search">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 512 512">
+        <path d="M496.131 435.698l-121.276-103.147c-12.537-11.283-25.945-16.463-36.776-15.963 28.628-33.534 45.921-77.039 45.921-124.588 0-106.039-85.961-192-192-192s-192 85.961-192 192 85.961 192 192 192c47.549 0 91.054-17.293 124.588-45.922-0.5 10.831 4.68 24.239 15.963 36.776l103.147 121.276c17.661 19.623 46.511 21.277 64.11 3.678s15.946-46.449-3.677-64.11zM192 320c-70.692 0-128-57.308-128-128s57.308-128 128-128 128 57.308 128 128-57.307 128-128 128z"></path>
+        </svg>
+      </button>
+      <input type="hidden" name="sitesearch" value="https://kido0617.github.io">
+    </form>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 kido (<a target="_blank" rel="noopener" href="https://twitter.com/kido0617">@kido0617</a>)<br>
+    </div>
+  </div>
+</footer>
+    </div>
+  </div>
+</body>
+</html>
