@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Node.jsでAES暗号化・復号化 | JavaScript | kido Tech Blog</title>
+  <title>Cloud Buildを使ってLaravelをGAEにデプロイ | GCP | kido Tech Blog</title>
   
-  <meta name="description" content="Node.jsでAES暗号化・復号化する話。今回は、AES256bitで行う。cryptoモジュール使えば簡単にできるのだが、createCipherメソッドだと鍵と初期化ベクトルを指定できない。代わりにcreateCipherivを使うことでそれらを指定できる。以下コード。 123456789101112131415161718var cryp &#x3D; require(&quot;crypto&amp;qu">
+  <meta name="description" content="Cloud Build と Github連携Cloud Buildを初めて使いました。Laravelをデプロイするときの個人的なcloudbuid.yamlのメモ。 123456789101112131415161718192021222324252627282930313233steps:## npm run productionをしてjs,cssファイルを生成- name: node  ent">
   <meta name="author" content="kido">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Node.jsでAES暗号化・復号化 | JavaScript | kido Tech Blog">
-  <meta property="og:url" content="https://kido0617.github.io/js/2016-08-17-aes/">
+  <meta property="og:title" content="Cloud Buildを使ってLaravelをGAEにデプロイ | GCP | kido Tech Blog">
+  <meta property="og:url" content="https://kido0617.github.io/server/2021-06-11-cloudbuild-laravel/">
   <meta property="og:site_name" content="kido Tech Blog">
-  <meta property="og:description" content="Node.jsでAES暗号化・復号化する話。今回は、AES256bitで行う。cryptoモジュール使えば簡単にできるのだが、createCipherメソッドだと鍵と初期化ベクトルを指定できない。代わりにcreateCipherivを使うことでそれらを指定できる。以下コード。 123456789101112131415161718var cryp &#x3D; require(&quot;crypto&amp;qu">
+  <meta property="og:description" content="Cloud Build と Github連携Cloud Buildを初めて使いました。Laravelをデプロイするときの個人的なcloudbuid.yamlのメモ。 123456789101112131415161718192021222324252627282930313233steps:## npm run productionをしてjs,cssファイルを生成- name: node  ent">
   <meta property="og:image" content="https://kido0617.github.io/css/images/ogp.png">
   <meta property="og:locale" content="ja_JP">
   <meta name="twitter:card" content="summary" />
@@ -70,7 +70,7 @@
       
         <li property="itemListElement" typeof="ListItem">
           
-            <a property="item" typeof="WebPage" href="/categories/JavaScript/"><span property="name">JavaScript</span></a>
+            <a property="item" typeof="WebPage" href="/categories/GCP/"><span property="name">GCP</span></a>
           
           <meta property="position" content="1" />
           
@@ -80,7 +80,7 @@
       
         <li property="itemListElement" typeof="ListItem">
           
-            <span property="name">Node.jsでAES暗号化・復号化</span>
+            <span property="name">Cloud Buildを使ってLaravelをGAEにデプロイ</span>
           
           <meta property="position" content="2" />
           
@@ -88,29 +88,28 @@
       
     </ul>
   
-        <section id="main"><article id="post-js/2016-08-17-aes" class="article article-type-post">
+        <section id="main"><article id="post-server/2021-06-11-cloudbuild-laravel" class="article article-type-post">
   <div class="article-inner">
     <header class="article-header">
-      <h1 class="article-title">Node.jsでAES暗号化・復号化</h1>
+      <h1 class="article-title">Cloud Buildを使ってLaravelをGAEにデプロイ</h1>
       <div class="article-meta">
-        <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a>
+        <a class="article-category-link" href="/categories/GCP/">GCP</a>
         <span class="article-date">
-          公開日:<time datetime="2016-08-16T15:00:00.000Z">2016-08-17</time>
+          公開日:<time datetime="2021-06-10T15:00:00.000Z">2021-06-11</time>
         </span>
       </div>
     </header>
     <div class="article-entry">
-      <p>Node.jsでAES暗号化・復号化する話。<br>今回は、AES256bitで行う。<br>cryptoモジュール使えば簡単にできるのだが、createCipherメソッドだと鍵と初期化ベクトルを指定できない。<br>代わりにcreateCipherivを使うことでそれらを指定できる。<br>以下コード。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> cryp = <span class="built_in">require</span>(<span class="string">&quot;crypto&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> key = <span class="keyword">new</span> Buffer(<span class="string">&#x27;bFr3r5iRkiTWf3r-a8GsHVZUgpAtDL7X&#x27;</span>, <span class="string">&#x27;utf8&#x27;</span>); <span class="comment">//鍵256bit</span></span><br><span class="line"><span class="keyword">var</span> iv = <span class="keyword">new</span> Buffer(<span class="string">&#x27;5xWAzpRh6TgybfGd&#x27;</span>, <span class="string">&#x27;utf8&#x27;</span>);<span class="comment">//初期化ベクトル128bit</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> text = <span class="string">&quot;あいうえお&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//暗号化</span></span><br><span class="line"><span class="keyword">var</span> cipher = cryp.createCipheriv(<span class="string">&#x27;aes-256-cbc&#x27;</span>, key, iv);</span><br><span class="line"><span class="keyword">var</span> encoded = cipher.update(text, <span class="string">&#x27;utf8&#x27;</span>, <span class="string">&#x27;binary&#x27;</span>);</span><br><span class="line">encoded += cipher.final(<span class="string">&#x27;binary&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//復号化</span></span><br><span class="line"><span class="keyword">var</span> decipher = cryp.createDecipheriv(<span class="string">&#x27;aes256&#x27;</span>, key, iv);</span><br><span class="line"><span class="keyword">var</span> decoded = decipher.update(encoded, <span class="string">&#x27;binary&#x27;</span>, <span class="string">&#x27;utf8&#x27;</span>);</span><br><span class="line">decoded += decipher.final(<span class="string">&#x27;utf8&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(decoded);  <span class="comment">//あいうえお</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
+      <h2 id="Cloud-Build-と-Github連携"><a href="#Cloud-Build-と-Github連携" class="headerlink" title="Cloud Build と Github連携"></a>Cloud Build と Github連携</h2><p>Cloud Buildを初めて使いました。<br>Laravelをデプロイするときの個人的なcloudbuid.yamlのメモ。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">steps:</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## npm run productionをしてjs,cssファイルを生成</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">node</span></span><br><span class="line">  <span class="attr">entrypoint:</span> <span class="string">npm</span></span><br><span class="line">  <span class="attr">args:</span> [<span class="string">&#x27;install&#x27;</span>]</span><br><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">node</span></span><br><span class="line">  <span class="attr">entrypoint:</span> <span class="string">npm</span></span><br><span class="line">  <span class="attr">args:</span> [<span class="string">&#x27;run&#x27;</span>, <span class="string">&#x27;production&#x27;</span>]</span><br><span class="line">  </span><br><span class="line"><span class="comment">## APIキー情報などはシークレットマネージャに登録してあるので、そこから情報を取得して、secret.yamlとして書き出す(app.yamlからincludeする)</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">gcr.io/cloud-builders/gcloud</span></span><br><span class="line">  <span class="attr">entrypoint:</span> <span class="string">&#x27;bash&#x27;</span></span><br><span class="line">  <span class="attr">args:</span> [ <span class="string">&#x27;-c&#x27;</span>, <span class="string">&quot;gcloud secrets versions access latest --secret=xxxxxx --format=&#x27;get(payload.data)&#x27; | tr &#x27;_-&#x27; &#x27;/+&#x27; | base64 -d &gt; secret.yaml&quot;</span> ]</span><br><span class="line"></span><br><span class="line"><span class="comment">## デプロイ</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">&#x27;gcr.io/google.com/cloudsdktool/cloud-sdk&#x27;</span></span><br><span class="line">  <span class="attr">entrypoint:</span> <span class="string">&#x27;bash&#x27;</span></span><br><span class="line">  <span class="attr">args:</span> [<span class="string">&#x27;-c&#x27;</span>, <span class="string">&#x27;gcloud config set app/cloud_build_timeout 1600 &amp;&amp; gcloud app deploy app.yaml --project=xxxxxx&#x27;</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## おまけでslackに通知</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">gcr.io/cloud-builders/curl</span></span><br><span class="line">  <span class="attr">args:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">-X</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">POST</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">--data-urlencode</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">&quot;payload=&#123;\&quot;text\&quot;:\&quot;$BUILD_ID $REPO_NAMEをデプロイしました\&quot;&#125;&quot;</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">https://hooks.slack.com/services/xxxxxxxxxxxxxxxxxxxxxxx</span></span><br><span class="line"></span><br><span class="line"><span class="attr">timeout:</span> <span class="string">&#x27;1600s&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
     </div>
     <footer class="article-footer">
-      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fkido0617.github.io%2Fjs%2F2016-08-17-aes%2F" class="article-share-twitter" target="_blank" title="Twitter">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fkido0617.github.io%2Fserver%2F2021-06-11-cloudbuild-laravel%2F" class="article-share-twitter" target="_blank" title="Twitter">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
         <path d="M512 113.2c-18.8 8.4-39.1 14-60.3 16.5 21.7-13 38.3-33.6 46.2-58.1-20.3 12-42.8 20.8-66.7 25.5-19.2-20.4-46.5-33.1-76.7-33.1-58 0-105 47-105 105 0 8.2 0.9 16.2 2.7 23.9-87.3-4.4-164.7-46.2-216.5-109.8-9 15.5-14.2 33.6-14.2 52.8 0 36.4 18.5 68.6 46.7 87.4-17.2-0.5-33.4-5.3-47.6-13.1 0 0.4 0 0.9 0 1.3 0 50.9 36.2 93.4 84.3 103-8.8 2.4-18.1 3.7-27.7 3.7-6.8 0-13.3-0.7-19.8-1.9 13.4 41.7 52.2 72.1 98.1 73-36 28.2-81.2 45-130.5 45-8.5 0-16.8-0.5-25.1-1.5 46.6 29.9 101.8 47.2 161.1 47.2 193.2 0 298.9-160.1 298.9-298.9 0-4.6-0.1-9.1-0.3-13.6 20.5-14.7 38.3-33.2 52.4-54.3z"></path>
         </svg>
       </a>
-      <a href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fkido0617.github.io%2Fjs%2F2016-08-17-aes%2F" class="article-share-facebook" target="_blank" title="Facebook">
+      <a href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fkido0617.github.io%2Fserver%2F2021-06-11-cloudbuild-laravel%2F" class="article-share-facebook" target="_blank" title="Facebook">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
         <path d="M304 96h80v-96h-80c-61.757 0-112 50.243-112 112v48h-64v96h64v256h96v-256h80l16-96h-96v-48c0-8.673 7.327-16 16-16z"></path>
         </svg>
@@ -147,50 +146,37 @@
 
   <section class="archives-wrap">
     <div class="archive-title-wrap">
-      <span class="archive-title">JavaScriptカテゴリの記事</span>
+      <span class="archive-title">GCPカテゴリの記事</span>
     </div>
     <div class="archives">
       
         
-        <a class="archive-article-block"  href="/js/2019-12-01-firebase-form-upload/">
+        
+        <a class="archive-article-block"  href="/server/2019-12-16-gae-image-upload-slow/">
   <div class="archive-article">
     <div class="archive-article-info">
       <span class="archive-article-date">
-        <time datetime="2019-11-30T15:00:00.000Z">2019-12-01</time>
+        <time datetime="2019-12-15T15:00:00.000Z">2019-12-16</time>
       </span>
-      <span class="archive-article-category">JavaScript</span>
+      <span class="archive-article-category">GCP</span>
     </div>
-    <span class="archive-article-title">Firebaseのstorageにformの画像をアップロードする</span>
+    <span class="archive-article-title">GAEに画像をアップロードするのが遅い</span>
   </div>
 </a>
       
         
-        <a class="archive-article-block"  href="/js/2018-08-01-gas-crawler/">
+        <a class="archive-article-block"  href="/server/2019-12-07-gae-https-only/">
   <div class="archive-article">
     <div class="archive-article-info">
       <span class="archive-article-date">
-        <time datetime="2018-07-31T15:00:00.000Z">2018-08-01</time>
+        <time datetime="2019-12-06T15:00:00.000Z">2019-12-07</time>
       </span>
-      <span class="archive-article-category">JavaScript</span>
+      <span class="archive-article-category">GCP</span>
     </div>
-    <span class="archive-article-title">Google Apps Script でクローラーを作る</span>
+    <span class="archive-article-title">GAEでhttpのアクセスをhttpsにリダイレクトする</span>
   </div>
 </a>
       
-        
-        <a class="archive-article-block"  href="/js/2017-02-13-gas-6-minutes/">
-  <div class="archive-article">
-    <div class="archive-article-info">
-      <span class="archive-article-date">
-        <time datetime="2017-02-12T15:00:00.000Z">2017-02-13</time>
-      </span>
-      <span class="archive-article-category">JavaScript</span>
-    </div>
-    <span class="archive-article-title">Google Apps Script で6分以上の処理をする</span>
-  </div>
-</a>
-      
-        
     </div>
   </section>
 

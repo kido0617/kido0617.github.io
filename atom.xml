@@ -43,6 +43,30 @@
   </entry>
   
   <entry>
+    <title>Cloud Buildを使ってLaravelをGAEにデプロイ</title>
+    <link href="https://kido0617.github.io/server/2021-06-11-cloudbuild-laravel/"/>
+    <id>https://kido0617.github.io/server/2021-06-11-cloudbuild-laravel/</id>
+    <published>2021-06-10T15:00:00.000Z</published>
+    <updated>2021-06-10T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Cloud-Build-と-Github連携"><a href="#Cloud-Build-と-Github連携" class="headerlink" title="Cloud Build と Github連携"></a>Cloud Build と Github連携</h2><p>Cloud Buildを初めて使いました。<br>Laravelをデプロイするときの個人的なcloudbuid.yamlのメモ。</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">steps:</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## npm run productionをしてjs,cssファイルを生成</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">node</span></span><br><span class="line">  <span class="attr">entrypoint:</span> <span class="string">npm</span></span><br><span class="line">  <span class="attr">args:</span> [<span class="string">&#x27;install&#x27;</span>]</span><br><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">node</span></span><br><span class="line">  <span class="attr">entrypoint:</span> <span class="string">npm</span></span><br><span class="line">  <span class="attr">args:</span> [<span class="string">&#x27;run&#x27;</span>, <span class="string">&#x27;production&#x27;</span>]</span><br><span class="line">  </span><br><span class="line"><span class="comment">## APIキー情報などはシークレットマネージャに登録してあるので、そこから情報を取得して、secret.yamlとして書き出す(app.yamlからincludeする)</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">gcr.io/cloud-builders/gcloud</span></span><br><span class="line">  <span class="attr">entrypoint:</span> <span class="string">&#x27;bash&#x27;</span></span><br><span class="line">  <span class="attr">args:</span> [ <span class="string">&#x27;-c&#x27;</span>, <span class="string">&quot;gcloud secrets versions access latest --secret=xxxxxx --format=&#x27;get(payload.data)&#x27; | tr &#x27;_-&#x27; &#x27;/+&#x27; | base64 -d &gt; secret.yaml&quot;</span> ]</span><br><span class="line"></span><br><span class="line"><span class="comment">## デプロイ</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">&#x27;gcr.io/google.com/cloudsdktool/cloud-sdk&#x27;</span></span><br><span class="line">  <span class="attr">entrypoint:</span> <span class="string">&#x27;bash&#x27;</span></span><br><span class="line">  <span class="attr">args:</span> [<span class="string">&#x27;-c&#x27;</span>, <span class="string">&#x27;gcloud config set app/cloud_build_timeout 1600 &amp;&amp; gcloud app deploy app.yaml --project=xxxxxx&#x27;</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## おまけでslackに通知</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">gcr.io/cloud-builders/curl</span></span><br><span class="line">  <span class="attr">args:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">-X</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">POST</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">--data-urlencode</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">&quot;payload=&#123;\&quot;text\&quot;:\&quot;$BUILD_ID $REPO_NAMEをデプロイしました\&quot;&#125;&quot;</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">https://hooks.slack.com/services/xxxxxxxxxxxxxxxxxxxxxxx</span></span><br><span class="line"></span><br><span class="line"><span class="attr">timeout:</span> <span class="string">&#x27;1600s&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;Cloud-Build-と-Github連携&quot;&gt;&lt;a href=&quot;#Cloud-Build-と-Github連携&quot; class=&quot;headerlink&quot; title=&quot;Cloud Build と Github連携&quot;&gt;&lt;/a&gt;Cloud Build と Github
+      
+    
+    </summary>
+    
+    
+      <category term="GCP" scheme="https://kido0617.github.io/categories/GCP/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>細かいTips2</title>
     <link href="https://kido0617.github.io/spine/2021-02-01-tips2/"/>
     <id>https://kido0617.github.io/spine/2021-02-01-tips2/</id>
@@ -224,31 +248,6 @@
       
       
         &lt;h2 id=&quot;お気に入り登録アセット&quot;&gt;&lt;a href=&quot;#お気に入り登録アセット&quot; class=&quot;headerlink&quot; title=&quot;お気に入り登録アセット&quot;&gt;&lt;/a&gt;お気に入り登録アセット&lt;/h2&gt;&lt;p&gt;プロジェクトビューにファイルがたくさんあると目当てのアセットを選ぶの
-      
-    
-    </summary>
-    
-    
-      <category term="Unity" scheme="https://kido0617.github.io/categories/Unity/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>キー操作でUIのナビゲーションをループさせる</title>
-    <link href="https://kido0617.github.io/unity/2020-08-10-loop-navigation/"/>
-    <id>https://kido0617.github.io/unity/2020-08-10-loop-navigation/</id>
-    <published>2020-08-09T15:00:00.000Z</published>
-    <updated>2020-08-09T15:00:00.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p><img src="/img/2020-08-10-loop-navigation/Buttons.png" alt="ボタン"></p><p>キーの上下でカーソル移動させる際、上図のようにボタンが並んでいるときに最上部から最下部にループしたいケースがあります。<br>UIコンポーネントには下図のようにナビゲーションの設定項目があるのですが、これらを設定しても自動でループの表現はできません。<br>Navigation項目をExplicitに設定して各遷移先を明示的に指定すれば可能ですが、手間なので自動で設定するようにします。  </p><p><img src="/img/2020-08-10-loop-navigation/ButtonInspector.png" alt="ナビゲーション設定"></p><h2 id="ナビゲーションを自動設定"><a href="#ナビゲーションを自動設定" class="headerlink" title="ナビゲーションを自動設定"></a>ナビゲーションを自動設定</h2><p><img src="/img/2020-08-10-loop-navigation/Hierarchy.png" alt="ヒエラルキー"></p><p>レイアウトグループを使うことを考えると、ヒエラルキーの順番とボタンの順番は一致しているので、この順番どおりにナビゲーションを設定します。<br>以下のようなコードを書いて、ボタンの親のオブジェクトにつけます(上図でいうCanvas)。<br>ボタンなどはSelectableクラスを継承しているのでこれを取得して、全てにナビゲーションモードをExplicitにして遷移先を設定します。  </p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">LoopMenu</span> : <span class="title">MonoBehaviour</span> &#123;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="comment">//子のボタンやスライダーなど操作可能なコンポーネントを取得する</span></span><br><span class="line">    <span class="keyword">var</span> selects = GetComponentsInChildren&lt;Selectable&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; selects.Length; i++) &#123;</span><br><span class="line">      <span class="keyword">var</span> nav = selects[i].navigation;</span><br><span class="line">      nav.mode = Navigation.Mode.Explicit;</span><br><span class="line">      nav.selectOnUp = selects[i == <span class="number">0</span> ? selects.Length - <span class="number">1</span> : i - <span class="number">1</span>];</span><br><span class="line">      nav.selectOnDown = selects[(i + <span class="number">1</span>) % selects.Length];</span><br><span class="line">      selects[i].navigation = nav;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="他のケース"><a href="#他のケース" class="headerlink" title="他のケース"></a>他のケース</h2><p>例えば、interactableでないボタンは除外する場合は、子のselectableを取得したあとに、以下のようにFilterすれば良いと思います。</p><p><code>selects = selects.Where((s) =&gt; s.interactable).ToArray();</code></p><p>また、あまりないと思いますが、ヒエラルキーの順番と一致しない場合はpositionでソートするという方法も考えられます。</p><h2 id="使用バージョン"><a href="#使用バージョン" class="headerlink" title="使用バージョン"></a>使用バージョン</h2><p>Unity 2019.4.5  </p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/img/2020-08-10-loop-navigation/Buttons.png&quot; alt=&quot;ボタン&quot;&gt;&lt;/p&gt;
-
       
     
     </summary>
