@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>デバッグ画面にショートカットキーを追加するプラグイン | RPGツクールMV | kido Tech Blog</title>
+  <title>回想の実装を考える | RPGツクールMV | kido Tech Blog</title>
   
-  <meta name="description" content="この記事はMV版です。VXAce版はこちら 概要F9で表示するデバッグウィンドウはスイッチと変数の切り替えが面倒なので、ショートカットキーを追加します。  Sキー  スイッチの先頭に飛ぶ Vキー  変数の先頭に飛ぶ 数字キー 入力した番号に飛ぶ  例1: s100 と入力するとスイッチの100番目に飛ぶ例2: v12 と入力すると変数の12番目に飛ぶ   Backspaceキーも使えます。 使用感">
+  <meta name="description" content="概要ゲーム中のあるシーンだけをもう一度見られるようにする機能として「回想」があります。ゲームのタイトルから見られる回想もありますが、今回取り上げるのはゲームプレイ中からの回想シーンです。回想は現在進行中の状態から全く別のシーンを再生しないといけないのですが、回想前後で状態が変わってはいけません。例えば、以下のような注意があります。  アイテムやお金が増えたり減ったりしてはいけない スイッチや変数の">
   <meta name="author" content="kido">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <meta property="og:type" content="article">
-  <meta property="og:title" content="デバッグ画面にショートカットキーを追加するプラグイン | RPGツクールMV | kido Tech Blog">
-  <meta property="og:url" content="https://kido0617.github.io/rpgmaker/2018-07-04-debug-shortcut/">
+  <meta property="og:title" content="回想の実装を考える | RPGツクールMV | kido Tech Blog">
+  <meta property="og:url" content="https://kido0617.github.io/rpgmaker/2021-06-13-memoryscene/">
   <meta property="og:site_name" content="kido Tech Blog">
-  <meta property="og:description" content="この記事はMV版です。VXAce版はこちら 概要F9で表示するデバッグウィンドウはスイッチと変数の切り替えが面倒なので、ショートカットキーを追加します。  Sキー  スイッチの先頭に飛ぶ Vキー  変数の先頭に飛ぶ 数字キー 入力した番号に飛ぶ  例1: s100 と入力するとスイッチの100番目に飛ぶ例2: v12 と入力すると変数の12番目に飛ぶ   Backspaceキーも使えます。 使用感">
+  <meta property="og:description" content="概要ゲーム中のあるシーンだけをもう一度見られるようにする機能として「回想」があります。ゲームのタイトルから見られる回想もありますが、今回取り上げるのはゲームプレイ中からの回想シーンです。回想は現在進行中の状態から全く別のシーンを再生しないといけないのですが、回想前後で状態が変わってはいけません。例えば、以下のような注意があります。  アイテムやお金が増えたり減ったりしてはいけない スイッチや変数の">
   <meta property="og:image" content="https://kido0617.github.io/css/images/ogp.png">
   <meta property="og:locale" content="ja_JP">
   <meta name="twitter:card" content="summary" />
@@ -80,7 +80,7 @@
       
         <li property="itemListElement" typeof="ListItem">
           
-            <span property="name">デバッグ画面にショートカットキーを追加するプラグイン</span>
+            <span property="name">回想の実装を考える</span>
           
           <meta property="position" content="2" />
           
@@ -88,40 +88,40 @@
       
     </ul>
   
-        <section id="main"><article id="post-rpgmaker/2018-07-04-debug-shortcut" class="article article-type-post">
+        <section id="main"><article id="post-rpgmaker/2021-06-13-memoryscene" class="article article-type-post">
   <div class="article-inner">
     <header class="article-header">
-      <h1 class="article-title">デバッグ画面にショートカットキーを追加するプラグイン</h1>
+      <h1 class="article-title">回想の実装を考える</h1>
       <div class="article-meta">
         <a class="article-category-link" href="/categories/RPGMakerMV/">RPGツクールMV</a>
         <span class="article-date">
-          公開日:<time datetime="2018-07-03T15:00:00.000Z">2018-07-04</time>
+          公開日:<time datetime="2021-06-12T15:00:00.000Z">2021-06-13</time>
         </span>
       </div>
     </header>
     <div class="article-entry">
-      <p>この記事はMV版です。VXAce版は<a href="/rpgmaker/2018-07-05-debug-shortcut-vxace/">こちら</a></p>
-<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>F9で表示するデバッグウィンドウはスイッチと変数の切り替えが面倒なので、ショートカットキーを追加します。</p>
-<ul>
-<li><code>Sキー</code>  スイッチの先頭に飛ぶ</li>
-<li><code>Vキー</code>  変数の先頭に飛ぶ</li>
-<li><code>数字キー</code> 入力した番号に飛ぶ</li>
-</ul>
-<p>例1: <code>s100</code> と入力するとスイッチの100番目に飛ぶ<br>例2: <code>v12</code> と入力すると変数の12番目に飛ぶ  </p>
-<p>Backspaceキーも使えます。</p>
-<p>使用感はこんな感じです。<br><video src="/img/2018-07-04-debug-shortcut/debug-shortcut.mp4" width="816" height="624" controls></video></p>
-<h2 id="ダウンロード"><a href="#ダウンロード" class="headerlink" title="ダウンロード"></a>ダウンロード</h2><p><a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/DebugWindowShortCut/DebugWindowShortCut.js">こちらから</a></p>
-<h2 id="注意事項"><a href="#注意事項" class="headerlink" title="注意事項"></a>注意事項</h2><p>キーマップに <code>S</code> <code>V</code> <code>0～9</code> <code>BackSpace</code> キーを登録するのでこれらを使うプラグインを使用している場合、競合起こす可能性がある気がします。<br>私は <code>Input.keyMapper[8] = &#39;BackSpace&#39;</code> と登録していますが、他のプラグインが<code>BackSpace</code>を<code>backspace</code>みたいに登録しているとどっちかが動かないことが起こります。</p>
-<h2 id="ライセンス"><a href="#ライセンス" class="headerlink" title="ライセンス"></a>ライセンス</h2><p>Released under the MIT license</p>
+      <h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>ゲーム中のあるシーンだけをもう一度見られるようにする機能として「回想」があります。<br>ゲームのタイトルから見られる回想もありますが、今回取り上げるのはゲームプレイ中からの回想シーンです。<br>回想は現在進行中の状態から全く別のシーンを再生しないといけないのですが、回想前後で状態が変わってはいけません。<br>例えば、以下のような注意があります。</p>
+<ol>
+<li>アイテムやお金が増えたり減ったりしてはいけない</li>
+<li>スイッチや変数の状態が変わってはいけない</li>
+<li>ピクチャの状態が変わってはいけない</li>
+<li>パーティの状態(HP、メンバーなど）が変わってはいけない</li>
+<li>プラグインの設定が変わってはいけない</li>
+</ol>
+<p>もちろん、回想中に変えた場合は元に戻せばいいのですが、戻し忘れがあったりして、意外とバグが起こるところです。</p>
+<h2 id="実装案"><a href="#実装案" class="headerlink" title="実装案"></a>実装案</h2><p>上記のような問題に対処するため、回想前にメモリにゲームデータをセーブする方法が考えられます。<br>回想後にはそのセーブデータをロードすればいいので、回想中にいくらデータをいじっても一発で元に戻せます。  </p>
+<p>また、回想をいつでもユーザの操作によって終了させることができます。<br>ユーザ側は途中で回想を終わらせたいときに、会話スキップで最後まで見る必要なく、いつでも終わらせられるので便利です。  </p>
+<p>この方式は実装実績もあるのですが、問題なく動作しています。<br>ただ、仮でセーブしたものをロードするので、いろいろ考慮しないといけないところはあります。</p>
+<p>唯一問題があったのは、プラグインによってはグローバルな領域に設定値を持つものがあり、回想中でそれを変更するとセーブ・ロードで復元できないものがあったことでした。<br>(SomeGlobalObject.flag = false  みたいな設定値でセーブデータに含まれない特殊なもの)</p>
 
     </div>
     <footer class="article-footer">
-      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fkido0617.github.io%2Frpgmaker%2F2018-07-04-debug-shortcut%2F" class="article-share-twitter" target="_blank" title="Twitter">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fkido0617.github.io%2Frpgmaker%2F2021-06-13-memoryscene%2F" class="article-share-twitter" target="_blank" title="Twitter">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
         <path d="M512 113.2c-18.8 8.4-39.1 14-60.3 16.5 21.7-13 38.3-33.6 46.2-58.1-20.3 12-42.8 20.8-66.7 25.5-19.2-20.4-46.5-33.1-76.7-33.1-58 0-105 47-105 105 0 8.2 0.9 16.2 2.7 23.9-87.3-4.4-164.7-46.2-216.5-109.8-9 15.5-14.2 33.6-14.2 52.8 0 36.4 18.5 68.6 46.7 87.4-17.2-0.5-33.4-5.3-47.6-13.1 0 0.4 0 0.9 0 1.3 0 50.9 36.2 93.4 84.3 103-8.8 2.4-18.1 3.7-27.7 3.7-6.8 0-13.3-0.7-19.8-1.9 13.4 41.7 52.2 72.1 98.1 73-36 28.2-81.2 45-130.5 45-8.5 0-16.8-0.5-25.1-1.5 46.6 29.9 101.8 47.2 161.1 47.2 193.2 0 298.9-160.1 298.9-298.9 0-4.6-0.1-9.1-0.3-13.6 20.5-14.7 38.3-33.2 52.4-54.3z"></path>
         </svg>
       </a>
-      <a href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fkido0617.github.io%2Frpgmaker%2F2018-07-04-debug-shortcut%2F" class="article-share-facebook" target="_blank" title="Facebook">
+      <a href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fkido0617.github.io%2Frpgmaker%2F2021-06-13-memoryscene%2F" class="article-share-facebook" target="_blank" title="Facebook">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
         <path d="M304 96h80v-96h-80c-61.757 0-112 50.243-112 112v48h-64v96h64v256h96v-256h80l16-96h-96v-48c0-8.673 7.327-16 16-16z"></path>
         </svg>
@@ -163,18 +163,6 @@
     <div class="archives">
       
         
-        <a class="archive-article-block"  href="/rpgmaker/2021-06-13-memoryscene/">
-  <div class="archive-article">
-    <div class="archive-article-info">
-      <span class="archive-article-date">
-        <time datetime="2021-06-12T15:00:00.000Z">2021-06-13</time>
-      </span>
-      <span class="archive-article-category">RPGツクールMV</span>
-    </div>
-    <span class="archive-article-title">回想の実装を考える</span>
-  </div>
-</a>
-      
         
         <a class="archive-article-block"  href="/rpgmaker/2020-12-27-errorandfix2020/">
   <div class="archive-article">
@@ -397,6 +385,18 @@
 </a>
       
         
+        <a class="archive-article-block"  href="/rpgmaker/2018-07-04-debug-shortcut/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-07-03T15:00:00.000Z">2018-07-04</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">デバッグ画面にショートカットキーを追加するプラグイン</span>
+  </div>
+</a>
+      
         
         <a class="archive-article-block"  href="/rpgmaker/2018-06-19-save-bgs/">
   <div class="archive-article">

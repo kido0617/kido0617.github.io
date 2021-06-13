@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://kido0617.github.io/"/>
-  <updated>2021-06-10T15:00:00.000Z</updated>
+  <updated>2021-06-12T15:00:00.000Z</updated>
   <id>https://kido0617.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>回想の実装を考える</title>
+    <link href="https://kido0617.github.io/rpgmaker/2021-06-13-memoryscene/"/>
+    <id>https://kido0617.github.io/rpgmaker/2021-06-13-memoryscene/</id>
+    <published>2021-06-12T15:00:00.000Z</published>
+    <updated>2021-06-12T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>ゲーム中のあるシーンだけをもう一度見られるようにする機能として「回想」があります。<br>ゲームのタイトルから見られる回想もありますが、今回取り上げるのはゲームプレイ中からの回想シーンです。<br>回想は現在進行中の状態から全く別のシーンを再生しないといけないのですが、回想前後で状態が変わってはいけません。<br>例えば、以下のような注意があります。</p><ol><li>アイテムやお金が増えたり減ったりしてはいけない</li><li>スイッチや変数の状態が変わってはいけない</li><li>ピクチャの状態が変わってはいけない</li><li>パーティの状態(HP、メンバーなど）が変わってはいけない</li><li>プラグインの設定が変わってはいけない</li></ol><p>もちろん、回想中に変えた場合は元に戻せばいいのですが、戻し忘れがあったりして、意外とバグが起こるところです。</p><h2 id="実装案"><a href="#実装案" class="headerlink" title="実装案"></a>実装案</h2><p>上記のような問題に対処するため、回想前にメモリにゲームデータをセーブする方法が考えられます。<br>回想後にはそのセーブデータをロードすればいいので、回想中にいくらデータをいじっても一発で元に戻せます。  </p><p>また、回想をいつでもユーザの操作によって終了させることができます。<br>ユーザ側は途中で回想を終わらせたいときに、会話スキップで最後まで見る必要なく、いつでも終わらせられるので便利です。  </p><p>この方式は実装実績もあるのですが、問題なく動作しています。<br>ただ、仮でセーブしたものをロードするので、いろいろ考慮しないといけないところはあります。</p><p>唯一問題があったのは、プラグインによってはグローバルな領域に設定値を持つものがあり、回想中でそれを変更するとセーブ・ロードで復元できないものがあったことでした。<br>(SomeGlobalObject.flag = false  みたいな設定値でセーブデータに含まれない特殊なもの)</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h2&gt;&lt;p&gt;ゲーム中のあるシーンだけをもう一度見られるようにする機能として「回想」があります。&lt;br&gt;ゲームのタイトルから見られる回想もありますが、今回
+      
+    
+    </summary>
+    
+    
+      <category term="RPGツクールMV" scheme="https://kido0617.github.io/categories/RPGMakerMV/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>オフセットを使い髪の毛や触手などの揺れ物を作る</title>
@@ -230,30 +254,6 @@
     
     
       <category term="RPGツクールMV" scheme="https://kido0617.github.io/categories/RPGMakerMV/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Kris&#39; Favorite Assets が便利</title>
-    <link href="https://kido0617.github.io/unity/2020-08-29-krisFavoriteAssets/"/>
-    <id>https://kido0617.github.io/unity/2020-08-29-krisFavoriteAssets/</id>
-    <published>2020-08-28T15:00:00.000Z</published>
-    <updated>2020-08-28T15:00:00.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="お気に入り登録アセット"><a href="#お気に入り登録アセット" class="headerlink" title="お気に入り登録アセット"></a>お気に入り登録アセット</h2><p>プロジェクトビューにファイルがたくさんあると目当てのアセットを選ぶのに苦労します。<br>検索しても良いですが、お気に入りをリスト表示していてワンクリックで飛べると便利です。<br>それを叶えてくれるアセットが<a href="https://assetstore.unity.com/packages/tools/utilities/kris-favorite-assets-143105">Kris’ Favorite Assets</a>です。<br>しかも無料アセットです。</p><p>以下のようなウィンドウで管理するようになっていて、本当にシンプル。<br>追加したいアセットをプロジェクトビューで選択してPin(お気に入り登録)するだけです。<br>登録したアセットは選択すればプロジェクトビューで選択され、スクロールしてくれます。<br>さらにPingボタンを押すと選択されずにスクロールしてくれるので、Inspectorの表示が変わることなくアセットを探すことができます。</p><p><img src="/img/2020-08-29-krisFavoriteAssets/window.png" alt="表示"></p><p>加えて、このアセットは以下のように一つのソースファイルで構成されているのも良いです。<br>お気に入り登録したアセットはEditorPrefsに保存しているようで、特にファイルが生成されるということもないです。</p><p><img src="/img/2020-08-29-krisFavoriteAssets/list.png" alt="表示"></p><h2 id="同機能の他アセット"><a href="#同機能の他アセット" class="headerlink" title="同機能の他アセット"></a>同機能の他アセット</h2><p>有料ですが、お気に入り登録ができるアセットに<a href="https://assetstore.unity.com/packages/tools/utilities/favorites-tab-s-4237">Favorites Tab[s]</a> があり、こちらも所持しています。<br>こちらは有料だけあってシーンビューのファイルもお気に入り登録できたり、分類分けできたりして高機能です。<br>ただそこまで丁寧に分けることもなく、単純にお気に入り登録したいだけなので、<code>Kris&#39; Favorite Assets</code>の方が私には合っていました。  </p><h2 id="使用バージョン"><a href="#使用バージョン" class="headerlink" title="使用バージョン"></a>使用バージョン</h2><p>Unity 2019.4.5  </p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;お気に入り登録アセット&quot;&gt;&lt;a href=&quot;#お気に入り登録アセット&quot; class=&quot;headerlink&quot; title=&quot;お気に入り登録アセット&quot;&gt;&lt;/a&gt;お気に入り登録アセット&lt;/h2&gt;&lt;p&gt;プロジェクトビューにファイルがたくさんあると目当てのアセットを選ぶの
-      
-    
-    </summary>
-    
-    
-      <category term="Unity" scheme="https://kido0617.github.io/categories/Unity/"/>
     
     
   </entry>
