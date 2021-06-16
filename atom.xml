@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://kido0617.github.io/"/>
-  <updated>2021-06-12T15:00:00.000Z</updated>
+  <updated>2021-06-15T15:00:00.000Z</updated>
   <id>https://kido0617.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>再インストール後のwin10 Proへのアップグレード</title>
+    <link href="https://kido0617.github.io/others/2021-06-16-win10upgrade/"/>
+    <id>https://kido0617.github.io/others/2021-06-16-win10upgrade/</id>
+    <published>2021-06-15T15:00:00.000Z</published>
+    <updated>2021-06-15T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>前にWindows10 HomeからProにWindows Storeでアップグレードを購入しました。<br>その後、最インストールしなおして、もう一度HomeからProにアップグレードしようとしました。<br>「設定」→「ライセンス認証」を選択し、そこからアップグレードを選択するとWindowsストアに遷移します。<br>しかし、ページを開くと「お探しのものはここにはありません」と表示され、アップグレードできません。<br>購入履歴からも表示できませんでした。<br>仕方なくサポートに電話したところ、以下の手順で解決しました。  </p><h2 id="手順"><a href="#手順" class="headerlink" title="手順"></a>手順</h2><p>サポートによると、OSの表示言語を「英語」にして試すとうまくいくことがあるようです。<br>「設定」→「言語」を選択し、言語の追加から「English 米国」を追加し、英語を優先にします。<br>再起動し、ストアにアクセスすると無事、Win10 Proのページが表示され、アップグレードできました。  </p><h2 id="おまけ"><a href="#おまけ" class="headerlink" title="おまけ"></a>おまけ</h2><p>サポートに久しぶりに電話したのですが、今のWindowsってデフォルト遠隔操作できるソフト（クイックアシスト）が入っていて、サポートがこっちのパソコンを遠隔で操作して解決してくれるんですね。  </p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h2&gt;&lt;p&gt;前にWindows10 HomeからProにWindows Storeでアップグレードを購入しました。&lt;br&gt;その後、最インストールしなおし
+      
+    
+    </summary>
+    
+    
+      <category term="その他" scheme="https://kido0617.github.io/categories/Others/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>回想の実装を考える</title>
@@ -230,30 +254,6 @@
     
     
       <category term="Unity" scheme="https://kido0617.github.io/categories/Unity/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>環境依存系のエラー調査など</title>
-    <link href="https://kido0617.github.io/rpgmaker/2020-12-27-errorandfix2020/"/>
-    <id>https://kido0617.github.io/rpgmaker/2020-12-27-errorandfix2020/</id>
-    <published>2020-12-26T15:00:00.000Z</published>
-    <updated>2020-12-26T15:00:00.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>最近調査したツクールMVのエラーのログです。<br>解決できていないので、一応情報として残しておきます。<br>稀に発生するのか環境依存なのか、通常発生しないため調査困難なものです。  </p><h2 id="ロードできない問題"><a href="#ロードできない問題" class="headerlink" title="ロードできない問題"></a>ロードできない問題</h2><p>セーブしたファイルをロードしようとしてもブザーが鳴り、ロードできないという現象です。<br>該当のセーブファイルを確認すると以下のようにデータが壊れていました。<br>容量はあるように見えますが、全部0で埋められています。  </p><p><img src="/img/2020-12-27-errorandfix2020/zero.png" alt="セーブファイル"></p><p>セーブファイルが壊れているのでロードの問題ではなく、セーブ時の問題なのですが、発生条件はよくわかりませんでした。<br>ツクールのセーブは、セーブが実行される直前に.bakファイルが生成されます。<br>セーブに失敗した場合、そのbakファイルからセーブを復元するのですが、それも作用してはいないようです。<br>セーブファイルが壊れているのでセーブ時にゲームが落ちたとかありえるのかもしれませんが、発生時の状況も不明でこれ以上は無理でした。</p><h2 id="音の再生時のエラー"><a href="#音の再生時のエラー" class="headerlink" title="音の再生時のエラー"></a>音の再生時のエラー</h2><p>以下のエラーが発生しました。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Uncaught RangeError: Failed to execute &#x27;start&#x27; on &#x27;AudioBufferSouceNode&#x27;: The offset provided (-22089.3) is less than the minimum bound (0)</span><br></pre></td></tr></table></figure><p>これは音声ファイルの再生位置をマイナスで再生しようとしたときに生じるエラーです。<br>例えばコンソールに<code>AudioManager.playBgm(&#123;name: &quot;Battle1&quot;, volume : 90, pitch: 100&#125;, -200);</code>のように打つとエラーを起こせます。<br>ですが、プロジェクトを見てもマイナス位置で再生しようとするような場面もなく、発生条件不明でした。<br><code>WebAudio.prototype._startPlaying</code>メソッドの引数に<code>offset</code>があり、これがマイナスの場合、0にするような処理を追加すればとりあえずエラーは出なくなるので、一旦これで対処しました。</p><h2 id="起動しない問題"><a href="#起動しない問題" class="headerlink" title="起動しない問題"></a>起動しない問題</h2><p>exeファイルをダブルクリックしてもゲームが起動せず、同フォルダ内に<code>debug.log</code>が生成されます。<br>ログには以下のように記載されていました。  </p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[WARNING:minidump_to_upload_parameters.cc(66)] duplicate annotation name metrics_client_id, discarding value 43cecd601cc84e9e9bbac5991f952aff</span><br><span class="line">[ERROR:http_transport_win.cc(175)] WinHttpCrackUrl: URL は認識されているプロトコルを使用していません (0x2ee6)</span><br></pre></td></tr></table></figure><p>これはSteamで配信されているMV製のゲームやnw.jsを採用しているゲームでも報告があるのですが、明確な解決手段は示されていませんでした。  </p><p>nw.jsのバージョンを上げると解決するという話もありましたが、リリース後のゲームにそれを適用するのは厳しいです。<br>解決するかどうかもわからず、別の問題が発生した場合、問題の切り分けが難しくなります。<br>デプロイの工程も複雑になるのでこの手段は採用しませんでした。</p><p>別の解決方法としてWindows XP (Service Pack 3)互換モードにしたら、起動したというものがありました。<br>互換モードの切り替えはexeファイルのプロパティから選択できます。<br>掲示板を見るとこの手段で2人解決した報告があるので、興味深いです。<br>これで本当に解決するかどうかは手元に再現環境がないので定かではありませんが、試す価値はあるかもしれません。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h2&gt;&lt;p&gt;最近調査したツクールMVのエラーのログです。&lt;br&gt;解決できていないので、一応情報として残しておきます。&lt;br&gt;稀に発生するのか環境依存なの
-      
-    
-    </summary>
-    
-    
-      <category term="RPGツクールMV" scheme="https://kido0617.github.io/categories/RPGMakerMV/"/>
     
     
   </entry>
