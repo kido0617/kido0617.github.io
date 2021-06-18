@@ -9,6 +9,22 @@
 
 
     <url>
+        <loc>https://kido0617.github.io/others/2021-06-18-search-console-pending/</loc>
+        <lastmod>2021-06-17T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kido0617.github.io/php/2021-06-17-laravel-sitemap/</loc>
+        <lastmod>2021-06-16T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>https://kido0617.github.io/others/2021-06-16-win10upgrade/</loc>
         <lastmod>2021-06-15T15:00:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -795,14 +811,6 @@
     <url>
         <loc>https://kido0617.github.io/server/2016-06-29-ansible-vagrant/</loc>
         <lastmod>2016-06-28T15:00:00.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>https://kido0617.github.io/others/2015-09-17-reflection-attribute/</loc>
-        <lastmod>2015-09-16T15:00:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 

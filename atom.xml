@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://kido0617.github.io/"/>
-  <updated>2021-06-15T15:00:00.000Z</updated>
+  <updated>2021-06-17T15:00:00.000Z</updated>
   <id>https://kido0617.github.io/</id>
   
   <author>
@@ -15,6 +15,54 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>sitemap.xml登録の「取得できませんでした」について</title>
+    <link href="https://kido0617.github.io/others/2021-06-18-search-console-pending/"/>
+    <id>https://kido0617.github.io/others/2021-06-18-search-console-pending/</id>
+    <published>2021-06-17T15:00:00.000Z</published>
+    <updated>2021-06-17T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Search Consoleにsitemap.xmlを登録したときに「取得できませんでした」と表示されることがあります。<br>最初、xmlの形式や件数がオーバーしているなどのこちらのミスかと思ったのですが、10個に分割しているsitemap.xmlのいくつかは登録できていました。<br>言語を英語にして見ると「Couldn’t fetch」と表示されており、これで検索してみたところ、いくつか回答が見つかりました。<br>robot.txtやmetaタグでnoindexにしているという説もありましたが、これは違いました。<br>もう一つ、Search Console側の表示が違くて、実際はPendingだという説。<br>実際、そのとおりで1日置いたら徐々に取得可能なものが増えていきました。<br>単純に表示に惑わされただけで、待つのが正解だったという話。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Search Consoleにsitemap.xmlを登録したときに「取得できませんでした」と表示されることがあります。&lt;br&gt;最初、xmlの形式や件数がオーバーしているなどのこちらのミスかと思ったのですが、10個に分割しているsitemap.xmlのいくつかは登録できてい
+      
+    
+    </summary>
+    
+    
+      <category term="その他" scheme="https://kido0617.github.io/categories/Others/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Laravel sitemap.xmlを作る</title>
+    <link href="https://kido0617.github.io/php/2021-06-17-laravel-sitemap/"/>
+    <id>https://kido0617.github.io/php/2021-06-17-laravel-sitemap/</id>
+    <published>2021-06-16T15:00:00.000Z</published>
+    <updated>2021-06-16T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="大規模なsitemap-xmlを作る"><a href="#大規模なsitemap-xmlを作る" class="headerlink" title="大規模なsitemap.xmlを作る"></a>大規模なsitemap.xmlを作る</h2><p>sitemap.xmlは1つのファイルに5万件という制約があります。<br>その件数を超えるようなサイトはsitemap.xmlを分割する必要があり、今回その対応が必要でした。<br>Laravelでsitemap.xmlを作るのには<a href="https://github.com/Laravelium/laravel-sitemap">laravelium/sitemap</a>を使うのが便利です。<br>Laravelのバージョンごとに使うバージョンが異なるので正しいバージョンをインストールします。  </p><h2 id="sitemap-index"><a href="#sitemap-index" class="headerlink" title="sitemap index"></a>sitemap index</h2><p>sitemap indexファイルを作り、sitemap.xmlを分割します。<br><a href="https://github.com/Laravelium/laravel-sitemap/wiki/Sitemap-index">公式ドキュメント</a>にサンプルがあるので合わせて参考にしてください。  </p><p>下記のようにルーティングを設定します。<br>別にURLに.xmlが必要なわけではないので、<code>/sitemap</code>をindexファイルとし、<code>/sitemap/xxx</code>をタイプ別にsitemapを生成するように分割します。</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Route::get(<span class="string">&#x27;sitemap/&#123;type?&#125;&#x27;</span>, <span class="string">&#x27;SitemapController@index&#x27;</span>);</span><br></pre></td></tr></table></figure><p>以下にControllerを載せています。<br>$typeがnullのときはインデックスを表示し、$typeが指定されたときは、タイプ別のsitemapを表示するようにすれば適切に分割できます。  </p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SitemapController</span> <span class="keyword">extends</span> <span class="title">Controller</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span>(<span class="params"><span class="variable">$type</span> = <span class="literal">null</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$sitemap</span> = App::make(<span class="string">&#x27;sitemap&#x27;</span>);</span><br><span class="line">        <span class="keyword">switch</span> (<span class="variable">$type</span>) &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="literal">null</span>:</span><br><span class="line">                <span class="comment">//インデックス</span></span><br><span class="line">                <span class="variable">$sitemap</span>-&gt;model-&gt;setSitemaps([<span class="string">&#x27;loc&#x27;</span> =&gt; url(<span class="string">&#x27;sitemap/type1&#x27;</span>), <span class="string">&#x27;lastmod&#x27;</span> =&gt; <span class="literal">null</span>]);</span><br><span class="line">                <span class="variable">$sitemap</span>-&gt;model-&gt;setSitemaps([<span class="string">&#x27;loc&#x27;</span> =&gt; url(<span class="string">&#x27;sitemap/type2&#x27;</span>), <span class="string">&#x27;lastmod&#x27;</span> =&gt; <span class="literal">null</span>]);</span><br><span class="line">                <span class="variable">$sitemap</span>-&gt;model-&gt;setSitemaps([<span class="string">&#x27;loc&#x27;</span> =&gt; url(<span class="string">&#x27;sitemap/type3&#x27;</span>), <span class="string">&#x27;lastmod&#x27;</span> =&gt; <span class="literal">null</span>]);</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;type1&#x27;</span>:</span><br><span class="line">                <span class="variable">$sitemap</span>-&gt;add(URL::to(<span class="string">&#x27;/&#x27;</span>), <span class="literal">null</span>, <span class="string">&#x27;1.0&#x27;</span>, <span class="string">&#x27;daily&#x27;</span>);</span><br><span class="line">                <span class="comment">//適当にURLをaddしていく</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;type2&#x27;</span>:</span><br><span class="line">                <span class="comment">//type1と同様にsitemapに5万件を超えないようにaddする</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;type3&#x27;</span>:</span><br><span class="line">               <span class="comment">//type1と同様にsitemapに5万件を超えないようにaddする</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//描画</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$sitemap</span>-&gt;render(<span class="string">&#x27;xml&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;大規模なsitemap-xmlを作る&quot;&gt;&lt;a href=&quot;#大規模なsitemap-xmlを作る&quot; class=&quot;headerlink&quot; title=&quot;大規模なsitemap.xmlを作る&quot;&gt;&lt;/a&gt;大規模なsitemap.xmlを作る&lt;/h2&gt;&lt;p&gt;sitema
+      
+    
+    </summary>
+    
+    
+      <category term="PHP" scheme="https://kido0617.github.io/categories/PHP/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>再インストール後のwin10 Proへのアップグレード</title>
@@ -206,54 +254,6 @@
     
     
       <category term="Spine" scheme="https://kido0617.github.io/categories/Spine/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>コンポーネントの順番をスクリプトから並び替える</title>
-    <link href="https://kido0617.github.io/unity/2020-12-30-order-component/"/>
-    <id>https://kido0617.github.io/unity/2020-12-30-order-component/</id>
-    <published>2020-12-29T15:00:00.000Z</published>
-    <updated>2020-12-29T15:00:00.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="UnityEditorInternal-ComponentUtility"><a href="#UnityEditorInternal-ComponentUtility" class="headerlink" title="UnityEditorInternal.ComponentUtility"></a>UnityEditorInternal.ComponentUtility</h2><p>インスペクタに表示されているコンポーネントの順番はドラッグしたり、右クリックメニューからMove Up や Move Downを選択すると動かすことができます。<br>この動作を以下のエディタスクリプトから実行することができます。</p><ul><li>UnityEditorInternal.ComponentUtility.MoveComponentUp(component);</li><li>UnityEditorInternal.ComponentUtility.MoveComponentDown(component);</li></ul><p>Move Up と Downしかないので少し自由に動かしづらいです。<br>私はこれらを使ってインスペクタに表示されるコンポーネントをソートするということをしています。  </p><p>コンポーネントの順番は見やすさもありますが、GetComponentsで取得したときの返り値にも影響します。<br>GetComponentsで取得したときのコンポーネントの順番はインスペクタの順番であることが保証されているからです。<br><a href="https://docs.unity3d.com/Manual/UsingTheInspector.html?_ga=2.84041243.325931642.1609116201-486307593.1604365260">このページ</a>に以下のように記載があります。  </p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">The order you give to components in the Inspector window is </span><br><span class="line">the order you need to use when querying components in your user scripts. </span><br><span class="line">If you query the components programmatically, you’ll get the order you see in the Inspector.</span><br></pre></td></tr></table></figure><h2 id="使用バージョン"><a href="#使用バージョン" class="headerlink" title="使用バージョン"></a>使用バージョン</h2><p>Unity 2019.4.14</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;UnityEditorInternal-ComponentUtility&quot;&gt;&lt;a href=&quot;#UnityEditorInternal-ComponentUtility&quot; class=&quot;headerlink&quot; title=&quot;UnityEditorInternal.
-      
-    
-    </summary>
-    
-    
-      <category term="Unity" scheme="https://kido0617.github.io/categories/Unity/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Smart Inspectorの紹介</title>
-    <link href="https://kido0617.github.io/unity/2020-12-30-smart-inspector/"/>
-    <id>https://kido0617.github.io/unity/2020-12-30-smart-inspector/</id>
-    <published>2020-12-29T15:00:00.000Z</published>
-    <updated>2020-12-29T15:00:00.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="シンプルなインスペクタ"><a href="#シンプルなインスペクタ" class="headerlink" title="シンプルなインスペクタ"></a>シンプルなインスペクタ</h2><p>コンポーネントをたくさんつけるとインスペクタが縦に長くなりすぎて、見通しが悪くなります。<br>そういうときにシンプルにインスペクタの表示をしてくれる<a href="https://assetstore.unity.com/packages/tools/utilities/smart-inspector-140945?locale=ja-JP">Smart Inspector</a>が便利かもしれません。  </p><p>以下のような独自にインスペクタのウィンドウを表示できます。<br>元のインスペクタは維持されるので併用可能です。  </p><p><img src="/img/2020-12-30-smart-inspector/inspector.png" alt="表示"></p><p>Openボタンを押すと以下のようにコンポーネントを単体で表示できます。</p><p><img src="/img/2020-12-30-smart-inspector/open.png" alt="Open"></p><p>コンポーネントの値をいじるのに1ステップ増えるので使い所は限られるかもしれませんが、最近使っています。  </p><h2 id="使用バージョン"><a href="#使用バージョン" class="headerlink" title="使用バージョン"></a>使用バージョン</h2><p>Unity 2019.4.14</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;シンプルなインスペクタ&quot;&gt;&lt;a href=&quot;#シンプルなインスペクタ&quot; class=&quot;headerlink&quot; title=&quot;シンプルなインスペクタ&quot;&gt;&lt;/a&gt;シンプルなインスペクタ&lt;/h2&gt;&lt;p&gt;コンポーネントをたくさんつけるとインスペクタが縦に長くなりすぎて、見
-      
-    
-    </summary>
-    
-    
-      <category term="Unity" scheme="https://kido0617.github.io/categories/Unity/"/>
     
     
   </entry>
