@@ -9,6 +9,13 @@
 
 
     <url>
+        <loc>https://kido0617.github.io/categories/Unity/</loc>
+        <lastmod>2021-06-18T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
         <loc>https://kido0617.github.io/categories/Others/</loc>
         <lastmod>2021-06-17T15:00:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -39,13 +46,6 @@
     <url>
         <loc>https://kido0617.github.io/categories/GCP/</loc>
         <lastmod>2021-06-10T15:00:00.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>https://kido0617.github.io/categories/Unity/</loc>
-        <lastmod>2020-12-29T15:00:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

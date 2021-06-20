@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://kido0617.github.io/"/>
-  <updated>2021-06-17T15:00:00.000Z</updated>
+  <updated>2021-06-18T15:00:00.000Z</updated>
   <id>https://kido0617.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Chronosを使った感想</title>
+    <link href="https://kido0617.github.io/unity/2021-06-19-chronos/"/>
+    <id>https://kido0617.github.io/unity/2021-06-19-chronos/</id>
+    <published>2021-06-18T15:00:00.000Z</published>
+    <updated>2021-06-18T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Chronosについて"><a href="#Chronosについて" class="headerlink" title="Chronosについて"></a>Chronosについて</h2><p>時間を制御するアセットに<a href="https://assetstore.unity.com/packages/tools/particles-effects/chronos-31225?locale=ja-JP">Chronos</a>があります。<br>私が購入した頃は有料でしたが、今は無料になり、誰でも使えるアセットです。<br>ゲーム全体のスローモーションなどはUnityでデフォルトでもTime.scaleの値を変更すれば手軽に可能ですが、プレイヤーだけ時間はそのまま、弾丸や敵は遅くしたいといったケースはこういったアセットを使うことも考えられます。  </p><p>今回は、このアセットを使用してゲームを作り、リリースもしたことがあるので、その使用感を述べていきたいと思います。  </p><h2 id="Timelineコンポーネント"><a href="#Timelineコンポーネント" class="headerlink" title="Timelineコンポーネント"></a>Timelineコンポーネント</h2><p>ざっくり使用方法を説明すると、TimeKeeperという時間制御のマネージャークラスが一個あり、時間制御したいオブジェクトにはTimelineコンポーネントを付けるという感じです。<br>TimelineコンポーネントにはEnemyやEffectなど好きなIDを振り、TimekeeperでEnemeyは速度倍率0.5などと設定します。  </p><p>時間制御を行うすべてのオブジェクトにこのTimelineコンポーネントを付ける必要があります。<br>Animator、Particle、Rigidbody、Navimeshなどこれらを使うオブジェクトには漏れなくTimelineコンポーネントを追加します。<br>これがなかなか手間で、漏れがあるとスローモーション時だとそれだけ早かったりしてバグになります。  </p><p>しかし、これは単純にコンポーネントつければいいだけの話です。</p><h2 id="タイミング問題"><a href="#タイミング問題" class="headerlink" title="タイミング問題"></a>タイミング問題</h2><p>時間制御の開始、解除のタイミングが合わないことがあります。<br>特に苦労したのが、時間制御中にオブジェクトを生成したときで、最初の1フレームだけ適用されず、元の時間軸で動いてしまうことでした。<br>スローモーションで使用すると、1フレームだけ速く動いてしまい、1フレームだけでもやはりおかしく見えてしまいます。<br>Execution Orderを整えればどうにかなるのかもしれませんが、わからず、元のソースコードを読んで修正して対応しました。  </p><h2 id="他のアセットへの適用"><a href="#他のアセットへの適用" class="headerlink" title="他のアセットへの適用"></a>他のアセットへの適用</h2><p>Chronos対応として、プログラムでTimeクラスを使用している箇所はすべてTimelineクラスに置き換える必要があります。<br>例えば、Time.deltatime は Timeline.deltatimeに、Time.fixedDeltaTime は Timeline.fixedDeltaTime になどです。<br>また、Rigidbodyについても、Rigidbody.velocity は Timeline.rigidbody.velocityに置き換えるなど対応が必要です。  </p><p>自分が作成したプログラムについてはこの対応は容易ですが、他のアセットを使用している場合、この対応が非常に困難です。<br>他のアセットのソースを読み、置き換えていくのがかなり大変でした。</p><h2 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>Chronosは非常に便利で、実際に使う場合かなり覚悟が必要ですが、次も時間制御をするならこれを使うと思います。<br>ただ、今はもうほとんどメンテナンスされていないようなので、別の解決策があるなら、それに乗り換えたい気持ちはあります。<br>(そもそも複雑な時間制御をしたいと思うケースがあまり発生しないかもしれませんが)</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;Chronosについて&quot;&gt;&lt;a href=&quot;#Chronosについて&quot; class=&quot;headerlink&quot; title=&quot;Chronosについて&quot;&gt;&lt;/a&gt;Chronosについて&lt;/h2&gt;&lt;p&gt;時間を制御するアセットに&lt;a href=&quot;https://asset
+      
+    
+    </summary>
+    
+    
+      <category term="Unity" scheme="https://kido0617.github.io/categories/Unity/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>sitemap.xml登録の「取得できませんでした」について</title>
@@ -224,30 +248,6 @@
       
       
         &lt;h2 id=&quot;クリックでIKのターゲットを作成した時のずれ&quot;&gt;&lt;a href=&quot;#クリックでIKのターゲットを作成した時のずれ&quot; class=&quot;headerlink&quot; title=&quot;クリックでIKのターゲットを作成した時のずれ&quot;&gt;&lt;/a&gt;クリックでIKのターゲットを作成した時の
-      
-    
-    </summary>
-    
-    
-      <category term="Spine" scheme="https://kido0617.github.io/categories/Spine/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>原点調整</title>
-    <link href="https://kido0617.github.io/spine/2021-01-27-origin/"/>
-    <id>https://kido0617.github.io/spine/2021-01-27-origin/</id>
-    <published>2021-01-26T15:00:00.000Z</published>
-    <updated>2021-01-26T15:00:00.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="PhotoshopToSpineの原点"><a href="#PhotoshopToSpineの原点" class="headerlink" title="PhotoshopToSpineの原点"></a>PhotoshopToSpineの原点</h2><p>PhotoshopからSpine用にデータをエクスポートするのに<a href="https://github.com/EsotericSoftware/spine-scripts/tree/master/photoshop">PhotoshopToSpine</a>を使用しますが、このときの原点はPhotoshopの定規(Ruler)の(0,0)の位置を基準とします。<br>Photoshopのメニューの「表示」から「定規」を選択すると画面の上左に座標が表示されます。<br>定規の原点を移動させるには下図のように左上の地点からドラッグすると十字表示になり、ドラッグを離すとその位置が原点になります。  </p><p><img src="/img/2021-01-27-origin/ruler.png" alt="定規の調整"></p><p>しかし、この定規の位置は保存されないので、ガイドを作成しておくと良いと思います。<br>「表示」から「新規ガイド」を選択し、水平方向と垂直方向をそれぞれ作成します。<br>定規の位置に青い線が引かれ、このガイドは保存されます。<br>次に開いたときは、定規の位置を調整するときにガイドの線にスナップされるので原点を復元できます。</p><h2 id="Spine上での原点調整"><a href="#Spine上での原点調整" class="headerlink" title="Spine上での原点調整"></a>Spine上での原点調整</h2><p>すべてのパーツをドラッグして矩形選択し、移動させれば原点を調整できます。<br>しかし、この方法だと非表示のパーツなど選択漏れがあったりした場合、すべてのパーツを移動できない可能性があります。<br>これを回避する手順を示します。  </p><ol><li>Hierarchyからrootを選択し、rootを動かしてキャラ全体の原点を合わせます。</li><li>次に下図のようにCompensateで画像とボーンをONにします。こうすると画像もボーンも動かず、rootの座標だけを変更できます。<br>この状態でTranslateの値を0,0にすればrootの座標が原点に移動します。</li></ol><p><img src="/img/2021-01-27-origin/compensate.png" alt="rootの調整"></p><p>終わったら忘れずにCompensateをOffにしておきます。</p><p>しかし、この方法だとPhotoshop側で新たにパーツを追加した場合に対応できないので注意が必要です。<br>rootの位置が変わっているので追加したパーツの位置がずれます。<br>Photoshop側で定規の位置を調整するやり方の方が変更に強い気がします。  </p><h2 id="使用バージョン"><a href="#使用バージョン" class="headerlink" title="使用バージョン"></a>使用バージョン</h2><p>Spine 3.8.99</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;PhotoshopToSpineの原点&quot;&gt;&lt;a href=&quot;#PhotoshopToSpineの原点&quot; class=&quot;headerlink&quot; title=&quot;PhotoshopToSpineの原点&quot;&gt;&lt;/a&gt;PhotoshopToSpineの原点&lt;/h2&gt;&lt;p&gt;Ph
       
     
     </summary>
