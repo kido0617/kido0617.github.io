@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://kido0617.github.io/"/>
-  <updated>2021-06-18T15:00:00.000Z</updated>
+  <updated>2021-06-20T15:00:00.000Z</updated>
   <id>https://kido0617.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>敵AIとビジュアルスクリプティング</title>
+    <link href="https://kido0617.github.io/unity/2021-06-21-enemy-ai/"/>
+    <id>https://kido0617.github.io/unity/2021-06-21-enemy-ai/</id>
+    <published>2021-06-20T15:00:00.000Z</published>
+    <updated>2021-06-20T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="経緯"><a href="#経緯" class="headerlink" title="経緯"></a>経緯</h2><p>アクションゲームなど敵のAIが必要なケースは多々あります。<br>その際、FSMやビヘイビアツリーなどといった考え方を用いて実装する方法が一般的だと思います。<br>そういったアセットが多々あり、ビジュアルスクリプティングでAIを作るということはよく取られる手法です。<br>私が好きなアクションゲームの Hollow Knight はFSMを実装できるPlaymakerで敵AIを作っているらしく、私もそれに習ってPlaymakerで実装を始めました。<br>しかし、これが私に合わなくて、採用できなかったのでそのことを書いておきたいと思います。</p><h2 id="ビジュアルスクリプティングでAIを作るということ"><a href="#ビジュアルスクリプティングでAIを作るということ" class="headerlink" title="ビジュアルスクリプティングでAIを作るということ"></a>ビジュアルスクリプティングでAIを作るということ</h2><p>個人的につらかったのは以下の点です。<br>敵AIの挙動を考え、プログラムで実装する方法を考えます。<br>その方法を思いついたあとに、これをPlaymakerで実装するにはどうしたら良いのかさらに考えないといけないのです。<br>プログラムで普通に実装するならイメージできるのですが、Playmaker上で再現する方法がパッと出てこないということが多々ありました。<br>Playmakerで敵AIを作る動画などを観ても、なんとなく二度手間というか、思考のロジックが自分に合っていないような気がします。<br>急がば回れでビジュアルスクリプティングで敵AIを作る環境をちゃんと整えれば最終的な効率が上がるのか？とも思いましたが、私は断念してしまいました。</p><h2 id="結果"><a href="#結果" class="headerlink" title="結果"></a>結果</h2><p>UnityのFSMの実装でポピュラーな以下のコードが公開されています。<br><a href="https://github.com/thefuntastic/Unity3d-Finite-State-Machine">thefuntastic / Unity3d-Finite-State-Machine</a><br>敵ごとにこの実装を用いて、敵AIを作ることにしました。<br>コードベースなのでGitでdiffも見やすいし、ダイレクトに書けるので性に合っていると感じました。</p><p>余談ですが、Playmakerはアクションの実行をシーケンスにしてフローチャート的な使い方して使うのは便利そうだなとは思いました。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;経緯&quot;&gt;&lt;a href=&quot;#経緯&quot; class=&quot;headerlink&quot; title=&quot;経緯&quot;&gt;&lt;/a&gt;経緯&lt;/h2&gt;&lt;p&gt;アクションゲームなど敵のAIが必要なケースは多々あります。&lt;br&gt;その際、FSMやビヘイビアツリーなどといった考え方を用いて実装する方法が一
+      
+    
+    </summary>
+    
+    
+      <category term="Unity" scheme="https://kido0617.github.io/categories/Unity/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>Chronosを使った感想</title>
@@ -224,30 +248,6 @@
       
       
         &lt;h2 id=&quot;自動バックアップ&quot;&gt;&lt;a href=&quot;#自動バックアップ&quot; class=&quot;headerlink&quot; title=&quot;自動バックアップ&quot;&gt;&lt;/a&gt;自動バックアップ&lt;/h2&gt;&lt;p&gt;Spineには自動バックアップの機能があります。&lt;br&gt;F12で開くSettingsメニュー
-      
-    
-    </summary>
-    
-    
-      <category term="Spine" scheme="https://kido0617.github.io/categories/Spine/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>IK作成時にボーンがずれないようにする</title>
-    <link href="https://kido0617.github.io/spine/2021-01-28-ik-making/"/>
-    <id>https://kido0617.github.io/spine/2021-01-28-ik-making/</id>
-    <published>2021-01-27T15:00:00.000Z</published>
-    <updated>2021-01-27T15:00:00.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="クリックでIKのターゲットを作成した時のずれ"><a href="#クリックでIKのターゲットを作成した時のずれ" class="headerlink" title="クリックでIKのターゲットを作成した時のずれ"></a>クリックでIKのターゲットを作成した時のずれ</h2><p>IKを作成する際、親子ボーンを選択したあとに適当なスペースをクリックすると、IKのターゲットが作成されます。<br>しかし、位置が正確でないためボーンが微妙にずれます。<br>選択したボーンの先端の位置にIKのターゲットが作成できれば、ずれないのですが、ボーンの先端の位置を取得することができません。  </p><p><img src="/img/2021-01-28-ik-making/click.png" alt="IKターゲットの作成"></p><h2 id="既存のボーンをターゲットにする"><a href="#既存のボーンをターゲットにする" class="headerlink" title="既存のボーンをターゲットにする"></a>既存のボーンをターゲットにする</h2><p>IKを作成するときにHierarchyから既存のボーンを選択すると、それをIKのターゲットにできます。<br>これを用いて正確な位置にIKターゲットを作成します。  </p><ol><li>HierarchyからIKの先端になるボーンを選択します。  </li><li>下図のようにHierarchy下部のNewからボーンを選択し、ボーンを作成します。<br>この手順で作成したボーンは親ボーンの先端位置に正確に作成されます。</li></ol><p><img src="/img/2021-01-28-ik-making/new-bone.png" alt="IKターゲットの作成"></p><p><img src="/img/2021-01-28-ik-making/bone3.png" alt="bone3はbone2の先端位置に作成される"></p><ol start="3"><li>作成したボーンを別の階層に移動させます(IKターゲットはIK対象のボーンの子にすることはできません)</li></ol><p><img src="/img/2021-01-28-ik-making/move.png" alt="ボーンを移動する"></p><ol start="4"><li>親子ボーンを選択し、IKコンストレイントを作成します。その際、作成したボーンを選択します。</li></ol><p>これで正確な位置にIKのターゲットを作成することができました。</p><h2 id="使用バージョン"><a href="#使用バージョン" class="headerlink" title="使用バージョン"></a>使用バージョン</h2><p>Spine 3.8.99</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://ja.esotericsoftware.com/forum/Create-IK-target-at-the-tip-of-the-bone-10405?sid=db41d7c3c8a9de240009e01c9f7ed5bb&p=46851">Create IK target at the tip of the bone</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;クリックでIKのターゲットを作成した時のずれ&quot;&gt;&lt;a href=&quot;#クリックでIKのターゲットを作成した時のずれ&quot; class=&quot;headerlink&quot; title=&quot;クリックでIKのターゲットを作成した時のずれ&quot;&gt;&lt;/a&gt;クリックでIKのターゲットを作成した時の
       
     
     </summary>

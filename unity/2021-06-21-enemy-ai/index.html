@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Visual Studio で保存時にフォーマットする | Unity | kido Tech Blog</title>
+  <title>敵AIとビジュアルスクリプティング | Unity | kido Tech Blog</title>
   
-  <meta name="description" content="オートフォーマットVisual Studio で ファイル保存時にコードをフォーマットしたい。コードを自動的に整形することにより、ソースコードの品質を保ちたい。 Productivity Powers Tool のインストールメニューの「ツール」→「拡張機能と更新プログラム」を選択。「オンライン」から「Productivity Powers Tools」をダウンロードする。（執筆時のバージョンはP">
+  <meta name="description" content="経緯アクションゲームなど敵のAIが必要なケースは多々あります。その際、FSMやビヘイビアツリーなどといった考え方を用いて実装する方法が一般的だと思います。そういったアセットが多々あり、ビジュアルスクリプティングでAIを作るということはよく取られる手法です。私が好きなアクションゲームの Hollow Knight はFSMを実装できるPlaymakerで敵AIを作っているらしく、私もそれに習ってPl">
   <meta name="author" content="kido">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Visual Studio で保存時にフォーマットする | Unity | kido Tech Blog">
-  <meta property="og:url" content="https://kido0617.github.io/unity/2016-07-06-visual-studio-auto-format/">
+  <meta property="og:title" content="敵AIとビジュアルスクリプティング | Unity | kido Tech Blog">
+  <meta property="og:url" content="https://kido0617.github.io/unity/2021-06-21-enemy-ai/">
   <meta property="og:site_name" content="kido Tech Blog">
-  <meta property="og:description" content="オートフォーマットVisual Studio で ファイル保存時にコードをフォーマットしたい。コードを自動的に整形することにより、ソースコードの品質を保ちたい。 Productivity Powers Tool のインストールメニューの「ツール」→「拡張機能と更新プログラム」を選択。「オンライン」から「Productivity Powers Tools」をダウンロードする。（執筆時のバージョンはP">
+  <meta property="og:description" content="経緯アクションゲームなど敵のAIが必要なケースは多々あります。その際、FSMやビヘイビアツリーなどといった考え方を用いて実装する方法が一般的だと思います。そういったアセットが多々あり、ビジュアルスクリプティングでAIを作るということはよく取られる手法です。私が好きなアクションゲームの Hollow Knight はFSMを実装できるPlaymakerで敵AIを作っているらしく、私もそれに習ってPl">
   <meta property="og:image" content="https://kido0617.github.io/css/images/ogp.png">
   <meta property="og:locale" content="ja_JP">
   <meta name="twitter:card" content="summary" />
@@ -80,7 +80,7 @@
       
         <li property="itemListElement" typeof="ListItem">
           
-            <span property="name">Visual Studio で保存時にフォーマットする</span>
+            <span property="name">敵AIとビジュアルスクリプティング</span>
           
           <meta property="position" content="2" />
           
@@ -88,33 +88,31 @@
       
     </ul>
   
-        <section id="main"><article id="post-unity/2016-07-06-visual-studio-auto-format" class="article article-type-post">
+        <section id="main"><article id="post-unity/2021-06-21-enemy-ai" class="article article-type-post">
   <div class="article-inner">
     <header class="article-header">
-      <h1 class="article-title">Visual Studio で保存時にフォーマットする</h1>
+      <h1 class="article-title">敵AIとビジュアルスクリプティング</h1>
       <div class="article-meta">
         <a class="article-category-link" href="/categories/Unity/">Unity</a>
         <span class="article-date">
-          公開日:<time datetime="2016-07-05T15:00:00.000Z">2016-07-06</time>
+          公開日:<time datetime="2021-06-20T15:00:00.000Z">2021-06-21</time>
         </span>
       </div>
     </header>
     <div class="article-entry">
-      <h2 id="オートフォーマット"><a href="#オートフォーマット" class="headerlink" title="オートフォーマット"></a>オートフォーマット</h2><p>Visual Studio で ファイル保存時にコードをフォーマットしたい。<br>コードを自動的に整形することにより、ソースコードの品質を保ちたい。</p>
-<h2 id="Productivity-Powers-Tool-のインストール"><a href="#Productivity-Powers-Tool-のインストール" class="headerlink" title="Productivity Powers Tool のインストール"></a>Productivity Powers Tool のインストール</h2><p>メニューの「ツール」→「拡張機能と更新プログラム」を選択。<br>「オンライン」から「Productivity Powers Tools」をダウンロードする。<br>（執筆時のバージョンはProductivity Powers Tools 2015）</p>
-<h2 id="設定"><a href="#設定" class="headerlink" title="設定"></a>設定</h2><p>メニューの「ツール」→「オプション」に新しく「Productivity Powers Tools」があるので選択。<br>「PowerCommands」にある「Format document on save」 にチェック。</p>
-<p><img src="/img/2016-07-06-visual-studio-auto-format/auto-format.png" alt="Format document on save"></p>
-<p>以上でOK。</p>
-<h2 id="2019年追記"><a href="#2019年追記" class="headerlink" title="2019年追記"></a>2019年追記</h2><p>拡張機能と更新プログラムで「Format」で検索すると、それに特化したものが見つかるのでそれのほうが軽くて良いと思います。</p>
+      <h2 id="経緯"><a href="#経緯" class="headerlink" title="経緯"></a>経緯</h2><p>アクションゲームなど敵のAIが必要なケースは多々あります。<br>その際、FSMやビヘイビアツリーなどといった考え方を用いて実装する方法が一般的だと思います。<br>そういったアセットが多々あり、ビジュアルスクリプティングでAIを作るということはよく取られる手法です。<br>私が好きなアクションゲームの Hollow Knight はFSMを実装できるPlaymakerで敵AIを作っているらしく、私もそれに習ってPlaymakerで実装を始めました。<br>しかし、これが私に合わなくて、採用できなかったのでそのことを書いておきたいと思います。</p>
+<h2 id="ビジュアルスクリプティングでAIを作るということ"><a href="#ビジュアルスクリプティングでAIを作るということ" class="headerlink" title="ビジュアルスクリプティングでAIを作るということ"></a>ビジュアルスクリプティングでAIを作るということ</h2><p>個人的につらかったのは以下の点です。<br>敵AIの挙動を考え、プログラムで実装する方法を考えます。<br>その方法を思いついたあとに、これをPlaymakerで実装するにはどうしたら良いのかさらに考えないといけないのです。<br>プログラムで普通に実装するならイメージできるのですが、Playmaker上で再現する方法がパッと出てこないということが多々ありました。<br>Playmakerで敵AIを作る動画などを観ても、なんとなく二度手間というか、思考のロジックが自分に合っていないような気がします。<br>急がば回れでビジュアルスクリプティングで敵AIを作る環境をちゃんと整えれば最終的な効率が上がるのか？とも思いましたが、私は断念してしまいました。</p>
+<h2 id="結果"><a href="#結果" class="headerlink" title="結果"></a>結果</h2><p>UnityのFSMの実装でポピュラーな以下のコードが公開されています。<br><a target="_blank" rel="noopener" href="https://github.com/thefuntastic/Unity3d-Finite-State-Machine">thefuntastic / Unity3d-Finite-State-Machine</a><br>敵ごとにこの実装を用いて、敵AIを作ることにしました。<br>コードベースなのでGitでdiffも見やすいし、ダイレクトに書けるので性に合っていると感じました。</p>
+<p>余談ですが、Playmakerはアクションの実行をシーケンスにしてフローチャート的な使い方して使うのは便利そうだなとは思いました。</p>
 
     </div>
     <footer class="article-footer">
-      <a href="https://twitter.com/intent/tweet?text=Visual%20Studio%20%E3%81%A7%E4%BF%9D%E5%AD%98%E6%99%82%E3%81%AB%E3%83%95%E3%82%A9%E3%83%BC%E3%83%9E%E3%83%83%E3%83%88%E3%81%99%E3%82%8B%20%7C%20Unity%20%7C%20kido tech blog%0a&url=https%3A%2F%2Fkido0617.github.io%2Funity%2F2016-07-06-visual-studio-auto-format%2F" class="article-share-twitter" target="_blank" title="Twitter">
+      <a href="https://twitter.com/intent/tweet?text=%E6%95%B5AI%E3%81%A8%E3%83%93%E3%82%B8%E3%83%A5%E3%82%A2%E3%83%AB%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%20%7C%20Unity%20%7C%20kido tech blog%0a&url=https%3A%2F%2Fkido0617.github.io%2Funity%2F2021-06-21-enemy-ai%2F" class="article-share-twitter" target="_blank" title="Twitter">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
         <path d="M512 113.2c-18.8 8.4-39.1 14-60.3 16.5 21.7-13 38.3-33.6 46.2-58.1-20.3 12-42.8 20.8-66.7 25.5-19.2-20.4-46.5-33.1-76.7-33.1-58 0-105 47-105 105 0 8.2 0.9 16.2 2.7 23.9-87.3-4.4-164.7-46.2-216.5-109.8-9 15.5-14.2 33.6-14.2 52.8 0 36.4 18.5 68.6 46.7 87.4-17.2-0.5-33.4-5.3-47.6-13.1 0 0.4 0 0.9 0 1.3 0 50.9 36.2 93.4 84.3 103-8.8 2.4-18.1 3.7-27.7 3.7-6.8 0-13.3-0.7-19.8-1.9 13.4 41.7 52.2 72.1 98.1 73-36 28.2-81.2 45-130.5 45-8.5 0-16.8-0.5-25.1-1.5 46.6 29.9 101.8 47.2 161.1 47.2 193.2 0 298.9-160.1 298.9-298.9 0-4.6-0.1-9.1-0.3-13.6 20.5-14.7 38.3-33.2 52.4-54.3z"></path>
         </svg>
       </a>
-      <a href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fkido0617.github.io%2Funity%2F2016-07-06-visual-studio-auto-format%2F" class="article-share-facebook" target="_blank" title="Facebook">
+      <a href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fkido0617.github.io%2Funity%2F2021-06-21-enemy-ai%2F" class="article-share-facebook" target="_blank" title="Facebook">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
         <path d="M304 96h80v-96h-80c-61.757 0-112 50.243-112 112v48h-64v96h64v256h96v-256h80l16-96h-96v-48c0-8.673 7.327-16 16-16z"></path>
         </svg>
@@ -156,18 +154,6 @@
     <div class="archives">
       
         
-        <a class="archive-article-block"  href="/unity/2021-06-21-enemy-ai/">
-  <div class="archive-article">
-    <div class="archive-article-info">
-      <span class="archive-article-date">
-        <time datetime="2021-06-20T15:00:00.000Z">2021-06-21</time>
-      </span>
-      <span class="archive-article-category">Unity</span>
-    </div>
-    <span class="archive-article-title">敵AIとビジュアルスクリプティング</span>
-  </div>
-</a>
-      
         
         <a class="archive-article-block"  href="/unity/2021-06-19-chronos/">
   <div class="archive-article">
@@ -442,6 +428,18 @@
 </a>
       
         
+        <a class="archive-article-block"  href="/unity/2016-07-06-visual-studio-auto-format/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2016-07-05T15:00:00.000Z">2016-07-06</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">Visual Studio で保存時にフォーマットする</span>
+  </div>
+</a>
+      
         
         <a class="archive-article-block"  href="/unity/2015-09-04-spreadsheet-loader/">
   <div class="archive-article">
