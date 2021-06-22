@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>IK作成時にボーンがずれないようにする | Spine | kido Tech Blog</title>
+  <title>参考資料まとめ | Spine | kido Tech Blog</title>
   
-  <meta name="description" content="クリックでIKのターゲットを作成した時のずれIKを作成する際、親子ボーンを選択したあとに適当なスペースをクリックすると、IKのターゲットが作成されます。しかし、位置が正確でないためボーンが微妙にずれます。選択したボーンの先端の位置にIKのターゲットが作成できれば、ずれないのですが、ボーンの先端の位置を取得することができません。    既存のボーンをターゲットにするIKを作成するときにHierarc">
+  <meta name="description" content="個人的にSpineを勉強するのに役立ったサイトなどのまとめです。   エディタ編 Spineユーザーガイド公式のユーザガイドは全ての画面の説明が載っているのでよく見返します。このボタンの機能なんだっけ？っていうときはここを見ます。たまに表示言語が英語にしかない情報があります。  Spine Cheat Sheetショートカットキーのリファレンス。覚えると効率が違います。LMBはLeft Mouse">
   <meta name="author" content="kido">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <meta property="og:type" content="article">
-  <meta property="og:title" content="IK作成時にボーンがずれないようにする | Spine | kido Tech Blog">
-  <meta property="og:url" content="https://kido0617.github.io/spine/2021-01-28-ik-making/">
+  <meta property="og:title" content="参考資料まとめ | Spine | kido Tech Blog">
+  <meta property="og:url" content="https://kido0617.github.io/spine/2021-06-22-reference/">
   <meta property="og:site_name" content="kido Tech Blog">
-  <meta property="og:description" content="クリックでIKのターゲットを作成した時のずれIKを作成する際、親子ボーンを選択したあとに適当なスペースをクリックすると、IKのターゲットが作成されます。しかし、位置が正確でないためボーンが微妙にずれます。選択したボーンの先端の位置にIKのターゲットが作成できれば、ずれないのですが、ボーンの先端の位置を取得することができません。    既存のボーンをターゲットにするIKを作成するときにHierarc">
+  <meta property="og:description" content="個人的にSpineを勉強するのに役立ったサイトなどのまとめです。   エディタ編 Spineユーザーガイド公式のユーザガイドは全ての画面の説明が載っているのでよく見返します。このボタンの機能なんだっけ？っていうときはここを見ます。たまに表示言語が英語にしかない情報があります。  Spine Cheat Sheetショートカットキーのリファレンス。覚えると効率が違います。LMBはLeft Mouse">
   <meta property="og:image" content="https://kido0617.github.io/css/images/ogp.png">
   <meta property="og:locale" content="ja_JP">
   <meta name="twitter:card" content="summary" />
@@ -80,7 +80,7 @@
       
         <li property="itemListElement" typeof="ListItem">
           
-            <span property="name">IK作成時にボーンがずれないようにする</span>
+            <span property="name">参考資料まとめ</span>
           
           <meta property="position" content="2" />
           
@@ -88,46 +88,68 @@
       
     </ul>
   
-        <section id="main"><article id="post-spine/2021-01-28-ik-making" class="article article-type-post">
+        <section id="main"><article id="post-spine/2021-06-22-reference" class="article article-type-post">
   <div class="article-inner">
     <header class="article-header">
-      <h1 class="article-title">IK作成時にボーンがずれないようにする</h1>
+      <h1 class="article-title">参考資料まとめ</h1>
       <div class="article-meta">
         <a class="article-category-link" href="/categories/Spine/">Spine</a>
         <span class="article-date">
-          公開日:<time datetime="2021-01-27T15:00:00.000Z">2021-01-28</time>
+          公開日:<time datetime="2021-06-21T15:00:00.000Z">2021-06-22</time>
         </span>
       </div>
     </header>
     <div class="article-entry">
-      <h2 id="クリックでIKのターゲットを作成した時のずれ"><a href="#クリックでIKのターゲットを作成した時のずれ" class="headerlink" title="クリックでIKのターゲットを作成した時のずれ"></a>クリックでIKのターゲットを作成した時のずれ</h2><p>IKを作成する際、親子ボーンを選択したあとに適当なスペースをクリックすると、IKのターゲットが作成されます。<br>しかし、位置が正確でないためボーンが微妙にずれます。<br>選択したボーンの先端の位置にIKのターゲットが作成できれば、ずれないのですが、ボーンの先端の位置を取得することができません。  </p>
-<p><img src="/img/2021-01-28-ik-making/click.png" alt="IKターゲットの作成"></p>
-<h2 id="既存のボーンをターゲットにする"><a href="#既存のボーンをターゲットにする" class="headerlink" title="既存のボーンをターゲットにする"></a>既存のボーンをターゲットにする</h2><p>IKを作成するときにHierarchyから既存のボーンを選択すると、それをIKのターゲットにできます。<br>これを用いて正確な位置にIKターゲットを作成します。  </p>
-<ol>
-<li>HierarchyからIKの先端になるボーンを選択します。  </li>
-<li>下図のようにHierarchy下部のNewからボーンを選択し、ボーンを作成します。<br>この手順で作成したボーンは親ボーンの先端位置に正確に作成されます。</li>
-</ol>
-<p><img src="/img/2021-01-28-ik-making/new-bone.png" alt="IKターゲットの作成"></p>
-<p><img src="/img/2021-01-28-ik-making/bone3.png" alt="bone3はbone2の先端位置に作成される"></p>
-<ol start="3">
-<li>作成したボーンを別の階層に移動させます(IKターゲットはIK対象のボーンの子にすることはできません)</li>
-</ol>
-<p><img src="/img/2021-01-28-ik-making/move.png" alt="ボーンを移動する"></p>
-<ol start="4">
-<li>親子ボーンを選択し、IKコンストレイントを作成します。その際、作成したボーンを選択します。</li>
-</ol>
-<p>これで正確な位置にIKのターゲットを作成することができました。</p>
-<h2 id="使用バージョン"><a href="#使用バージョン" class="headerlink" title="使用バージョン"></a>使用バージョン</h2><p>Spine 3.8.99</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="http://ja.esotericsoftware.com/forum/Create-IK-target-at-the-tip-of-the-bone-10405?sid=db41d7c3c8a9de240009e01c9f7ed5bb&p=46851">Create IK target at the tip of the bone</a></p>
+      <p>個人的にSpineを勉強するのに役立ったサイトなどのまとめです。  </p>
+<h2 id="エディタ編"><a href="#エディタ編" class="headerlink" title="エディタ編"></a>エディタ編</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="http://ja.esotericsoftware.com/spine-user-guide">Spineユーザーガイド</a><br>公式のユーザガイドは全ての画面の説明が載っているのでよく見返します。<br>このボタンの機能なんだっけ？っていうときはここを見ます。<br>たまに表示言語が英語にしかない情報があります。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://ja.esotericsoftware.com/spine-cheat-sheet">Spine Cheat Sheet</a><br>ショートカットキーのリファレンス。覚えると効率が違います。<br>LMBはLeft Mouse Buttonの略。RMBは右クリック。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://cgworld.jp/regular/201908-spine1.html">連載　Spineではじめる、動くイラスト制作 | CGWORLD.jp</a><br>チュートリアル形式で実際にキャラクターアニメーションを１から作る連載で、わかりやすくて勉強になります。<br>サンプルファイルもついているので一緒に作りながらできますし、完成版もDLできます。<br>コンストレイントとか最初難しかったのですが、慣れてきてもう一度このサイト見ると納得できました。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www2.slideshare.net/G2Studios/spiners-meetup-vol1">Spiners MeetUp vol.1 アニメーション制作フロー比較と実例紹介 </a><br>少し慣れてきたころにこれを読むと、実際の現場の意見が聞けて納得感があります。<br>苦労するところとか考慮するべきところの共感ができて安心します。<br>Spiners MeetUp はこれ以外にもシリーズで公開されていて、どれも非常に勉強になるので検索すると良いと思います。  </p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.artstation.com/marketplace/p/03Rl/halloween-animation-spine-full-real-time-process">HALLOWEEN animation SPINE: Full real time process</a><br>上記MeetUpの資料で紹介されていたもので、有料ですが3時間近くのメイキングの動画をDLできます。<br>説明音声はありませんが、ディティールにこだわる制作風景が見られて参考になります。<br>ボーンとかに名前つけないでガンガン作っていくのがすごいと思いました。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://developers.cyberagent.co.jp/blog/archives/16096/">SpineでGF(仮)のガールを動かしてみた（メイキング1/2:Spine基礎編）| CyberAgent Developers Blog</a><br>実際のキャラクターをSpineで動かす過程が見られるので参考になります。<br>かわいいキャラクターのちゃんとした製作工程が見られるのは貴重で、目パチ、顔の角度などの作成など素晴らしい資料です。  </p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://developers.cyberagent.co.jp/blog/archives/26932/">ゲームを彩るちびキャラたち！Spine量産ノウハウ大全〈前編：衣装・キャラ替え〉| CyberAgent Developers Blog</a><br>上記同様にCyberAgentさんの資料ですが、こちらも実際の現場のノウハウがつまっていて、参考になります。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://note.com/appai/n/nf4a225891c2a">Spineエディタのスキン機能を理解する｜アップルパイ｜note </a><br>Spineのスキン機能はサンプルプロジェクト触ると、何が起きたのかわからず混乱するのですが、同じ心境で書かれていて参考になります。  </p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://ja.esotericsoftware.com/blog">公式ブログ</a><br>新バージョンの情報などのアナウンスのブログかと思っていたら、メッシュ割りのヒントとか、アニメーションのコツとか情報が充実しています。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://ja.esotericsoftware.com/spine-examples">公式のプロジェクト例</a><br>機能に沿ったプロジェクト例が説明と共にあるので、やはり参考になります。  </p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://ja.esotericsoftware.com/spine-twitch">公式 Spine Twitchストリーミング</a><br>公式のアニメータの方が配信するチュートリアル動画です。<br>実際に手を動かして作る工程が観られるので勉強になるのですが、結構長いので目的にあった知りたい箇所を観たりしています。<br>完成ファイルも公開されています。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://ja.esotericsoftware.com/spine-tips">公式 Spine Tips</a><br>短い説明文と動画のTips集です。<br>こんなことできるんだなぁと眺めるのに面白いですし、いろいろ役立つ情報があります。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/EsotericSoftware/spine-scripts/tree/master/photoshop">spine-scripts/photoshop/</a><br>公式のPhotoshopからSpine用にインポートファイルを生成するスクリプトです。<br>オプションやタグがいろいろあるので、ここのページも時々参照します。</p>
+</li>
+</ul>
+<h2 id="アニメーションの基礎編"><a href="#アニメーションの基礎編" class="headerlink" title="アニメーションの基礎編"></a>アニメーションの基礎編</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.co.jp/dp/4766121961">増補 アニメーターズサバイバルキット</a><br>Spineで公式におすすめされている本です。翻訳版があって良かったと思いました。<br>海外アニメの手書きのアニメーターの技術が主なのですが、どうやって生き生きとしたアニメーションを作るのかなど、ベースの知識として勉強になります。<br>読み物としても面白かったです。</li>
+</ul>
+<h2 id="ランタイム編"><a href="#ランタイム編" class="headerlink" title="ランタイム編"></a>ランタイム編</h2><p>Unityでしか使用したことないので、Unityユーザ視点です。<br>ランタイムの情報も公式が一番充実しています。</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="http://ja.esotericsoftware.com/spine-runtimes-guide">Spine Runtimesガイド</a><br>これは、Unityに限らずランタイムで動かすことのベースとなる知識です。読んでおくとイメージしやすいです。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://ja.esotericsoftware.com/spine-unity">spine-unity Runtime Documentation</a><br>Unityで実装するときのドキュメントです。やはり公式が一番。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://ja.esotericsoftware.com/spine-asset-packs">アセットパック</a><br>公式で販売しているアセットパックですが、これにUnityのプロジェクトがついてきます。<br>ガンマンの方のパックを購入しました。上のURLだとUnity5としか書いてませんが2019版もちゃんと付いてきました。<br>ショットガンとか両手持ちの銃の実装が見られるので面白いです。  </p>
+</li>
+</ul>
 
     </div>
     <footer class="article-footer">
-      <a href="https://twitter.com/intent/tweet?text=IK%E4%BD%9C%E6%88%90%E6%99%82%E3%81%AB%E3%83%9C%E3%83%BC%E3%83%B3%E3%81%8C%E3%81%9A%E3%82%8C%E3%81%AA%E3%81%84%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B%20%7C%20Spine%20%7C%20kido tech blog%0a&url=https%3A%2F%2Fkido0617.github.io%2Fspine%2F2021-01-28-ik-making%2F" class="article-share-twitter" target="_blank" title="Twitter">
+      <a href="https://twitter.com/intent/tweet?text=%E5%8F%82%E8%80%83%E8%B3%87%E6%96%99%E3%81%BE%E3%81%A8%E3%82%81%20%7C%20Spine%20%7C%20kido tech blog%0a&url=https%3A%2F%2Fkido0617.github.io%2Fspine%2F2021-06-22-reference%2F" class="article-share-twitter" target="_blank" title="Twitter">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
         <path d="M512 113.2c-18.8 8.4-39.1 14-60.3 16.5 21.7-13 38.3-33.6 46.2-58.1-20.3 12-42.8 20.8-66.7 25.5-19.2-20.4-46.5-33.1-76.7-33.1-58 0-105 47-105 105 0 8.2 0.9 16.2 2.7 23.9-87.3-4.4-164.7-46.2-216.5-109.8-9 15.5-14.2 33.6-14.2 52.8 0 36.4 18.5 68.6 46.7 87.4-17.2-0.5-33.4-5.3-47.6-13.1 0 0.4 0 0.9 0 1.3 0 50.9 36.2 93.4 84.3 103-8.8 2.4-18.1 3.7-27.7 3.7-6.8 0-13.3-0.7-19.8-1.9 13.4 41.7 52.2 72.1 98.1 73-36 28.2-81.2 45-130.5 45-8.5 0-16.8-0.5-25.1-1.5 46.6 29.9 101.8 47.2 161.1 47.2 193.2 0 298.9-160.1 298.9-298.9 0-4.6-0.1-9.1-0.3-13.6 20.5-14.7 38.3-33.2 52.4-54.3z"></path>
         </svg>
       </a>
-      <a href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fkido0617.github.io%2Fspine%2F2021-01-28-ik-making%2F" class="article-share-facebook" target="_blank" title="Facebook">
+      <a href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fkido0617.github.io%2Fspine%2F2021-06-22-reference%2F" class="article-share-facebook" target="_blank" title="Facebook">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
         <path d="M304 96h80v-96h-80c-61.757 0-112 50.243-112 112v48h-64v96h64v256h96v-256h80l16-96h-96v-48c0-8.673 7.327-16 16-16z"></path>
         </svg>
@@ -169,18 +191,6 @@
     <div class="archives">
       
         
-        <a class="archive-article-block"  href="/spine/2021-06-22-reference/">
-  <div class="archive-article">
-    <div class="archive-article-info">
-      <span class="archive-article-date">
-        <time datetime="2021-06-21T15:00:00.000Z">2021-06-22</time>
-      </span>
-      <span class="archive-article-category">Spine</span>
-    </div>
-    <span class="archive-article-title">参考資料まとめ</span>
-  </div>
-</a>
-      
         
         <a class="archive-article-block"  href="/spine/2021-06-11-tentacle/">
   <div class="archive-article">
@@ -221,6 +231,18 @@
 </a>
       
         
+        <a class="archive-article-block"  href="/spine/2021-01-28-ik-making/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2021-01-27T15:00:00.000Z">2021-01-28</time>
+      </span>
+      <span class="archive-article-category">Spine</span>
+    </div>
+    <span class="archive-article-title">IK作成時にボーンがずれないようにする</span>
+  </div>
+</a>
+      
         
         <a class="archive-article-block"  href="/spine/2021-01-27-origin/">
   <div class="archive-article">
