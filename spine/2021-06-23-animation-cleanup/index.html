@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>post_typeによって生成する画像を変える | WordPress | kido Tech Blog</title>
+  <title>プレビューとランタイムでの再生が異なる問題 | Spine | kido Tech Blog</title>
   
-  <meta name="description" content="Wordpressでは画像をアップロードすると、設定のメディアで指定したサイズに画像を縮小してくれる。サムネイル、中、大と３つ作られるのだが、post_typeによってはサムネイルだけ作りたかったり、そもそも別のサイズの画像を作る必要がなかったりするケースがある。 post_typeによって作る画像のサイズを変えるには intermediate_image_sizes をフックする。これには作られ">
+  <meta name="description" content="Spineのエディタ上でトラックを複数用いて、プレビューでアニメーションを確認します。同様にランタイム側（私の場合はUnity)でトラックを重ねて再生したところ、微妙にアニメーションが異なってしまいました。   これは、ExportのときにAnimation clean upを選択して不要なキーを削除していたからでした。トラックの重ね方があまり正しくないのだと思うのですが、以下のような状況です。">
   <meta name="author" content="kido">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <meta property="og:type" content="article">
-  <meta property="og:title" content="post_typeによって生成する画像を変える | WordPress | kido Tech Blog">
-  <meta property="og:url" content="https://kido0617.github.io/wordpress/2014-08-28-wordpress-posttype-image/">
+  <meta property="og:title" content="プレビューとランタイムでの再生が異なる問題 | Spine | kido Tech Blog">
+  <meta property="og:url" content="https://kido0617.github.io/spine/2021-06-23-animation-cleanup/">
   <meta property="og:site_name" content="kido Tech Blog">
-  <meta property="og:description" content="Wordpressでは画像をアップロードすると、設定のメディアで指定したサイズに画像を縮小してくれる。サムネイル、中、大と３つ作られるのだが、post_typeによってはサムネイルだけ作りたかったり、そもそも別のサイズの画像を作る必要がなかったりするケースがある。 post_typeによって作る画像のサイズを変えるには intermediate_image_sizes をフックする。これには作られ">
+  <meta property="og:description" content="Spineのエディタ上でトラックを複数用いて、プレビューでアニメーションを確認します。同様にランタイム側（私の場合はUnity)でトラックを重ねて再生したところ、微妙にアニメーションが異なってしまいました。   これは、ExportのときにAnimation clean upを選択して不要なキーを削除していたからでした。トラックの重ね方があまり正しくないのだと思うのですが、以下のような状況です。">
   <meta property="og:image" content="https://kido0617.github.io/css/images/ogp.png">
   <meta property="og:locale" content="ja_JP">
   <meta name="twitter:card" content="summary" />
@@ -70,7 +70,7 @@
       
         <li property="itemListElement" typeof="ListItem">
           
-            <a property="item" typeof="WebPage" href="/categories/WordPress/"><span property="name">WordPress</span></a>
+            <a property="item" typeof="WebPage" href="/categories/Spine/"><span property="name">Spine</span></a>
           
           <meta property="position" content="1" />
           
@@ -80,7 +80,7 @@
       
         <li property="itemListElement" typeof="ListItem">
           
-            <span property="name">post_typeによって生成する画像を変える</span>
+            <span property="name">プレビューとランタイムでの再生が異なる問題</span>
           
           <meta property="position" content="2" />
           
@@ -88,33 +88,32 @@
       
     </ul>
   
-        <section id="main"><article id="post-wordpress/2014-08-28-wordpress-posttype-image" class="article article-type-post">
+        <section id="main"><article id="post-spine/2021-06-23-animation-cleanup" class="article article-type-post">
   <div class="article-inner">
     <header class="article-header">
-      <h1 class="article-title">post_typeによって生成する画像を変える</h1>
+      <h1 class="article-title">プレビューとランタイムでの再生が異なる問題</h1>
       <div class="article-meta">
-        <a class="article-category-link" href="/categories/WordPress/">WordPress</a>
+        <a class="article-category-link" href="/categories/Spine/">Spine</a>
         <span class="article-date">
-          公開日:<time datetime="2014-08-27T15:00:00.000Z">2014-08-28</time>
+          公開日:<time datetime="2021-06-22T15:00:00.000Z">2021-06-23</time>
         </span>
       </div>
     </header>
     <div class="article-entry">
-      <p>Wordpressでは画像をアップロードすると、設定のメディアで指定したサイズに画像を縮小してくれる。<br>サムネイル、中、大と３つ作られるのだが、post_typeによってはサムネイルだけ作りたかったり、そもそも別のサイズの画像を作る必要がなかったりするケースがある。</p>
-<p>post_typeによって作る画像のサイズを変えるには intermediate_image_sizes をフックする。<br>これには作られる画像のサイズの名前がarrayで渡ってくる。 例： array(‘thumbnail’, ‘medium’, ‘large’)<br>このarray を書き換えることによって画像を生成するかどうか変更できる。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">add_filter( <span class="string">&#x27;intermediate_image_sizes&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"> <span class="variable">$image_sizes</span> </span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;post_type&#x27;</span>] == <span class="string">&#x27;some_post_type&#x27;</span> )&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">array</span>(<span class="string">&#x27;thumbnail&#x27;</span>);   <span class="comment">//サムネイルだけ作る</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="variable">$image_sizes</span>;</span><br><span class="line">&#125;, <span class="number">999</span> );</span><br></pre></td></tr></table></figure>
-
-
-<p>参考<br><a target="_blank" rel="noopener" href="http://wordpress.stackexchange.com/questions/131497/removing-image-sizes-for-custom-post-type">Removing Image Sizes for Custom Post Type</a></p>
+      <p>Spineのエディタ上でトラックを複数用いて、プレビューでアニメーションを確認します。<br>同様にランタイム側（私の場合はUnity)でトラックを重ねて再生したところ、微妙にアニメーションが異なってしまいました。  </p>
+<p>これは、Exportのときに<code>Animation clean up</code>を選択して不要なキーを削除していたからでした。<br>トラックの重ね方があまり正しくないのだと思うのですが、以下のような状況です。  </p>
+<p>トラック1: ボーンAを90度曲げる<br>トラック2: ボーンAをデフォルトの角度に上書きする</p>
+<p>デフォルトの角度のキーはAnimation clean up で削除されてしまうので、トラック2で上書けなかったということです。<br>Animation clean upの挙動的にも正しく、私の作り方に問題があったと思います。  </p>
+<p>ちなみにExport時でなくとも、該当のアニメーションを選択した状態でツリービューの下にあるclean upボタンを押すとどのキーが消されるかは確認できます。</p>
 
     </div>
     <footer class="article-footer">
-      <a href="https://twitter.com/intent/tweet?text=post_type%E3%81%AB%E3%82%88%E3%81%A3%E3%81%A6%E7%94%9F%E6%88%90%E3%81%99%E3%82%8B%E7%94%BB%E5%83%8F%E3%82%92%E5%A4%89%E3%81%88%E3%82%8B%20%7C%20WordPress%20%7C%20kido tech blog%0a&url=https%3A%2F%2Fkido0617.github.io%2Fwordpress%2F2014-08-28-wordpress-posttype-image%2F" class="article-share-twitter" target="_blank" title="Twitter">
+      <a href="https://twitter.com/intent/tweet?text=%E3%83%97%E3%83%AC%E3%83%93%E3%83%A5%E3%83%BC%E3%81%A8%E3%83%A9%E3%83%B3%E3%82%BF%E3%82%A4%E3%83%A0%E3%81%A7%E3%81%AE%E5%86%8D%E7%94%9F%E3%81%8C%E7%95%B0%E3%81%AA%E3%82%8B%E5%95%8F%E9%A1%8C%20%7C%20Spine%20%7C%20kido tech blog%0a&url=https%3A%2F%2Fkido0617.github.io%2Fspine%2F2021-06-23-animation-cleanup%2F" class="article-share-twitter" target="_blank" title="Twitter">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
         <path d="M512 113.2c-18.8 8.4-39.1 14-60.3 16.5 21.7-13 38.3-33.6 46.2-58.1-20.3 12-42.8 20.8-66.7 25.5-19.2-20.4-46.5-33.1-76.7-33.1-58 0-105 47-105 105 0 8.2 0.9 16.2 2.7 23.9-87.3-4.4-164.7-46.2-216.5-109.8-9 15.5-14.2 33.6-14.2 52.8 0 36.4 18.5 68.6 46.7 87.4-17.2-0.5-33.4-5.3-47.6-13.1 0 0.4 0 0.9 0 1.3 0 50.9 36.2 93.4 84.3 103-8.8 2.4-18.1 3.7-27.7 3.7-6.8 0-13.3-0.7-19.8-1.9 13.4 41.7 52.2 72.1 98.1 73-36 28.2-81.2 45-130.5 45-8.5 0-16.8-0.5-25.1-1.5 46.6 29.9 101.8 47.2 161.1 47.2 193.2 0 298.9-160.1 298.9-298.9 0-4.6-0.1-9.1-0.3-13.6 20.5-14.7 38.3-33.2 52.4-54.3z"></path>
         </svg>
       </a>
-      <a href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fkido0617.github.io%2Fwordpress%2F2014-08-28-wordpress-posttype-image%2F" class="article-share-facebook" target="_blank" title="Facebook">
+      <a href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fkido0617.github.io%2Fspine%2F2021-06-23-animation-cleanup%2F" class="article-share-facebook" target="_blank" title="Facebook">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
         <path d="M304 96h80v-96h-80c-61.757 0-112 50.243-112 112v48h-64v96h64v256h96v-256h80l16-96h-96v-48c0-8.673 7.327-16 16-16z"></path>
         </svg>
@@ -151,190 +150,86 @@
 
   <section class="archives-wrap">
     <div class="archive-title-wrap">
-      <span class="archive-title">WordPressカテゴリの記事</span>
+      <span class="archive-title">Spineカテゴリの記事</span>
     </div>
     <div class="archives">
       
         
-        <a class="archive-article-block"  href="/wordpress/2019-12-07-gae-wordpress2/">
+        
+        <a class="archive-article-block"  href="/spine/2021-06-22-reference/">
   <div class="archive-article">
     <div class="archive-article-info">
       <span class="archive-article-date">
-        <time datetime="2019-12-06T15:00:00.000Z">2019-12-07</time>
+        <time datetime="2021-06-21T15:00:00.000Z">2021-06-22</time>
       </span>
-      <span class="archive-article-category">WordPress</span>
+      <span class="archive-article-category">Spine</span>
     </div>
-    <span class="archive-article-title">GAEでWordPressを運用する上でつまづいたところ</span>
+    <span class="archive-article-title">参考資料まとめ</span>
   </div>
 </a>
       
         
-        <a class="archive-article-block"  href="/wordpress/2019-12-02-gae-wordpress/">
+        <a class="archive-article-block"  href="/spine/2021-06-11-tentacle/">
   <div class="archive-article">
     <div class="archive-article-info">
       <span class="archive-article-date">
-        <time datetime="2019-12-01T15:00:00.000Z">2019-12-02</time>
+        <time datetime="2021-06-10T15:00:00.000Z">2021-06-11</time>
       </span>
-      <span class="archive-article-category">WordPress</span>
+      <span class="archive-article-category">Spine</span>
     </div>
-    <span class="archive-article-title">GAEのサブディレクトリでWordPressを動かす</span>
+    <span class="archive-article-title">オフセットを使い髪の毛や触手などの揺れ物を作る</span>
   </div>
 </a>
       
         
-        <a class="archive-article-block"  href="/wordpress/2016-08-19-wordpress-selinux/">
+        <a class="archive-article-block"  href="/spine/2021-02-01-tips2/">
   <div class="archive-article">
     <div class="archive-article-info">
       <span class="archive-article-date">
-        <time datetime="2016-08-18T15:00:00.000Z">2016-08-19</time>
+        <time datetime="2021-01-31T15:00:00.000Z">2021-02-01</time>
       </span>
-      <span class="archive-article-category">WordPress</span>
+      <span class="archive-article-category">Spine</span>
     </div>
-    <span class="archive-article-title">更新時にFTP情報の入力を促されるのを改善</span>
+    <span class="archive-article-title">細かいTips2</span>
   </div>
 </a>
       
         
-        <a class="archive-article-block"  href="/wordpress/2014-11-10-wordpress-user-authority/">
+        <a class="archive-article-block"  href="/spine/2021-01-29-tips/">
   <div class="archive-article">
     <div class="archive-article-info">
       <span class="archive-article-date">
-        <time datetime="2014-11-09T15:00:00.000Z">2014-11-10</time>
+        <time datetime="2021-01-28T15:00:00.000Z">2021-01-29</time>
       </span>
-      <span class="archive-article-category">WordPress</span>
+      <span class="archive-article-category">Spine</span>
     </div>
-    <span class="archive-article-title">ユーザの権限で管理画面をカスタマイズする</span>
+    <span class="archive-article-title">細かいTips1</span>
   </div>
 </a>
       
         
-        <a class="archive-article-block"  href="/wordpress/2014-11-03-wordpress-redirect-loop/">
+        <a class="archive-article-block"  href="/spine/2021-01-28-ik-making/">
   <div class="archive-article">
     <div class="archive-article-info">
       <span class="archive-article-date">
-        <time datetime="2014-11-02T15:00:00.000Z">2014-11-03</time>
+        <time datetime="2021-01-27T15:00:00.000Z">2021-01-28</time>
       </span>
-      <span class="archive-article-category">WordPress</span>
+      <span class="archive-article-category">Spine</span>
     </div>
-    <span class="archive-article-title">SSLサイトのWordPressでリダイレクトループのためログインできない</span>
+    <span class="archive-article-title">IK作成時にボーンがずれないようにする</span>
   </div>
 </a>
       
         
-        
-        <a class="archive-article-block"  href="/wordpress/2014-08-13-wordpress-postname-order/">
+        <a class="archive-article-block"  href="/spine/2021-01-27-origin/">
   <div class="archive-article">
     <div class="archive-article-info">
       <span class="archive-article-date">
-        <time datetime="2014-08-12T15:00:00.000Z">2014-08-13</time>
+        <time datetime="2021-01-26T15:00:00.000Z">2021-01-27</time>
       </span>
-      <span class="archive-article-category">WordPress</span>
+      <span class="archive-article-category">Spine</span>
     </div>
-    <span class="archive-article-title">post_name に連番を付与する</span>
-  </div>
-</a>
-      
-        
-        <a class="archive-article-block"  href="/wordpress/2014-08-10-wordpress-metabox/">
-  <div class="archive-article">
-    <div class="archive-article-info">
-      <span class="archive-article-date">
-        <time datetime="2014-08-09T15:00:00.000Z">2014-08-10</time>
-      </span>
-      <span class="archive-article-category">WordPress</span>
-    </div>
-    <span class="archive-article-title">metaboxをドラッグしたり折りたためなくする方法</span>
-  </div>
-</a>
-      
-        
-        <a class="archive-article-block"  href="/wordpress/2014-08-06-wordpress-js-load/">
-  <div class="archive-article">
-    <div class="archive-article-info">
-      <span class="archive-article-date">
-        <time datetime="2014-08-05T15:00:00.000Z">2014-08-06</time>
-      </span>
-      <span class="archive-article-category">WordPress</span>
-    </div>
-    <span class="archive-article-title">管理画面でbodyの終わりにjsファイルを読む</span>
-  </div>
-</a>
-      
-        
-        <a class="archive-article-block"  href="/wordpress/2014-08-05-wordpress-preview-change/">
-  <div class="archive-article">
-    <div class="archive-article-info">
-      <span class="archive-article-date">
-        <time datetime="2014-08-04T15:00:00.000Z">2014-08-05</time>
-      </span>
-      <span class="archive-article-category">WordPress</span>
-    </div>
-    <span class="archive-article-title">プレビューのリンク先を変更する</span>
-  </div>
-</a>
-      
-        
-        <a class="archive-article-block"  href="/wordpress/2014-08-04-wordpress-title-change/">
-  <div class="archive-article">
-    <div class="archive-article-info">
-      <span class="archive-article-date">
-        <time datetime="2014-08-03T15:00:00.000Z">2014-08-04</time>
-      </span>
-      <span class="archive-article-category">WordPress</span>
-    </div>
-    <span class="archive-article-title">ここにタイトルを入力 を変更する</span>
-  </div>
-</a>
-      
-        
-        <a class="archive-article-block"  href="/wordpress/2014-04-23-wordpress-cft-dynamic-selectbox/">
-  <div class="archive-article">
-    <div class="archive-article-info">
-      <span class="archive-article-date">
-        <time datetime="2014-04-22T15:00:00.000Z">2014-04-23</time>
-      </span>
-      <span class="archive-article-category">WordPress</span>
-    </div>
-    <span class="archive-article-title">Custom Field Template で 動的にselect box を生成する</span>
-  </div>
-</a>
-      
-        
-        <a class="archive-article-block"  href="/wordpress/2014-03-23-wordpress-delete-post/">
-  <div class="archive-article">
-    <div class="archive-article-info">
-      <span class="archive-article-date">
-        <time datetime="2014-03-22T15:00:00.000Z">2014-03-23</time>
-      </span>
-      <span class="archive-article-category">WordPress</span>
-    </div>
-    <span class="archive-article-title">削除時のフック delete_post</span>
-  </div>
-</a>
-      
-        
-        <a class="archive-article-block"  href="/wordpress/2014-03-21-wordpress-cft-file-validation/">
-  <div class="archive-article">
-    <div class="archive-article-info">
-      <span class="archive-article-date">
-        <time datetime="2014-03-20T15:00:00.000Z">2014-03-21</time>
-      </span>
-      <span class="archive-article-category">WordPress</span>
-    </div>
-    <span class="archive-article-title">Custom Field Template の FILE の バリデーション</span>
-  </div>
-</a>
-      
-        
-        <a class="archive-article-block"  href="/wordpress/2014-03-09-wordpress-hidden/">
-  <div class="archive-article">
-    <div class="archive-article-info">
-      <span class="archive-article-date">
-        <time datetime="2014-03-08T15:00:00.000Z">2014-03-09</time>
-      </span>
-      <span class="archive-article-category">WordPress</span>
-    </div>
-    <span class="archive-article-title">管理画面のいらないものを消す</span>
+    <span class="archive-article-title">原点調整</span>
   </div>
 </a>
       

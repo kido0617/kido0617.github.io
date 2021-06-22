@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://kido0617.github.io/"/>
-  <updated>2021-06-21T15:00:00.000Z</updated>
+  <updated>2021-06-22T15:00:00.000Z</updated>
   <id>https://kido0617.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>プレビューとランタイムでの再生が異なる問題</title>
+    <link href="https://kido0617.github.io/spine/2021-06-23-animation-cleanup/"/>
+    <id>https://kido0617.github.io/spine/2021-06-23-animation-cleanup/</id>
+    <published>2021-06-22T15:00:00.000Z</published>
+    <updated>2021-06-22T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Spineのエディタ上でトラックを複数用いて、プレビューでアニメーションを確認します。<br>同様にランタイム側（私の場合はUnity)でトラックを重ねて再生したところ、微妙にアニメーションが異なってしまいました。  </p><p>これは、Exportのときに<code>Animation clean up</code>を選択して不要なキーを削除していたからでした。<br>トラックの重ね方があまり正しくないのだと思うのですが、以下のような状況です。  </p><p>トラック1: ボーンAを90度曲げる<br>トラック2: ボーンAをデフォルトの角度に上書きする</p><p>デフォルトの角度のキーはAnimation clean up で削除されてしまうので、トラック2で上書けなかったということです。<br>Animation clean upの挙動的にも正しく、私の作り方に問題があったと思います。  </p><p>ちなみにExport時でなくとも、該当のアニメーションを選択した状態でツリービューの下にあるclean upボタンを押すとどのキーが消されるかは確認できます。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Spineのエディタ上でトラックを複数用いて、プレビューでアニメーションを確認します。&lt;br&gt;同様にランタイム側（私の場合はUnity)でトラックを重ねて再生したところ、微妙にアニメーションが異なってしまいました。  &lt;/p&gt;
+&lt;p&gt;これは、Exportのときに&lt;code&gt;
+      
+    
+    </summary>
+    
+    
+      <category term="Spine" scheme="https://kido0617.github.io/categories/Spine/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>参考資料まとめ</title>
@@ -232,30 +257,6 @@
     
     
       <category term="GCP" scheme="https://kido0617.github.io/categories/GCP/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>細かいTips2</title>
-    <link href="https://kido0617.github.io/spine/2021-02-01-tips2/"/>
-    <id>https://kido0617.github.io/spine/2021-02-01-tips2/</id>
-    <published>2021-01-31T15:00:00.000Z</published>
-    <updated>2021-01-31T15:00:00.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="ボーンの描画順序"><a href="#ボーンの描画順序" class="headerlink" title="ボーンの描画順序"></a>ボーンの描画順序</h2><p>ボーンをメッシュに割り当てた後、下図のように曲げたときにメッシュ同士が重なる場合があります。  </p><p><img src="/img/2021-02-01-tips2/bind1.png" alt="メッシュの描画順序"></p><p>この重なった描画順序を変えたい場合、bindしたボーンの順番を変える必要があります。<br>例えば、以下のようにbindしたボーンの順番を変えてみます。</p><p><img src="/img/2021-02-01-tips2/bind-order.png" alt="bindの順番"></p><p>そうすると最初の図のメッシュは以下のようになり、ボーン2にbindされたメッシュは描画順序が上になります。</p><p><img src="/img/2021-02-01-tips2/bind2.png" alt="メッシュの描画順序2"></p><h2 id="コピペと複製"><a href="#コピペと複製" class="headerlink" title="コピペと複製"></a>コピペと複製</h2><p>Hierarchy上で<code>Ctrl + C</code>、<code>Ctrl + V</code>を押してコピペしても複製はできません。<br>Transformの値（回転とか位置とか）がコピーされるからです。<br>同じ座標にオブジェクトを配置するときは便利ですが、複製するにはTreeビュー下部にあるDuplicateボタンを押す必要があります。<br>最初、アニメーションを複製したいときにどうやって複製すればいいか迷いました。</p><p><img src="/img/2021-02-01-tips2/duplicate.png" alt="複製"></p><h2 id="コンストレイントの順序"><a href="#コンストレイントの順序" class="headerlink" title="コンストレイントの順序"></a>コンストレイントの順序</h2><p>パスコンストレイントとIKコンストレイントを併用しているときに、IKが効かなくなることがありました。<br>これはコンストレイントの順序が影響によるものでした。<br>下図のようにパスコンストレイント-&gt;IKコンストレイントの順番ならIKが効くのですが、逆だとIKが効きませんでした。<br>順序に関しては<a href="http://ja.esotericsoftware.com/spine-constraints">公式に記載</a>があります。</p><p><img src="/img/2021-02-01-tips2/constraint-order.png" alt="constraint-oder"></p><h2 id="使用バージョン"><a href="#使用バージョン" class="headerlink" title="使用バージョン"></a>使用バージョン</h2><p>Spine 3.8.99</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;ボーンの描画順序&quot;&gt;&lt;a href=&quot;#ボーンの描画順序&quot; class=&quot;headerlink&quot; title=&quot;ボーンの描画順序&quot;&gt;&lt;/a&gt;ボーンの描画順序&lt;/h2&gt;&lt;p&gt;ボーンをメッシュに割り当てた後、下図のように曲げたときにメッシュ同士が重なる場合があります。
-      
-    
-    </summary>
-    
-    
-      <category term="Spine" scheme="https://kido0617.github.io/categories/Spine/"/>
     
     
   </entry>
