@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://kido0617.github.io/"/>
-  <updated>2021-06-22T15:00:00.000Z</updated>
+  <updated>2021-06-23T15:00:00.000Z</updated>
   <id>https://kido0617.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SpineのSkeletonAnimationとSkeletonMecanimについて</title>
+    <link href="https://kido0617.github.io/unity/2021-06-24-spine-animation/"/>
+    <id>https://kido0617.github.io/unity/2021-06-24-spine-animation/</id>
+    <published>2021-06-23T15:00:00.000Z</published>
+    <updated>2021-06-23T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>基本的に以下のURLのドキュメントを参考にしています。  </p><ul><li><a href="http://ja.esotericsoftware.com/spine-unity">spine-unity Runtime Documentation</a></li><li><a href="http://ja.esotericsoftware.com/spine-runtimes-guide">Spine Runtimesガイド</a>  </li></ul><h2 id="Unityで使用するSpineコンポーネント"><a href="#Unityで使用するSpineコンポーネント" class="headerlink" title="Unityで使用するSpineコンポーネント"></a>Unityで使用するSpineコンポーネント</h2><p>UnityでSpineで作成したアニメーションを再生するためのコンポーネントとして以下の3つが用意されています。  </p><ul><li>SkeletonAnimation</li><li>SkeletonGraphic (UI) </li><li>SkeletonMecanim</li></ul><p>SkeletonGraphic (UI)に関しては名前のとおりUGUIのcanvasに使用するものなので用途は限られているのですが、問題はSkeletonAnimationとSkeletonMecanimです。<br>Spineのアニメーションを再生するにはどちらかを使う必要がありますが、調べたり実装したりして考えたことを書いておきます。</p><h2 id="SkeletonAnimation-or-SkeletonMecanim"><a href="#SkeletonAnimation-or-SkeletonMecanim" class="headerlink" title="SkeletonAnimation or SkeletonMecanim"></a>SkeletonAnimation or SkeletonMecanim</h2><p>公式で推奨されているのはSkeletonAnimationですが、それぞれ比べていきます。</p><h3 id="アニメーションの再現"><a href="#アニメーションの再現" class="headerlink" title="アニメーションの再現"></a>アニメーションの再現</h3><p>Mecanimを使用した場合、Spineのエディタのプレビューで再生したものと同じになることを保証しない記載があります。<br>また、アニメーション間のトランジションを最初のフレームに追加のキーを設定する必要があります。<br>それらのキーはExport時にオプションの Animation clean up をONにすると消されるので、そのオプションはMecanimの場合使用できません。<br>詳しくは<a href="http://esotericsoftware.com/spine-unity#Required-Additional-Keys">こちら</a></p><p>トランジションはただでさえ、見た目を整える難しさがあるので、さらに考慮すべき項目が増えるのはちょっとしんどい印象です。</p><h3 id="機能面"><a href="#機能面" class="headerlink" title="機能面"></a>機能面</h3><ul><li><p>トラック<br> SkeletonAnimation : アニメーション再生のAPI使用時に指定する<br> SkeletonMecanim : Animatorウィンドウのレイヤーで指定する</p></li><li><p>ミックス<br>SkeletonAnimation : Skeleton Data Assetで設定しておくか、アニメーション再生時TrackEntryを介して指定する<br>SkeletonMecanim : AnimatorウィンドウのTransitionの各値で設定する</p></li><li><p>アルファ<br>SkeletonAnimation : アニメーション再生時TrackEntryを介して指定する<br>SkeletonMecanim : レイヤーのweightで指定する</p></li><li><p>Spineで設定したイベント<br>SkeletonAnimation : AnimationStateのEventのdelegateに追加して受け取る<br>SkeletonMecanim : Animation Clipのイベントとして設定される</p></li></ul><p>どちらも基本的な機能は備えています。  </p><p>SkeletonAnimationは<a href="http://ja.esotericsoftware.com/spine-unity#Processing-AnimationState-Events">started, interrupted, completed, ended, disposed</a>といった5つのイベントを受け取ることができ、アニメーション再生時のイベントの扱いが便利そうだと思いました。  </p><p>また、SkeletonAnimationは<a href="http://ja.esotericsoftware.com/spine-api-reference#TrackEntry">TrackEntry</a>を介したアニメーションの細かい設定ができる点も気になります。<br>attachmentのON/OFFやdrawOrderの順番の変更、eventの発火といった徐々に変化せずミックスができない項目に対してしきい値を設定できます。  </p><h3 id="パフォーマンス面"><a href="#パフォーマンス面" class="headerlink" title="パフォーマンス面"></a>パフォーマンス面</h3><p>SkeletonMecanimはSkeletonAnimatonに比べるとパフォーマンスで劣るそうです。<br>ゲームプレイに影響ある程ではないと思いますが、以下のフォーラムで書かれているように大量に生成したときにパフォーマンスに差が出たという話があります。<br><a href="http://ja.esotericsoftware.com/forum/Performance-Analysis-of-Mecanim-vs-Animation-15046">Performance Analysis of Mecanim vs Animation</a></p><p>両者の差がパフォーマンスにとってクリティカルになるケースは稀な気がします。<br>正直多少のパフォーマンスを犠牲にしてでもMecanimのようにGUIでアニメーションの遷移を設定出来たほうが良いという気持ちはあります。  </p><h3 id="ステートマシン"><a href="#ステートマシン" class="headerlink" title="ステートマシン"></a>ステートマシン</h3><p>Mecanimを使う最大のメリットはやはりGUIでアニメーションの遷移を定義できることです。<br>スパゲッティな遷移になりがちとはいえ、アニメーションの遷移をステートマシンで表現できるのは強みです。<br>逆にSkeletonAnimationを使う際の一番の問題点はこれで、アニメーションを変化させるのにプログラムからAPIを呼ぶしかないのです。<br>SkeletonAnimationを使いつつ、Mecanimnのようなステートマシンを使いたいというニーズはあり、以下のフォーラムのように<a href="https://assetstore.unity.com/packages/tools/visual-scripting/nodecanvas-14914?locale=ja-JP">NodeCanvas</a>というアセットを使う方法が提案されています。  </p><p><a href="http://ja.esotericsoftware.com/forum/Spine-NodeCanvas-6366">Spine + NodeCanvas?</a></p><p>NodeCanvasは少し高価ですが、触った感じ、確かにステートマシンでアニメーションを管理できますし、使いやすいアセットです。<br>上記フォーラムで紹介されているようなSpine用のアクションを自分で作る必要があるものの、一つの解であると言えそうです。<br>同様にステートマシンを扱うPlaymakerのSpine実装も存在しているのですが、PlaymakerでMecanimのようなアニメーション遷移を作るのは難しいです。  </p><h2 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>どちらもメリット・デメリットあるのでどちらを採用するかは一概に言えない感じでした。<br>個人的にはSkeletonAimatonを使っていこうかと思っています。やはり公式で推奨されているなら・・・。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;基本的に以下のURLのドキュメントを参考にしています。  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://ja.esotericsoftware.com/spine-unity&quot;&gt;spine-unity Runtime Documentation&lt;/a&gt;&lt;/li
+      
+    
+    </summary>
+    
+    
+      <category term="Unity" scheme="https://kido0617.github.io/categories/Unity/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>プレビューとランタイムでの再生が異なる問題</title>
@@ -233,30 +259,6 @@
     
     
       <category term="Spine" scheme="https://kido0617.github.io/categories/Spine/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Cloud Buildを使ってLaravelをGAEにデプロイ</title>
-    <link href="https://kido0617.github.io/server/2021-06-11-cloudbuild-laravel/"/>
-    <id>https://kido0617.github.io/server/2021-06-11-cloudbuild-laravel/</id>
-    <published>2021-06-10T15:00:00.000Z</published>
-    <updated>2021-06-10T15:00:00.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="Cloud-Build-と-Github連携"><a href="#Cloud-Build-と-Github連携" class="headerlink" title="Cloud Build と Github連携"></a>Cloud Build と Github連携</h2><p>Cloud Buildを初めて使いました。<br>Laravelをデプロイするときの個人的なcloudbuid.yamlのメモ。</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">steps:</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## npm run productionをしてjs,cssファイルを生成</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">node</span></span><br><span class="line">  <span class="attr">entrypoint:</span> <span class="string">npm</span></span><br><span class="line">  <span class="attr">args:</span> [<span class="string">&#x27;install&#x27;</span>]</span><br><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">node</span></span><br><span class="line">  <span class="attr">entrypoint:</span> <span class="string">npm</span></span><br><span class="line">  <span class="attr">args:</span> [<span class="string">&#x27;run&#x27;</span>, <span class="string">&#x27;production&#x27;</span>]</span><br><span class="line">  </span><br><span class="line"><span class="comment">## APIキー情報などはシークレットマネージャに登録してあるので、そこから情報を取得して、secret.yamlとして書き出す(app.yamlからincludeする)</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">gcr.io/cloud-builders/gcloud</span></span><br><span class="line">  <span class="attr">entrypoint:</span> <span class="string">&#x27;bash&#x27;</span></span><br><span class="line">  <span class="attr">args:</span> [ <span class="string">&#x27;-c&#x27;</span>, <span class="string">&quot;gcloud secrets versions access latest --secret=xxxxxx --format=&#x27;get(payload.data)&#x27; | tr &#x27;_-&#x27; &#x27;/+&#x27; | base64 -d &gt; secret.yaml&quot;</span> ]</span><br><span class="line"></span><br><span class="line"><span class="comment">## デプロイ</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">&#x27;gcr.io/google.com/cloudsdktool/cloud-sdk&#x27;</span></span><br><span class="line">  <span class="attr">entrypoint:</span> <span class="string">&#x27;bash&#x27;</span></span><br><span class="line">  <span class="attr">args:</span> [<span class="string">&#x27;-c&#x27;</span>, <span class="string">&#x27;gcloud config set app/cloud_build_timeout 1600 &amp;&amp; gcloud app deploy app.yaml --project=xxxxxx&#x27;</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## おまけでslackに通知</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">gcr.io/cloud-builders/curl</span></span><br><span class="line">  <span class="attr">args:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">-X</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">POST</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">--data-urlencode</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">&quot;payload=&#123;\&quot;text\&quot;:\&quot;$BUILD_ID $REPO_NAMEをデプロイしました\&quot;&#125;&quot;</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">https://hooks.slack.com/services/xxxxxxxxxxxxxxxxxxxxxxx</span></span><br><span class="line"></span><br><span class="line"><span class="attr">timeout:</span> <span class="string">&#x27;1600s&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;Cloud-Build-と-Github連携&quot;&gt;&lt;a href=&quot;#Cloud-Build-と-Github連携&quot; class=&quot;headerlink&quot; title=&quot;Cloud Build と Github連携&quot;&gt;&lt;/a&gt;Cloud Build と Github
-      
-    
-    </summary>
-    
-    
-      <category term="GCP" scheme="https://kido0617.github.io/categories/GCP/"/>
     
     
   </entry>

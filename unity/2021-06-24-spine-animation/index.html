@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Any State でどこからでも遷移できるようにする | Unity | kido Tech Blog</title>
+  <title>SpineのSkeletonAnimationとSkeletonMecanimについて | Unity | kido Tech Blog</title>
   
-  <meta name="description" content="共通のアニメーション遷移Unity の Mechanim でスプライトアニメーションを付けているのだが、状態数が増えると遷移も増えて大変。よく例示される、立ち→歩く→走る　みたいな遷移だと、立ち→走る みたいに間を飛ばすことないから、ちゃんと遷移付をしないといけないのはわかる。しかし、今回実装していたやつは、どの状態からでも好きな状態に遷移できて良いパターンだった。 それを実現するのが Any S">
+  <meta name="description" content="基本的に以下のURLのドキュメントを参考にしています。    spine-unity Runtime Documentation Spine Runtimesガイド    Unityで使用するSpineコンポーネントUnityでSpineで作成したアニメーションを再生するためのコンポーネントとして以下の3つが用意されています。    SkeletonAnimation SkeletonGraphi">
   <meta name="author" content="kido">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Any State でどこからでも遷移できるようにする | Unity | kido Tech Blog">
-  <meta property="og:url" content="https://kido0617.github.io/unity/2014-09-30-any-state/">
+  <meta property="og:title" content="SpineのSkeletonAnimationとSkeletonMecanimについて | Unity | kido Tech Blog">
+  <meta property="og:url" content="https://kido0617.github.io/unity/2021-06-24-spine-animation/">
   <meta property="og:site_name" content="kido Tech Blog">
-  <meta property="og:description" content="共通のアニメーション遷移Unity の Mechanim でスプライトアニメーションを付けているのだが、状態数が増えると遷移も増えて大変。よく例示される、立ち→歩く→走る　みたいな遷移だと、立ち→走る みたいに間を飛ばすことないから、ちゃんと遷移付をしないといけないのはわかる。しかし、今回実装していたやつは、どの状態からでも好きな状態に遷移できて良いパターンだった。 それを実現するのが Any S">
+  <meta property="og:description" content="基本的に以下のURLのドキュメントを参考にしています。    spine-unity Runtime Documentation Spine Runtimesガイド    Unityで使用するSpineコンポーネントUnityでSpineで作成したアニメーションを再生するためのコンポーネントとして以下の3つが用意されています。    SkeletonAnimation SkeletonGraphi">
   <meta property="og:image" content="https://kido0617.github.io/css/images/ogp.png">
   <meta property="og:locale" content="ja_JP">
   <meta name="twitter:card" content="summary" />
@@ -80,7 +80,7 @@
       
         <li property="itemListElement" typeof="ListItem">
           
-            <span property="name">Any State でどこからでも遷移できるようにする</span>
+            <span property="name">SpineのSkeletonAnimationとSkeletonMecanimについて</span>
           
           <meta property="position" content="2" />
           
@@ -88,33 +88,61 @@
       
     </ul>
   
-        <section id="main"><article id="post-unity/2014-09-30-any-state" class="article article-type-post">
+        <section id="main"><article id="post-unity/2021-06-24-spine-animation" class="article article-type-post">
   <div class="article-inner">
     <header class="article-header">
-      <h1 class="article-title">Any State でどこからでも遷移できるようにする</h1>
+      <h1 class="article-title">SpineのSkeletonAnimationとSkeletonMecanimについて</h1>
       <div class="article-meta">
         <a class="article-category-link" href="/categories/Unity/">Unity</a>
         <span class="article-date">
-          公開日:<time datetime="2014-09-29T15:00:00.000Z">2014-09-30</time>
+          公開日:<time datetime="2021-06-23T15:00:00.000Z">2021-06-24</time>
         </span>
       </div>
     </header>
     <div class="article-entry">
-      <h2 id="共通のアニメーション遷移"><a href="#共通のアニメーション遷移" class="headerlink" title="共通のアニメーション遷移"></a>共通のアニメーション遷移</h2><p>Unity の Mechanim でスプライトアニメーションを付けているのだが、状態数が増えると遷移も増えて大変。<br>よく例示される、立ち→歩く→走る　みたいな遷移だと、立ち→走る みたいに間を飛ばすことないから、ちゃんと遷移付をしないといけないのはわかる。<br>しかし、今回実装していたやつは、どの状態からでも好きな状態に遷移できて良いパターンだった。</p>
-<p>それを実現するのが Any State だ。ずっと、Mechanim の画面で表示されているのに、完全にスルーしていた。</p>
-<p><a target="_blank" rel="noopener" href="http://docs-jp.unity3d.com/Documentation/Components/class-State.html">Unity Manual</a><br>「現在どのステートにいるかに影響を受けることなく、特定のステートに遷移したい場合のために存在している。これは、全ステートに同じ遷移先を追加するのと同じ効果がある。」</p>
-<p>なので、Any Stateから遷移を以下のように伸ばせば、好きなように遷移可能になる。</p>
-<p><img src="/img/2014-09-30-any-state/anystate.png" alt="Any State"></p>
-<h2 id="確認バージョン"><a href="#確認バージョン" class="headerlink" title="確認バージョン"></a>確認バージョン</h2><p>Unity 4.5</p>
+      <p>基本的に以下のURLのドキュメントを参考にしています。  </p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://ja.esotericsoftware.com/spine-unity">spine-unity Runtime Documentation</a></li>
+<li><a target="_blank" rel="noopener" href="http://ja.esotericsoftware.com/spine-runtimes-guide">Spine Runtimesガイド</a>  </li>
+</ul>
+<h2 id="Unityで使用するSpineコンポーネント"><a href="#Unityで使用するSpineコンポーネント" class="headerlink" title="Unityで使用するSpineコンポーネント"></a>Unityで使用するSpineコンポーネント</h2><p>UnityでSpineで作成したアニメーションを再生するためのコンポーネントとして以下の3つが用意されています。  </p>
+<ul>
+<li>SkeletonAnimation</li>
+<li>SkeletonGraphic (UI) </li>
+<li>SkeletonMecanim</li>
+</ul>
+<p>SkeletonGraphic (UI)に関しては名前のとおりUGUIのcanvasに使用するものなので用途は限られているのですが、問題はSkeletonAnimationとSkeletonMecanimです。<br>Spineのアニメーションを再生するにはどちらかを使う必要がありますが、調べたり実装したりして考えたことを書いておきます。</p>
+<h2 id="SkeletonAnimation-or-SkeletonMecanim"><a href="#SkeletonAnimation-or-SkeletonMecanim" class="headerlink" title="SkeletonAnimation or SkeletonMecanim"></a>SkeletonAnimation or SkeletonMecanim</h2><p>公式で推奨されているのはSkeletonAnimationですが、それぞれ比べていきます。</p>
+<h3 id="アニメーションの再現"><a href="#アニメーションの再現" class="headerlink" title="アニメーションの再現"></a>アニメーションの再現</h3><p>Mecanimを使用した場合、Spineのエディタのプレビューで再生したものと同じになることを保証しない記載があります。<br>また、アニメーション間のトランジションを最初のフレームに追加のキーを設定する必要があります。<br>それらのキーはExport時にオプションの Animation clean up をONにすると消されるので、そのオプションはMecanimの場合使用できません。<br>詳しくは<a target="_blank" rel="noopener" href="http://esotericsoftware.com/spine-unity#Required-Additional-Keys">こちら</a></p>
+<p>トランジションはただでさえ、見た目を整える難しさがあるので、さらに考慮すべき項目が増えるのはちょっとしんどい印象です。</p>
+<h3 id="機能面"><a href="#機能面" class="headerlink" title="機能面"></a>機能面</h3><ul>
+<li><p>トラック<br> SkeletonAnimation : アニメーション再生のAPI使用時に指定する<br> SkeletonMecanim : Animatorウィンドウのレイヤーで指定する</p>
+</li>
+<li><p>ミックス<br>SkeletonAnimation : Skeleton Data Assetで設定しておくか、アニメーション再生時TrackEntryを介して指定する<br>SkeletonMecanim : AnimatorウィンドウのTransitionの各値で設定する</p>
+</li>
+<li><p>アルファ<br>SkeletonAnimation : アニメーション再生時TrackEntryを介して指定する<br>SkeletonMecanim : レイヤーのweightで指定する</p>
+</li>
+<li><p>Spineで設定したイベント<br>SkeletonAnimation : AnimationStateのEventのdelegateに追加して受け取る<br>SkeletonMecanim : Animation Clipのイベントとして設定される</p>
+</li>
+</ul>
+<p>どちらも基本的な機能は備えています。  </p>
+<p>SkeletonAnimationは<a target="_blank" rel="noopener" href="http://ja.esotericsoftware.com/spine-unity#Processing-AnimationState-Events">started, interrupted, completed, ended, disposed</a>といった5つのイベントを受け取ることができ、アニメーション再生時のイベントの扱いが便利そうだと思いました。  </p>
+<p>また、SkeletonAnimationは<a target="_blank" rel="noopener" href="http://ja.esotericsoftware.com/spine-api-reference#TrackEntry">TrackEntry</a>を介したアニメーションの細かい設定ができる点も気になります。<br>attachmentのON/OFFやdrawOrderの順番の変更、eventの発火といった徐々に変化せずミックスができない項目に対してしきい値を設定できます。  </p>
+<h3 id="パフォーマンス面"><a href="#パフォーマンス面" class="headerlink" title="パフォーマンス面"></a>パフォーマンス面</h3><p>SkeletonMecanimはSkeletonAnimatonに比べるとパフォーマンスで劣るそうです。<br>ゲームプレイに影響ある程ではないと思いますが、以下のフォーラムで書かれているように大量に生成したときにパフォーマンスに差が出たという話があります。<br><a target="_blank" rel="noopener" href="http://ja.esotericsoftware.com/forum/Performance-Analysis-of-Mecanim-vs-Animation-15046">Performance Analysis of Mecanim vs Animation</a></p>
+<p>両者の差がパフォーマンスにとってクリティカルになるケースは稀な気がします。<br>正直多少のパフォーマンスを犠牲にしてでもMecanimのようにGUIでアニメーションの遷移を設定出来たほうが良いという気持ちはあります。  </p>
+<h3 id="ステートマシン"><a href="#ステートマシン" class="headerlink" title="ステートマシン"></a>ステートマシン</h3><p>Mecanimを使う最大のメリットはやはりGUIでアニメーションの遷移を定義できることです。<br>スパゲッティな遷移になりがちとはいえ、アニメーションの遷移をステートマシンで表現できるのは強みです。<br>逆にSkeletonAnimationを使う際の一番の問題点はこれで、アニメーションを変化させるのにプログラムからAPIを呼ぶしかないのです。<br>SkeletonAnimationを使いつつ、Mecanimnのようなステートマシンを使いたいというニーズはあり、以下のフォーラムのように<a target="_blank" rel="noopener" href="https://assetstore.unity.com/packages/tools/visual-scripting/nodecanvas-14914?locale=ja-JP">NodeCanvas</a>というアセットを使う方法が提案されています。  </p>
+<p><a target="_blank" rel="noopener" href="http://ja.esotericsoftware.com/forum/Spine-NodeCanvas-6366">Spine + NodeCanvas?</a></p>
+<p>NodeCanvasは少し高価ですが、触った感じ、確かにステートマシンでアニメーションを管理できますし、使いやすいアセットです。<br>上記フォーラムで紹介されているようなSpine用のアクションを自分で作る必要があるものの、一つの解であると言えそうです。<br>同様にステートマシンを扱うPlaymakerのSpine実装も存在しているのですが、PlaymakerでMecanimのようなアニメーション遷移を作るのは難しいです。  </p>
+<h2 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>どちらもメリット・デメリットあるのでどちらを採用するかは一概に言えない感じでした。<br>個人的にはSkeletonAimatonを使っていこうかと思っています。やはり公式で推奨されているなら・・・。</p>
 
     </div>
     <footer class="article-footer">
-      <a href="https://twitter.com/intent/tweet?text=Any%20State%20%E3%81%A7%E3%81%A9%E3%81%93%E3%81%8B%E3%82%89%E3%81%A7%E3%82%82%E9%81%B7%E7%A7%BB%E3%81%A7%E3%81%8D%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B%20%7C%20Unity%20%7C%20kido tech blog%0a&url=https%3A%2F%2Fkido0617.github.io%2Funity%2F2014-09-30-any-state%2F" class="article-share-twitter" target="_blank" title="Twitter">
+      <a href="https://twitter.com/intent/tweet?text=Spine%E3%81%AESkeletonAnimation%E3%81%A8SkeletonMecanim%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%20%7C%20Unity%20%7C%20kido tech blog%0a&url=https%3A%2F%2Fkido0617.github.io%2Funity%2F2021-06-24-spine-animation%2F" class="article-share-twitter" target="_blank" title="Twitter">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
         <path d="M512 113.2c-18.8 8.4-39.1 14-60.3 16.5 21.7-13 38.3-33.6 46.2-58.1-20.3 12-42.8 20.8-66.7 25.5-19.2-20.4-46.5-33.1-76.7-33.1-58 0-105 47-105 105 0 8.2 0.9 16.2 2.7 23.9-87.3-4.4-164.7-46.2-216.5-109.8-9 15.5-14.2 33.6-14.2 52.8 0 36.4 18.5 68.6 46.7 87.4-17.2-0.5-33.4-5.3-47.6-13.1 0 0.4 0 0.9 0 1.3 0 50.9 36.2 93.4 84.3 103-8.8 2.4-18.1 3.7-27.7 3.7-6.8 0-13.3-0.7-19.8-1.9 13.4 41.7 52.2 72.1 98.1 73-36 28.2-81.2 45-130.5 45-8.5 0-16.8-0.5-25.1-1.5 46.6 29.9 101.8 47.2 161.1 47.2 193.2 0 298.9-160.1 298.9-298.9 0-4.6-0.1-9.1-0.3-13.6 20.5-14.7 38.3-33.2 52.4-54.3z"></path>
         </svg>
       </a>
-      <a href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fkido0617.github.io%2Funity%2F2014-09-30-any-state%2F" class="article-share-facebook" target="_blank" title="Facebook">
+      <a href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fkido0617.github.io%2Funity%2F2021-06-24-spine-animation%2F" class="article-share-facebook" target="_blank" title="Facebook">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
         <path d="M304 96h80v-96h-80c-61.757 0-112 50.243-112 112v48h-64v96h64v256h96v-256h80l16-96h-96v-48c0-8.673 7.327-16 16-16z"></path>
         </svg>
@@ -156,18 +184,6 @@
     <div class="archives">
       
         
-        <a class="archive-article-block"  href="/unity/2021-06-24-spine-animation/">
-  <div class="archive-article">
-    <div class="archive-article-info">
-      <span class="archive-article-date">
-        <time datetime="2021-06-23T15:00:00.000Z">2021-06-24</time>
-      </span>
-      <span class="archive-article-category">Unity</span>
-    </div>
-    <span class="archive-article-title">SpineのSkeletonAnimationとSkeletonMecanimについて</span>
-  </div>
-</a>
-      
         
         <a class="archive-article-block"  href="/unity/2021-06-21-enemy-ai/">
   <div class="archive-article">
@@ -637,6 +653,18 @@
 </a>
       
         
+        <a class="archive-article-block"  href="/unity/2014-09-30-any-state/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2014-09-29T15:00:00.000Z">2014-09-30</time>
+      </span>
+      <span class="archive-article-category">Unity</span>
+    </div>
+    <span class="archive-article-title">Any State でどこからでも遷移できるようにする</span>
+  </div>
+</a>
+      
         
         <a class="archive-article-block"  href="/unity/2014-09-27-itween-stop/">
   <div class="archive-article">
