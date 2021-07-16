@@ -9,6 +9,13 @@
 
 
     <url>
+        <loc>https://kido0617.github.io/categories/RPGMakerMV/</loc>
+        <lastmod>2021-07-15T15:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
         <loc>https://kido0617.github.io/categories/Unity/</loc>
         <lastmod>2021-06-23T15:00:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -32,13 +39,6 @@
     <url>
         <loc>https://kido0617.github.io/categories/PHP/</loc>
         <lastmod>2021-06-16T15:00:00.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>https://kido0617.github.io/categories/RPGMakerMV/</loc>
-        <lastmod>2021-06-12T15:00:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

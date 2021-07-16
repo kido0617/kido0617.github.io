@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://kido0617.github.io/"/>
-  <updated>2021-06-23T15:00:00.000Z</updated>
+  <updated>2021-07-15T15:00:00.000Z</updated>
   <id>https://kido0617.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>リリース時のチェック項目</title>
+    <link href="https://kido0617.github.io/rpgmaker/2021-07-16-deploy-check/"/>
+    <id>https://kido0617.github.io/rpgmaker/2021-07-16-deploy-check/</id>
+    <published>2021-07-15T15:00:00.000Z</published>
+    <updated>2021-07-15T15:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>ゲームが完成し、リリースするときにチェックした方が良い項目をまとめました。<br>ツクールMVを基準に書いていますが、MZでも大体同じです。<br>windowsでexeファイルのリリースを対象としています。</p><h2 id="チェックリスト"><a href="#チェックリスト" class="headerlink" title="チェックリスト"></a>チェックリスト</h2><ol><li><p>不適切なファイルが含まれていないか<br>デプロイ後のwwwフォルダを開き、この中に意図していないファイルがないか確認します。<br>ライセンス的に問題があるもの、コピーした仮ファイル、制作メモ、不要なファイル（psdファイルなど）がないかチェックします。</p></li><li><p>未使用ファイルの削除<br>デプロイ時に「未使用ファイルを含まない」をチェックすると、ツクールのエディタ上で使われていない画像やサウンドファイルを削除してくれます。<br>しかし、プラグインで使用している画像も削除されてしまうので、このオプションの使用は少々難しいです。<br>なので、このオプションを使用せずデプロイすることをオススメします。<br>一度、このオプションを使用してデプロイし、削除されたファイルとの差分を見つつ、未使用ファイルをプロジェクトから手動で消すのが無難なのではと思います。<br>(プラグインで使用している画像が削除されるのは、ツクールのエディタ側からはどんなプラグインがどう画像を扱うか把握のしようがないため）</p></li><li><p>容量のチェック<br>可能ならばツールなどを使用し、容量が大きいファイルをリストアップすると良いです。<br>明らかに容量が大きい異常なファイルはしばしば見受けられます（未圧縮、不要なほど解像度が大きいなど）。</p></li><li><p>Canvasモードでデプロイしていないか<br>デプロイ後のexeを起動し、F2キーを押します。画面左上に表示が出ますが、これがWebGL modeであることを確認します。<br>もし、Canvas modeだった場合、描画処理が重く、また一部のプラグインは機能しない可能性があります。<br>ツクールMV側のバグらしく、MVを再インストールしてデプロイし直すと直ることがあるようです。<br>Steam版使っている人は大丈夫っぽい？</p></li><li><p>デプロイ時の暗号化キーをメモしておく<br>この暗号化キーは画像やサウンドファイルの暗号化に使われます。<br>暗号化キーをメモしておくと公開後にバグ修正などでデータの一部だけ修正ファイルを公開したいときに役立ちます。<br>デプロイ時の暗号化キーが同じならば、dataフォルダだけの差し替えでバージョンアップが可能のため、柔軟な対応ができます。<br>（販売サイトによっては差し替えに1日かかる場合があるので、自身のサイトで修正ファイルを公開するなど）</p></li><li><p>テスト用のイベントが残っていないか<br>よく拠点などにデバッグ用の便利イベントなどを設置したまま忘れてリリースしてしまうことがあります。  </p></li><li><p>ニューゲームの初期位置が正しいか<br>テストで初期位置を別の場所へしたままにしていないか。</p></li><li><p>Readmeを同梱したか<br>Readmeや説明ファイルなどがある場合、同梱するのを忘れないようにします。<br>バージョンアップ時に入れ忘れることもあるので注意。</p></li><li><p>起動に時間がかからないか<br>通常のデプロイなら問題ありません。Enigma Virtual boxなどでexeをまとめた場合、起動に時間がかかります。<br>許容範囲か確認します。<br>ちなみにEnigma Virtual boxを使用した場合、起動するとWindows Defenderにブロックされることがあります。<br>ブロックされても無視して起動はできますが、ユーザに知らせることも必要かもしれません。</p></li><li><p>テスト用のプラグインパラメータにしていないか<br>プラグインパラメータをテストのときのままにしている場合があります。<br>また、テスト用のプラグインがある場合、OFFにします。</p></li><li><p>体験版の範囲で止まらないか<br>体験版と製品版がある場合、製品版なのに体験版の範囲しかプレイできないことがないか確認します。</p></li><li><p>セーブファイルを同梱していないか<br>普通にデプロイしたらセーブファイルは含まれません。<br>デプロイ後に自分でテストしてセーブして、それをそのままアップロードしない限り。</p></li><li><p>データを閲覧されても大丈夫か<br>ツクールの性質上、データを閲覧されるのを防ぐことはできません。<br>コンプライアンスに関わるテキストなどデータベースに残さないようにします。<br>（昔、ユーザに見えないエディタ上にしか出ないテキストで販売サイトの審査落ちるみたいなこともありました。）</p></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;ゲームが完成し、リリースするときにチェックした方が良い項目をまとめました。&lt;br&gt;ツクールMVを基準に書いていますが、MZでも大体同じです。&lt;br&gt;windowsでexeファイルのリリースを対象としています。&lt;/p&gt;
+&lt;h2 id=&quot;チェックリスト&quot;&gt;&lt;a href=&quot;#チ
+      
+    
+    </summary>
+    
+    
+      <category term="RPGツクールMV" scheme="https://kido0617.github.io/categories/RPGMakerMV/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>SpineのSkeletonAnimationとSkeletonMecanimについて</title>
@@ -233,32 +258,6 @@
     
     
       <category term="RPGツクールMV" scheme="https://kido0617.github.io/categories/RPGMakerMV/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>オフセットを使い髪の毛や触手などの揺れ物を作る</title>
-    <link href="https://kido0617.github.io/spine/2021-06-11-tentacle/"/>
-    <id>https://kido0617.github.io/spine/2021-06-11-tentacle/</id>
-    <published>2021-06-10T15:00:00.000Z</published>
-    <updated>2021-06-10T15:00:00.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>こういう感じの揺れ物を作ります。</p><p><video src="/img/2021-06-11-tentacle/finish.mp4" width="600"  controls></video></p><h2 id="作り方"><a href="#作り方" class="headerlink" title="作り方"></a>作り方</h2><p>サンプルとして適当にボーンを置きます。</p><p><img src="/img/2021-06-11-tentacle/1.jpg" alt="step1"></p><p>以下に工程の動画を載せています。<br>全ボーンを選択し、一気に同じ角度だけ回転させて起点と終点と作り、ループアニメーションを作ります。<br>そこから、ドープシートにあるオフセットボタンを押します。<br>このオフセットの機能を使い、ボーンの根本から徐々にずらしていきます。<br>力の伝わりが少しずつ遅れるのを表現します。  </p><p><video src="/img/2021-06-11-tentacle/creating.mp4" width="1000"  controls></video></p><h2 id="問題点"><a href="#問題点" class="headerlink" title="問題点"></a>問題点</h2><p>上手な人のメイキング動画を観ていたら、このテクニックを使用していました。<br>このやり方だとそれっぽいのは作れるのですが、狙ったアニメーションが作れなくて苦戦しました。<br>起点と終点を作ったときから完成形がどう動くかが想像しづらいのです。思ったより揺れなかったり揺れすぎてしまったりします。<br>オフセットを設定してからだとアニメーションを付け直すのが難しくて、いつも作り直しています。<br>どうするのがベストか知りたいところです。</p><h2 id="使用バージョン"><a href="#使用バージョン" class="headerlink" title="使用バージョン"></a>使用バージョン</h2><p>Spine 3.8.99</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;こういう感じの揺れ物を作ります。&lt;/p&gt;
-&lt;p&gt;&lt;video src=&quot;/img/2021-06-11-tentacle/finish.mp4&quot; width=&quot;600&quot;  controls&gt;&lt;/video&gt;&lt;/p&gt;
-&lt;h2 id=&quot;作り方&quot;&gt;&lt;a href=&quot;#作り方&quot; c
-      
-    
-    </summary>
-    
-    
-      <category term="Spine" scheme="https://kido0617.github.io/categories/Spine/"/>
     
     
   </entry>

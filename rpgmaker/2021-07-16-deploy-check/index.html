@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>装備を記憶、ロードするプラグイン | RPGツクールMV | kido Tech Blog</title>
+  <title>リリース時のチェック項目 | RPGツクールMV | kido Tech Blog</title>
   
-  <meta name="description" content="概要アクターの装備を一度記憶し、それをロードできるプラグインを作りました。使用例としては、着せ替えゲームを作ったときにコーディネートを複数保存するということができます。あるいは敵に装備を奪われ、取り返したときに復元するみたいなこともできます。 仕様変数の管理みたいに保存領域を用意します。例えば、1番にはアクター1の装備を保存、2番にはアクター3の装備を保存ということができます。記憶したアクター1の">
+  <meta name="description" content="ゲームが完成し、リリースするときにチェックした方が良い項目をまとめました。ツクールMVを基準に書いていますが、MZでも大体同じです。windowsでexeファイルのリリースを対象としています。 チェックリスト 不適切なファイルが含まれていないかデプロイ後のwwwフォルダを開き、この中に意図していないファイルがないか確認します。ライセンス的に問題があるもの、コピーした仮ファイル、制作メモ、不要なファ">
   <meta name="author" content="kido">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <meta property="og:type" content="article">
-  <meta property="og:title" content="装備を記憶、ロードするプラグイン | RPGツクールMV | kido Tech Blog">
-  <meta property="og:url" content="https://kido0617.github.io/rpgmaker/2018-09-19-save-equips/">
+  <meta property="og:title" content="リリース時のチェック項目 | RPGツクールMV | kido Tech Blog">
+  <meta property="og:url" content="https://kido0617.github.io/rpgmaker/2021-07-16-deploy-check/">
   <meta property="og:site_name" content="kido Tech Blog">
-  <meta property="og:description" content="概要アクターの装備を一度記憶し、それをロードできるプラグインを作りました。使用例としては、着せ替えゲームを作ったときにコーディネートを複数保存するということができます。あるいは敵に装備を奪われ、取り返したときに復元するみたいなこともできます。 仕様変数の管理みたいに保存領域を用意します。例えば、1番にはアクター1の装備を保存、2番にはアクター3の装備を保存ということができます。記憶したアクター1の">
+  <meta property="og:description" content="ゲームが完成し、リリースするときにチェックした方が良い項目をまとめました。ツクールMVを基準に書いていますが、MZでも大体同じです。windowsでexeファイルのリリースを対象としています。 チェックリスト 不適切なファイルが含まれていないかデプロイ後のwwwフォルダを開き、この中に意図していないファイルがないか確認します。ライセンス的に問題があるもの、コピーした仮ファイル、制作メモ、不要なファ">
   <meta property="og:image" content="https://kido0617.github.io/css/images/ogp.png">
   <meta property="og:locale" content="ja_JP">
   <meta name="twitter:card" content="summary" />
@@ -80,7 +80,7 @@
       
         <li property="itemListElement" typeof="ListItem">
           
-            <span property="name">装備を記憶、ロードするプラグイン</span>
+            <span property="name">リリース時のチェック項目</span>
           
           <meta property="position" content="2" />
           
@@ -88,42 +88,56 @@
       
     </ul>
   
-        <section id="main"><article id="post-rpgmaker/2018-09-19-save-equips" class="article article-type-post">
+        <section id="main"><article id="post-rpgmaker/2021-07-16-deploy-check" class="article article-type-post">
   <div class="article-inner">
     <header class="article-header">
-      <h1 class="article-title">装備を記憶、ロードするプラグイン</h1>
+      <h1 class="article-title">リリース時のチェック項目</h1>
       <div class="article-meta">
         <a class="article-category-link" href="/categories/RPGMakerMV/">RPGツクールMV</a>
         <span class="article-date">
-          公開日:<time datetime="2018-09-18T15:00:00.000Z">2018-09-19</time>
+          公開日:<time datetime="2021-07-15T15:00:00.000Z">2021-07-16</time>
         </span>
       </div>
     </header>
     <div class="article-entry">
-      <h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>アクターの装備を一度記憶し、それをロードできるプラグインを作りました。<br>使用例としては、着せ替えゲームを作ったときにコーディネートを複数保存するということができます。<br>あるいは敵に装備を奪われ、取り返したときに復元するみたいなこともできます。</p>
-<h2 id="仕様"><a href="#仕様" class="headerlink" title="仕様"></a>仕様</h2><p>変数の管理みたいに保存領域を用意します。<br>例えば、1番にはアクター1の装備を保存、2番にはアクター3の装備を保存ということができます。<br>記憶したアクター1の装備をアクター3にロードするということができるようにします。<br>ロード時に所持品に該当装備があれば装備し、ない場合は装備なし状態になります。<br>ただし、パーティにそれを装備しているアクターがいた場合、それを奪うかどうか設定できます。<br>当然、アクター1の装備をアクター3にロードしたとき、装備できない装備は装備されません。<br>ゲームのセーブ・ロードに対応。</p>
-<h2 id="プラグインコマンド"><a href="#プラグインコマンド" class="headerlink" title="プラグインコマンド"></a>プラグインコマンド</h2><h3 id="記憶"><a href="#記憶" class="headerlink" title="記憶"></a>記憶</h3><ul>
-<li><p>SaveEquips arg0 arg1</p>
-<p>arg0はアクター番号、arg1は保存先番号<br>例: SaveEquips 1 1<br>引数には変数の制御文字が使えます。<br>例: SaveEquips \V[3] \V[4]  </p>
+      <p>ゲームが完成し、リリースするときにチェックした方が良い項目をまとめました。<br>ツクールMVを基準に書いていますが、MZでも大体同じです。<br>windowsでexeファイルのリリースを対象としています。</p>
+<h2 id="チェックリスト"><a href="#チェックリスト" class="headerlink" title="チェックリスト"></a>チェックリスト</h2><ol>
+<li><p>不適切なファイルが含まれていないか<br>デプロイ後のwwwフォルダを開き、この中に意図していないファイルがないか確認します。<br>ライセンス的に問題があるもの、コピーした仮ファイル、制作メモ、不要なファイル（psdファイルなど）がないかチェックします。</p>
 </li>
-</ul>
-<h3 id="ロード"><a href="#ロード" class="headerlink" title="ロード"></a>ロード</h3><ul>
-<li><p>LoadEquips arg0 arg1 arg2</p>
-<p> arg0はアクター番号、arg1は保存元番号、arg2は所持品に装備がない場合にパーティの装備を奪うか(0か指定なしは奪わない、1は奪う)<br> 例: LoadEquips 1 1<br> 例: LoadEquips 1 1 1<br> 引数には変数の制御文字が使えます。<br> 例: LoadEquips \V[3] \V[4]  </p>
+<li><p>未使用ファイルの削除<br>デプロイ時に「未使用ファイルを含まない」をチェックすると、ツクールのエディタ上で使われていない画像やサウンドファイルを削除してくれます。<br>しかし、プラグインで使用している画像も削除されてしまうので、このオプションの使用は少々難しいです。<br>なので、このオプションを使用せずデプロイすることをオススメします。<br>一度、このオプションを使用してデプロイし、削除されたファイルとの差分を見つつ、未使用ファイルをプロジェクトから手動で消すのが無難なのではと思います。<br>(プラグインで使用している画像が削除されるのは、ツクールのエディタ側からはどんなプラグインがどう画像を扱うか把握のしようがないため）</p>
 </li>
-</ul>
-<h2 id="ダウンロード"><a href="#ダウンロード" class="headerlink" title="ダウンロード"></a>ダウンロード</h2><p><code>RPGツクールMV1.6</code>以上にのみ対応。1.5は対応していません。</p>
-<p><a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/SaveEquips/SaveEquips.js">こちら</a></p>
-<h2 id="ライセンス"><a href="#ライセンス" class="headerlink" title="ライセンス"></a>ライセンス</h2><p>Released under the MIT license</p>
+<li><p>容量のチェック<br>可能ならばツールなどを使用し、容量が大きいファイルをリストアップすると良いです。<br>明らかに容量が大きい異常なファイルはしばしば見受けられます（未圧縮、不要なほど解像度が大きいなど）。</p>
+</li>
+<li><p>Canvasモードでデプロイしていないか<br>デプロイ後のexeを起動し、F2キーを押します。画面左上に表示が出ますが、これがWebGL modeであることを確認します。<br>もし、Canvas modeだった場合、描画処理が重く、また一部のプラグインは機能しない可能性があります。<br>ツクールMV側のバグらしく、MVを再インストールしてデプロイし直すと直ることがあるようです。<br>Steam版使っている人は大丈夫っぽい？</p>
+</li>
+<li><p>デプロイ時の暗号化キーをメモしておく<br>この暗号化キーは画像やサウンドファイルの暗号化に使われます。<br>暗号化キーをメモしておくと公開後にバグ修正などでデータの一部だけ修正ファイルを公開したいときに役立ちます。<br>デプロイ時の暗号化キーが同じならば、dataフォルダだけの差し替えでバージョンアップが可能のため、柔軟な対応ができます。<br>（販売サイトによっては差し替えに1日かかる場合があるので、自身のサイトで修正ファイルを公開するなど）</p>
+</li>
+<li><p>テスト用のイベントが残っていないか<br>よく拠点などにデバッグ用の便利イベントなどを設置したまま忘れてリリースしてしまうことがあります。  </p>
+</li>
+<li><p>ニューゲームの初期位置が正しいか<br>テストで初期位置を別の場所へしたままにしていないか。</p>
+</li>
+<li><p>Readmeを同梱したか<br>Readmeや説明ファイルなどがある場合、同梱するのを忘れないようにします。<br>バージョンアップ時に入れ忘れることもあるので注意。</p>
+</li>
+<li><p>起動に時間がかからないか<br>通常のデプロイなら問題ありません。Enigma Virtual boxなどでexeをまとめた場合、起動に時間がかかります。<br>許容範囲か確認します。<br>ちなみにEnigma Virtual boxを使用した場合、起動するとWindows Defenderにブロックされることがあります。<br>ブロックされても無視して起動はできますが、ユーザに知らせることも必要かもしれません。</p>
+</li>
+<li><p>テスト用のプラグインパラメータにしていないか<br>プラグインパラメータをテストのときのままにしている場合があります。<br>また、テスト用のプラグインがある場合、OFFにします。</p>
+</li>
+<li><p>体験版の範囲で止まらないか<br>体験版と製品版がある場合、製品版なのに体験版の範囲しかプレイできないことがないか確認します。</p>
+</li>
+<li><p>セーブファイルを同梱していないか<br>普通にデプロイしたらセーブファイルは含まれません。<br>デプロイ後に自分でテストしてセーブして、それをそのままアップロードしない限り。</p>
+</li>
+<li><p>データを閲覧されても大丈夫か<br>ツクールの性質上、データを閲覧されるのを防ぐことはできません。<br>コンプライアンスに関わるテキストなどデータベースに残さないようにします。<br>（昔、ユーザに見えないエディタ上にしか出ないテキストで販売サイトの審査落ちるみたいなこともありました。）</p>
+</li>
+</ol>
 
     </div>
     <footer class="article-footer">
-      <a href="https://twitter.com/intent/tweet?text=%E8%A3%85%E5%82%99%E3%82%92%E8%A8%98%E6%86%B6%E3%80%81%E3%83%AD%E3%83%BC%E3%83%89%E3%81%99%E3%82%8B%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%20%7C%20RPG%E3%83%84%E3%82%AF%E3%83%BC%E3%83%ABMV%20%7C%20kido tech blog%0a&url=https%3A%2F%2Fkido0617.github.io%2Frpgmaker%2F2018-09-19-save-equips%2F" class="article-share-twitter" target="_blank" title="Twitter">
+      <a href="https://twitter.com/intent/tweet?text=%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E6%99%82%E3%81%AE%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF%E9%A0%85%E7%9B%AE%20%7C%20RPG%E3%83%84%E3%82%AF%E3%83%BC%E3%83%ABMV%20%7C%20kido tech blog%0a&url=https%3A%2F%2Fkido0617.github.io%2Frpgmaker%2F2021-07-16-deploy-check%2F" class="article-share-twitter" target="_blank" title="Twitter">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
         <path d="M512 113.2c-18.8 8.4-39.1 14-60.3 16.5 21.7-13 38.3-33.6 46.2-58.1-20.3 12-42.8 20.8-66.7 25.5-19.2-20.4-46.5-33.1-76.7-33.1-58 0-105 47-105 105 0 8.2 0.9 16.2 2.7 23.9-87.3-4.4-164.7-46.2-216.5-109.8-9 15.5-14.2 33.6-14.2 52.8 0 36.4 18.5 68.6 46.7 87.4-17.2-0.5-33.4-5.3-47.6-13.1 0 0.4 0 0.9 0 1.3 0 50.9 36.2 93.4 84.3 103-8.8 2.4-18.1 3.7-27.7 3.7-6.8 0-13.3-0.7-19.8-1.9 13.4 41.7 52.2 72.1 98.1 73-36 28.2-81.2 45-130.5 45-8.5 0-16.8-0.5-25.1-1.5 46.6 29.9 101.8 47.2 161.1 47.2 193.2 0 298.9-160.1 298.9-298.9 0-4.6-0.1-9.1-0.3-13.6 20.5-14.7 38.3-33.2 52.4-54.3z"></path>
         </svg>
       </a>
-      <a href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fkido0617.github.io%2Frpgmaker%2F2018-09-19-save-equips%2F" class="article-share-facebook" target="_blank" title="Facebook">
+      <a href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fkido0617.github.io%2Frpgmaker%2F2021-07-16-deploy-check%2F" class="article-share-facebook" target="_blank" title="Facebook">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
         <path d="M304 96h80v-96h-80c-61.757 0-112 50.243-112 112v48h-64v96h64v256h96v-256h80l16-96h-96v-48c0-8.673 7.327-16 16-16z"></path>
         </svg>
@@ -165,18 +179,6 @@
     <div class="archives">
       
         
-        <a class="archive-article-block"  href="/rpgmaker/2021-07-16-deploy-check/">
-  <div class="archive-article">
-    <div class="archive-article-info">
-      <span class="archive-article-date">
-        <time datetime="2021-07-15T15:00:00.000Z">2021-07-16</time>
-      </span>
-      <span class="archive-article-category">RPGツクールMV</span>
-    </div>
-    <span class="archive-article-title">リリース時のチェック項目</span>
-  </div>
-</a>
-      
         
         <a class="archive-article-block"  href="/rpgmaker/2021-06-13-memoryscene/">
   <div class="archive-article">
@@ -373,6 +375,18 @@
 </a>
       
         
+        <a class="archive-article-block"  href="/rpgmaker/2018-09-19-save-equips/">
+  <div class="archive-article">
+    <div class="archive-article-info">
+      <span class="archive-article-date">
+        <time datetime="2018-09-18T15:00:00.000Z">2018-09-19</time>
+      </span>
+      <span class="archive-article-category">RPGツクールMV</span>
+    </div>
+    <span class="archive-article-title">装備を記憶、ロードするプラグイン</span>
+  </div>
+</a>
+      
         
         <a class="archive-article-block"  href="/rpgmaker/2018-08-20-tint/">
   <div class="archive-article">
