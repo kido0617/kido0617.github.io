@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>RPGツクールMZ on kido</title>
+    <link>https://kido0617.github.io/categories/rpg%E3%83%84%E3%82%AF%E3%83%BC%E3%83%ABmz/</link>
+    <description>Recent content in RPGツクールMZ on kido</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <lastBuildDate>Thu, 05 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kido0617.github.io/categories/rpg%E3%83%84%E3%82%AF%E3%83%BC%E3%83%ABmz/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ツクールでSpine導入したときのメモ</title>
+      <link>https://kido0617.github.io/rpgmaker/2023-10-05-spine/</link>
+      <pubDate>Thu, 05 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2023-10-05-spine/</guid>
+      
+      <description>&lt;p&gt;ツクールのSpine実装の勉強会をする予定で作った資料を上げる。&lt;br&gt;
+ほぼ自分用のメモ書きなので、細かいところは詳細を省く。&lt;/p&gt;
+&lt;h1 id=&#34;基本&#34;&gt;基本&lt;/h1&gt;
+&lt;p&gt;pixi-spine.jsというPixi.jsコミュニティが作っているspine用のライブラリを使う。&lt;br&gt;
+&lt;a href=&#34;https://makonet.sakura.ne.jp/rpg_tkool/MVMZ/PictureSpine/document.html&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;PictureSpine.js&lt;/a&gt;はそれをツクール用に使えるようにしたもの。&lt;br&gt;
+ツクールのピクチャのようにSpineを使える。&lt;/p&gt;
+&lt;h1 id=&#34;spineのバージョン&#34;&gt;Spineのバージョン&lt;/h1&gt;
+&lt;p&gt;MVはPixi.js4系なのでSpineは3.8限定&lt;br&gt;
+MZはPixi.js5系なのでSpineは3.8~4.1まで使用可能&lt;br&gt;
+PictureSpine.jsはSpine3.8基準。多分みんな3.8で作っているので安定を取るなら3.8。&lt;br&gt;
+Spine4以上を使いたい場合、pixi-spine.jsは最新のビルドをする必要ある。普通にDLできずNode.js入れてnpm install しないといけない。&lt;br&gt;
+こちらで試した限りでは細かいところは未検証だが、4系もとりあえず動いた。&lt;/p&gt;
+&lt;p&gt;Spineの3.8と4以上の差は、グラフエディタや細かな便利機能が追加されている差がある。&lt;br&gt;
+基本的な機能は3.8時点で完成されているが、最新使えるなら使いたい。&lt;/p&gt;
+&lt;h1 id=&#34;spineのエクスポート&#34;&gt;Spineのエクスポート&lt;/h1&gt;
+&lt;p&gt;json形式でエクスポートすれば良い。&lt;br&gt;
+4系使っているとオプションで3.8系式のjsonで出力できるが、原因の切り分けが難しくなるので推奨しない。 &lt;br&gt;
+テクスチャパックのオプションは基本いじる項目はないが、scaleだけいじることはある。&lt;br&gt;
+イラストを大きいサイズで作って出力するときscaleを0.5とかにすれば出力するテクスチャの解像度を減らせる。&lt;/p&gt;
+&lt;h1 id=&#34;トラックの重ねの話&#34;&gt;トラックの重ねの話&lt;/h1&gt;
+&lt;p&gt;トラック(アニメーション)を重ねることができる。&lt;br&gt;
+私は待機アニメーションの上にまばたきアニメーションを重ねるなどする。&lt;/p&gt;
+&lt;p&gt;例:&lt;br&gt;
+トラック0 : 待機アニメーション&lt;br&gt;
+トラック1 : まばたき&lt;/p&gt;
+&lt;p&gt;まばたきと待機の周期が違うし、まばたきを共通で使いまわしたいからこのような重ねる。&lt;br&gt;
+PictureSpine.jsはトラックの削除がないので、削除する場合は何もないアニメーションで上書きすればトラックを無効化できるのでそれで対応する。&lt;br&gt;
+あるいは自分でpixi-spine.jsにある&lt;code&gt;setEmptyAnimation&lt;/code&gt;の実装すれば良い。&lt;/p&gt;
+&lt;p&gt;トラックごとのアルファ値を設定する機能があるが、ここでいうアルファは透明度ではない。&lt;br&gt;
+どのくらいの影響度で重ねるか。ダメージ食らって足を引きずるのを徐々に強くするみたいなときに使うらしいが、私は使ったこと無い。&lt;/p&gt;
+&lt;h1 id=&#34;ミックス&#34;&gt;ミックス&lt;/h1&gt;
+&lt;p&gt;ミックスはアニメーション間の補完の話。&lt;br&gt;
+何も設定しないと瞬時にアニメーション切り替わって、シームレスじゃないので適当に設定しておく。&lt;br&gt;
+Spine側のエディタではデフォで0.2。&lt;br&gt;
+私はデフォで適当に設定して、個別に必要なところは設定している。&lt;/p&gt;
+&lt;h1 id=&#34;透明度&#34;&gt;透明度&lt;/h1&gt;
+&lt;p&gt;setColor(1, 1, 1, 0.1)などとすれば、全体を透明にできる。&lt;/p&gt;
+&lt;h1 id=&#34;scale&#34;&gt;Scale&lt;/h1&gt;
+&lt;p&gt;Spineで出力時にscaleを変えてもテクスチャの解像度が変わるだけで、モデルのサイズが変わるわけではない。&lt;br&gt;
+ツクール側でscaleを変えないといけない。&lt;/p&gt;
+&lt;h1 id=&#34;モザイク&#34;&gt;モザイク&lt;/h1&gt;
+&lt;p&gt;元ファイルもモザイク処理をする必要ありますが、モザイクしているパーツをメッシュ変形すると違和感がすごい。&lt;br&gt;
+だから元ファイルをモザイク処理した上で用意されているモザイク機能を上からかけるのが良いのではないか。&lt;/p&gt;
+&lt;h1 id=&#34;シーン切り替え&#34;&gt;シーン切り替え&lt;/h1&gt;
+&lt;p&gt;アニメーション状態を保存しているので、メニューを開いたり、場所移動しても前のアニメーションを継続できる&lt;/p&gt;
+&lt;h1 id=&#34;イベント&#34;&gt;イベント&lt;/h1&gt;
+&lt;p&gt;Spine側で設定したオーディオをツクール側で再生したり、スイッチ操作する機能がある。&lt;br&gt;
+Spine側で設定したオーディオは別にエクスポートしたファイルに含まれるわけではない。ファイル名を参照したいだけ。&lt;br&gt;
+スイッチ操作はイベントに直で設定するのではなく、タイムライン上で設定しないといけない。微妙にハマった。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>簡易ログメッセージプラグイン</title>
+      <link>https://kido0617.github.io/rpgmaker/2022-12-11-logmessage/</link>
+      <pubDate>Sun, 11 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2022-12-11-logmessage/</guid>
+      
+      <description>&lt;p&gt;簡易的にログメッセージを表示するプラグインを製作しました。&lt;/p&gt;
+&lt;p&gt;&lt;video src=&#34;logmessage.mp4&#34; width=&#34;720&#34; height=&#34;480&#34; controls&gt;&lt;/video&gt;&lt;/p&gt;
+&lt;p&gt;以下のような感じでプラグインコマンドから指定します。&lt;br&gt;
+最初に初期化コマンドから表示位置とサイズを指定し実行します。&lt;br&gt;
+その後はメッセージ追加コマンドからテキストを追加します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;command.png&#34; alt=&#34;コマンド例&#34;&gt;&lt;/p&gt;
+&lt;p&gt;ダウンロードは&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMZ-plugin/main/LogMessage/LogMessage.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;こちら&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;制限事項&#34;&gt;制限事項&lt;/h2&gt;
+&lt;p&gt;演出で使用することを想定しているので、マップを移動したり、メニューを表示したら消えます。&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pages on kido</title>
+    <link>https://kido0617.github.io/pages/</link>
+    <description>Recent content in Pages on kido</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language><atom:link href="https://kido0617.github.io/pages/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>経歴</title>
+      <link>https://kido0617.github.io/pages/career/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/pages/career/</guid>
+      
+      <description>&lt;h2 id=&#34;高専情報工学科--大学情報工学科&#34;&gt;高専(情報工学科) → 大学(情報工学科)&lt;/h2&gt;
+&lt;h2 id=&#34;a社2年&#34;&gt;A社(2年)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Symbian OS搭載携帯電話のアプリケーション管理・ダウンロード機能の開発 (C++)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;b社1年&#34;&gt;B社(1年)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;携帯電話向けメールチャットサービスの開発 (Java, MySQL)&lt;/li&gt;
+&lt;li&gt;喧嘩討論BBSサイトの開発 (Python, jQuery, MySQL)&lt;/li&gt;
+&lt;li&gt;売上・受注管理、バックアップなど社内システムの開発。自社サーバ管理 (PHP, MySQL)&lt;/li&gt;
+&lt;li&gt;iPhoneアプリ向け素材入稿Webシステムの開発 (PHP, jQuery, MySQL)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;c社4年&#34;&gt;C社(4年)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;通販サイト向けWindows8アプリの開発 (JavaScript)&lt;/li&gt;
+&lt;li&gt;WordPressを改造したCMS開発 4件 (PHP, jQuery, MySQL)&lt;/li&gt;
+&lt;li&gt;美容院向けWeb予約管理システムの開発 (Node.js, AngularJS, MongoDB)&lt;/li&gt;
+&lt;li&gt;アクセス分析システムの開発 (Go, AngularJS, MongoDB)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;副業&#34;&gt;副業&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;デジタル書籍投稿サイトのフロントエンド開発 (jQuery)&lt;/li&gt;
+&lt;li&gt;プレゼンテーション支援Windows8アプリの開発 (JavaScript)&lt;/li&gt;
+&lt;li&gt;ポーカー(成人向け, HTML, CSS, js)&lt;/li&gt;
+&lt;li&gt;スピード(成人向け, HTML, CSS, js)&lt;/li&gt;
+&lt;li&gt;成人向け同人ゲーム「花とマッチ売りの少女」の開発 (RPGツクールVXAce, プログラム担当)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;フリーランス2017年&#34;&gt;フリーランス(2017年～)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Webサイトの動作テスト&lt;/li&gt;
+&lt;li&gt;WordPressサイト移管、テスト環境構築など&lt;/li&gt;
+&lt;li&gt;ティラノスクリプト製のゲームのプラグイン作成, バグ対応&lt;/li&gt;
+&lt;li&gt;成人向け同人ゲーム「Ambrosia」のサポート (ツクールMVのプラグイン開発, 競合解決, バグ対応)&lt;/li&gt;
+&lt;li&gt;ゲームコミュニティサイトの開発 (WordPress)&lt;/li&gt;
+&lt;li&gt;会員制コミュニティサイトのテスト項目抽出及びテスト&lt;/li&gt;
+&lt;li&gt;霊園のサイトの開発 (WordPress)&lt;/li&gt;
+&lt;li&gt;ニュースコミュニティサイト開発 (WordPress)&lt;/li&gt;
+&lt;li&gt;人材採用会社のサイト開発 (WordPress)&lt;/li&gt;
+&lt;li&gt;建築会社のサイト開発&lt;/li&gt;
+&lt;li&gt;私立高校のサイトリニューアル (WordPress)&lt;/li&gt;
+&lt;li&gt;成人向け同人ゲーム「レリィ・ナビゲーション」のサポート (ツクールMVのプラグイン開発, 競合解決, バグ対応, パフォーマンス調整など130件)&lt;/li&gt;
+&lt;li&gt;教育機関の検索ポータルサイトの開発・保守(Laravel, GAE)&lt;/li&gt;
+&lt;li&gt;成人向け同人ゲーム「魔法少女セレスフォニア」のサポート (ツクールMVのプラグイン開発, 競合解決, バグ対応など50件)&lt;/li&gt;
+&lt;li&gt;診断サイト開発(Vue.js)&lt;/li&gt;
+&lt;li&gt;私立大学の学校案内用作品展示サイトの開発 (WordPress)&lt;/li&gt;
+&lt;li&gt;会員制求人サイトの開発・保守(Laravel, GAE)&lt;/li&gt;
+&lt;li&gt;Shopifyのテーマ改造(JavaScript)&lt;/li&gt;
+&lt;li&gt;Spineを使ったサイドビューRPG用のデフォルメアニメーションの作成(34件)&lt;/li&gt;
+&lt;li&gt;私立大学の学校案内用作品展示サイトのメンテナンス(WordPress)&lt;/li&gt;
+&lt;li&gt;成人向け同人ゲーム「エニシアと契約紋」のサポート (ツクールMZのプラグイン開発, 競合解決, バグ対応など35件)&lt;/li&gt;
+&lt;li&gt;Spineを使ったサイドビューRPG用の戦闘アニメーションの作成(1件)&lt;/li&gt;
+&lt;li&gt;Unity1週間ゲームジャムで「&lt;a href=&#34;https://unityroom.com/games/bountail-chan&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;バウンテールちゃん!&lt;/a&gt;」の開発&lt;/li&gt;
+&lt;li&gt;RPGツクールMZ製のゲームの描画、ロード周りのパフォーマンス改善&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;制作したゲーム&#34;&gt;制作したゲーム&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;2019年5月 Heroine of the Sniper　&lt;a href=&#34;https://store.steampowered.com/app/851950/Heroine_of_the_Sniper/&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Steam&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2022年8月 Attacker-chan!　&lt;a href=&#34;https://store.steampowered.com/app/1931510/_/&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Steam&lt;/a&gt; / &lt;a href=&#34;https://store-jp.nintendo.com/item/software/D70010000059118&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Switch&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2025年5月 Gunner-chan!　&lt;a href=&#34;https://store.steampowered.com/app/2516990/_/&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Steam&lt;/a&gt; / &lt;a href=&#34;https://store-jp.nintendo.com/item/software/D70010000100489&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Switch&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+      
+    </item>
+    
+  </channel>
+</rss>

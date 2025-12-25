@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">ビルドスクリプトを書く | kido</title>
+<meta property="og:title" content="ビルドスクリプトを書く | kido" />
+<meta name="twitter:title" content="ビルドスクリプトを書く | kido" />
+<meta itemprop="name" content="ビルドスクリプトを書く | kido" />
+<meta name="application-name" content="ビルドスクリプトを書く | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/unity/2020-03-29-build-script/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/unity/2020-03-29-build-script/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="ビルドスクリプトを書く">
+  <meta property="og:description" content="概要 テスト時のビルドとリリース時のビルドで設定が違い、ビルド時に毎回指定するのも面倒なのでスクリプトを書きます。
+基本的に以下のページに沿って実装しています。
+BuildPipeline.BuildPlayer
+コード Editorスクリプトなので、Editorフォルダ配下に置きます。
+public class BuildScript { [MenuItem(&#34;MyBuild/Test Build&#34;)] public static void TestBuild() { Build(false); Debug.Log(&#34;テストビルド Done&#34;); } [MenuItem(&#34;MyBuild//Release Build&#34;)] public static void ReleaseBuild() { Build(true); Debug.Log(&#34;リリースビルド Done&#34;); } static void Build(bool isReleaseBuild) { var scenes = GetScenes(isReleaseBuild); BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions(); buildPlayerOptions.scenes = scenes; if (isReleaseBuild) buildPlayerOptions.locationPathName = &#34;Build/Release/game.exe&#34;; else { buildPlayerOptions.locationPathName = &#34;Build/Test/game.exe&#34;; //テスト時はDevelopmentビルドのオプションを有効にする buildPlayerOptions.options = BuildOptions.Development; } //win64 Standalone向けを指定 buildPlayerOptions.target = BuildTarget.StandaloneWindows64; BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions); BuildSummary summary = report.summary; if (summary.result == BuildResult.Succeeded) { Debug.Log(&#34;Build succeeded: &#34; &#43; summary.totalSize &#43; &#34; bytes&#34;); } else if (summary.result == BuildResult.Failed) { Debug.LogError(&#34;Build failed&#34;); } } //DebugXXXXというシーンがいくつかあり、テストビルド時のみ有効にしたい //リリースビルド時はそれらのシーンを除外している static string[] GetScenes(bool isReleaseBuild) { List&lt;string&gt; sceneList = new List&lt;string&gt;(); EditorBuildSettingsScene[] scenes = EditorBuildSettings.scenes; foreach (EditorBuildSettingsScene scene in scenes) { if (isReleaseBuild &amp;&amp; scene.path.IndexOf(&#34;Debug&#34;) != -1) continue; sceneList.Add(scene.path); Debug.Log(scene.path); } return sceneList.ToArray(); } } ビルドプション 以下のようにDevelopmentのオプションを指定していますが、これはenum値のflagです。
+buildPlayerOptions.options = BuildOptions.Development">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="unity">
+    <meta property="article:published_time" content="2020-03-29T00:00:00+00:00">
+    <meta property="article:modified_time" content="2020-03-29T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ビルドスクリプトを書く">
+  <meta name="twitter:description" content="概要 テスト時のビルドとリリース時のビルドで設定が違い、ビルド時に毎回指定するのも面倒なのでスクリプトを書きます。
+基本的に以下のページに沿って実装しています。
+BuildPipeline.BuildPlayer
+コード Editorスクリプトなので、Editorフォルダ配下に置きます。
+public class BuildScript { [MenuItem(&#34;MyBuild/Test Build&#34;)] public static void TestBuild() { Build(false); Debug.Log(&#34;テストビルド Done&#34;); } [MenuItem(&#34;MyBuild//Release Build&#34;)] public static void ReleaseBuild() { Build(true); Debug.Log(&#34;リリースビルド Done&#34;); } static void Build(bool isReleaseBuild) { var scenes = GetScenes(isReleaseBuild); BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions(); buildPlayerOptions.scenes = scenes; if (isReleaseBuild) buildPlayerOptions.locationPathName = &#34;Build/Release/game.exe&#34;; else { buildPlayerOptions.locationPathName = &#34;Build/Test/game.exe&#34;; //テスト時はDevelopmentビルドのオプションを有効にする buildPlayerOptions.options = BuildOptions.Development; } //win64 Standalone向けを指定 buildPlayerOptions.target = BuildTarget.StandaloneWindows64; BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions); BuildSummary summary = report.summary; if (summary.result == BuildResult.Succeeded) { Debug.Log(&#34;Build succeeded: &#34; &#43; summary.totalSize &#43; &#34; bytes&#34;); } else if (summary.result == BuildResult.Failed) { Debug.LogError(&#34;Build failed&#34;); } } //DebugXXXXというシーンがいくつかあり、テストビルド時のみ有効にしたい //リリースビルド時はそれらのシーンを除外している static string[] GetScenes(bool isReleaseBuild) { List&lt;string&gt; sceneList = new List&lt;string&gt;(); EditorBuildSettingsScene[] scenes = EditorBuildSettings.scenes; foreach (EditorBuildSettingsScene scene in scenes) { if (isReleaseBuild &amp;&amp; scene.path.IndexOf(&#34;Debug&#34;) != -1) continue; sceneList.Add(scene.path); Debug.Log(scene.path); } return sceneList.ToArray(); } } ビルドプション 以下のようにDevelopmentのオプションを指定していますが、これはenum値のflagです。
+buildPlayerOptions.options = BuildOptions.Development">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/unity/2020-03-29-build-script/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">ビルドスクリプトを書く</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/unity" style="margin-right:10px;">Unity</a>
+                    <time datetime="2020-03-29T00:00:00&#43;00:00" itemprop="datePublished"> 2020/03/29 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <h2 id="概要">概要</h2>
+<p>テスト時のビルドとリリース時のビルドで設定が違い、ビルド時に毎回指定するのも面倒なのでスクリプトを書きます。<br>
+基本的に以下のページに沿って実装しています。<br>
+<a href="https://docs.unity3d.com/ja/current/ScriptReference/BuildPipeline.BuildPlayer.html" class="blankA" target="_blank" rel="noopener noreferrer">BuildPipeline.BuildPlayer</a></p>
+<h2 id="コード">コード</h2>
+<p>Editorスクリプトなので、Editorフォルダ配下に置きます。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"> <span class="kd">public</span> <span class="k">class</span> <span class="nc">BuildScript</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="na">
+</span></span></span><span class="line"><span class="cl"><span class="na">    [MenuItem(&#34;MyBuild/Test Build&#34;)]</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="k">void</span> <span class="n">TestBuild</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">Build</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&#34;テストビルド Done&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="na">
+</span></span></span><span class="line"><span class="cl"><span class="na">    [MenuItem(&#34;MyBuild//Release Build&#34;)]</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="k">void</span> <span class="n">ReleaseBuild</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">Build</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&#34;リリースビルド Done&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">static</span> <span class="k">void</span> <span class="n">Build</span><span class="p">(</span><span class="kt">bool</span> <span class="n">isReleaseBuild</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="kt">var</span> <span class="n">scenes</span> <span class="p">=</span> <span class="n">GetScenes</span><span class="p">(</span><span class="n">isReleaseBuild</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">BuildPlayerOptions</span> <span class="n">buildPlayerOptions</span> <span class="p">=</span> <span class="k">new</span> <span class="n">BuildPlayerOptions</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">      <span class="n">buildPlayerOptions</span><span class="p">.</span><span class="n">scenes</span> <span class="p">=</span> <span class="n">scenes</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="n">isReleaseBuild</span><span class="p">)</span> <span class="n">buildPlayerOptions</span><span class="p">.</span><span class="n">locationPathName</span> <span class="p">=</span> <span class="s">&#34;Build/Release/game.exe&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">buildPlayerOptions</span><span class="p">.</span><span class="n">locationPathName</span> <span class="p">=</span> <span class="s">&#34;Build/Test/game.exe&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//テスト時はDevelopmentビルドのオプションを有効にする</span>
+</span></span><span class="line"><span class="cl">        <span class="n">buildPlayerOptions</span><span class="p">.</span><span class="n">options</span> <span class="p">=</span> <span class="n">BuildOptions</span><span class="p">.</span><span class="n">Development</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c1">//win64 Standalone向けを指定</span>
+</span></span><span class="line"><span class="cl">      <span class="n">buildPlayerOptions</span><span class="p">.</span><span class="n">target</span> <span class="p">=</span> <span class="n">BuildTarget</span><span class="p">.</span><span class="n">StandaloneWindows64</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">BuildReport</span> <span class="n">report</span> <span class="p">=</span> <span class="n">BuildPipeline</span><span class="p">.</span><span class="n">BuildPlayer</span><span class="p">(</span><span class="n">buildPlayerOptions</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="n">BuildSummary</span> <span class="n">summary</span> <span class="p">=</span> <span class="n">report</span><span class="p">.</span><span class="n">summary</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="n">summary</span><span class="p">.</span><span class="n">result</span> <span class="p">==</span> <span class="n">BuildResult</span><span class="p">.</span><span class="n">Succeeded</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&#34;Build succeeded: &#34;</span> <span class="p">+</span> <span class="n">summary</span><span class="p">.</span><span class="n">totalSize</span> <span class="p">+</span> <span class="s">&#34; bytes&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">summary</span><span class="p">.</span><span class="n">result</span> <span class="p">==</span> <span class="n">BuildResult</span><span class="p">.</span><span class="n">Failed</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Debug</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="s">&#34;Build failed&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">//DebugXXXXというシーンがいくつかあり、テストビルド時のみ有効にしたい</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//リリースビルド時はそれらのシーンを除外している</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">static</span> <span class="kt">string</span><span class="p">[]</span> <span class="n">GetScenes</span><span class="p">(</span><span class="kt">bool</span> <span class="n">isReleaseBuild</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">sceneList</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
+</span></span><span class="line"><span class="cl">      <span class="n">EditorBuildSettingsScene</span><span class="p">[]</span> <span class="n">scenes</span> <span class="p">=</span> <span class="n">EditorBuildSettings</span><span class="p">.</span><span class="n">scenes</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">foreach</span> <span class="p">(</span><span class="n">EditorBuildSettingsScene</span> <span class="n">scene</span> <span class="k">in</span> <span class="n">scenes</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">isReleaseBuild</span> <span class="p">&amp;&amp;</span> <span class="n">scene</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">IndexOf</span><span class="p">(</span><span class="s">&#34;Debug&#34;</span><span class="p">)</span> <span class="p">!=</span> <span class="p">-</span><span class="m">1</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sceneList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">scene</span><span class="p">.</span><span class="n">path</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="n">scene</span><span class="p">.</span><span class="n">path</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="n">sceneList</span><span class="p">.</span><span class="n">ToArray</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span></code></pre></div><h2 id="ビルドプション">ビルドプション</h2>
+<p>以下のようにDevelopmentのオプションを指定していますが、これはenum値のflagです。<br>
+<code>buildPlayerOptions.options = BuildOptions.Development</code></p>
+<p>以下にenum値が定義されているので、複数指定するときはORでflag指定すれば良いです。<br>
+<a href="https://docs.unity3d.com/ja/current/ScriptReference/BuildOptions.html" class="blankA" target="_blank" rel="noopener noreferrer">BuildOptions</a></p>
+<p><code> buildPlayerOptions.options = BuildOptions.Development | BuildOptions.AllowDebugging;</code></p>
+<h2 id="ビルドサマリー">ビルドサマリー</h2>
+<p>ビルド後に<a href="https://docs.unity3d.com/ja/current/ScriptReference/Build.Reporting.BuildSummary.html" class="blankA" target="_blank" rel="noopener noreferrer">BuildSummary</a>が出力されますが、ここではEditor Logで見られるような各アセットの容量などは確認できません。</p>
+<p>それらを確認するのに<code>Package Manager</code>からインストールできる<a href="https://docs.unity3d.com/Packages/com.unity.build-report-inspector@0.1/manual/index.html" class="blankA" target="_blank" rel="noopener noreferrer">Build Report Inspector</a>が便利そうです(2020年3月時点でまだプレビュー)。<br>
+<code>Library/LastBuild.buildreport</code>に最後にビルドしたレポートが保存されるらしく、それを解析しているようです。</p>
+<h2 id="確認バージョン">確認バージョン</h2>
+<p>Unity 2018.4.17f1</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

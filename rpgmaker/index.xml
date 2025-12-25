@@ -1,0 +1,1659 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rpgmakers on kido</title>
+    <link>https://kido0617.github.io/rpgmaker/</link>
+    <description>Recent content in Rpgmakers on kido</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <lastBuildDate>Thu, 05 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kido0617.github.io/rpgmaker/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ツクールでSpine導入したときのメモ</title>
+      <link>https://kido0617.github.io/rpgmaker/2023-10-05-spine/</link>
+      <pubDate>Thu, 05 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2023-10-05-spine/</guid>
+      
+      <description>&lt;p&gt;ツクールのSpine実装の勉強会をする予定で作った資料を上げる。&lt;br&gt;
+ほぼ自分用のメモ書きなので、細かいところは詳細を省く。&lt;/p&gt;
+&lt;h1 id=&#34;基本&#34;&gt;基本&lt;/h1&gt;
+&lt;p&gt;pixi-spine.jsというPixi.jsコミュニティが作っているspine用のライブラリを使う。&lt;br&gt;
+&lt;a href=&#34;https://makonet.sakura.ne.jp/rpg_tkool/MVMZ/PictureSpine/document.html&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;PictureSpine.js&lt;/a&gt;はそれをツクール用に使えるようにしたもの。&lt;br&gt;
+ツクールのピクチャのようにSpineを使える。&lt;/p&gt;
+&lt;h1 id=&#34;spineのバージョン&#34;&gt;Spineのバージョン&lt;/h1&gt;
+&lt;p&gt;MVはPixi.js4系なのでSpineは3.8限定&lt;br&gt;
+MZはPixi.js5系なのでSpineは3.8~4.1まで使用可能&lt;br&gt;
+PictureSpine.jsはSpine3.8基準。多分みんな3.8で作っているので安定を取るなら3.8。&lt;br&gt;
+Spine4以上を使いたい場合、pixi-spine.jsは最新のビルドをする必要ある。普通にDLできずNode.js入れてnpm install しないといけない。&lt;br&gt;
+こちらで試した限りでは細かいところは未検証だが、4系もとりあえず動いた。&lt;/p&gt;
+&lt;p&gt;Spineの3.8と4以上の差は、グラフエディタや細かな便利機能が追加されている差がある。&lt;br&gt;
+基本的な機能は3.8時点で完成されているが、最新使えるなら使いたい。&lt;/p&gt;
+&lt;h1 id=&#34;spineのエクスポート&#34;&gt;Spineのエクスポート&lt;/h1&gt;
+&lt;p&gt;json形式でエクスポートすれば良い。&lt;br&gt;
+4系使っているとオプションで3.8系式のjsonで出力できるが、原因の切り分けが難しくなるので推奨しない。 &lt;br&gt;
+テクスチャパックのオプションは基本いじる項目はないが、scaleだけいじることはある。&lt;br&gt;
+イラストを大きいサイズで作って出力するときscaleを0.5とかにすれば出力するテクスチャの解像度を減らせる。&lt;/p&gt;
+&lt;h1 id=&#34;トラックの重ねの話&#34;&gt;トラックの重ねの話&lt;/h1&gt;
+&lt;p&gt;トラック(アニメーション)を重ねることができる。&lt;br&gt;
+私は待機アニメーションの上にまばたきアニメーションを重ねるなどする。&lt;/p&gt;
+&lt;p&gt;例:&lt;br&gt;
+トラック0 : 待機アニメーション&lt;br&gt;
+トラック1 : まばたき&lt;/p&gt;
+&lt;p&gt;まばたきと待機の周期が違うし、まばたきを共通で使いまわしたいからこのような重ねる。&lt;br&gt;
+PictureSpine.jsはトラックの削除がないので、削除する場合は何もないアニメーションで上書きすればトラックを無効化できるのでそれで対応する。&lt;br&gt;
+あるいは自分でpixi-spine.jsにある&lt;code&gt;setEmptyAnimation&lt;/code&gt;の実装すれば良い。&lt;/p&gt;
+&lt;p&gt;トラックごとのアルファ値を設定する機能があるが、ここでいうアルファは透明度ではない。&lt;br&gt;
+どのくらいの影響度で重ねるか。ダメージ食らって足を引きずるのを徐々に強くするみたいなときに使うらしいが、私は使ったこと無い。&lt;/p&gt;
+&lt;h1 id=&#34;ミックス&#34;&gt;ミックス&lt;/h1&gt;
+&lt;p&gt;ミックスはアニメーション間の補完の話。&lt;br&gt;
+何も設定しないと瞬時にアニメーション切り替わって、シームレスじゃないので適当に設定しておく。&lt;br&gt;
+Spine側のエディタではデフォで0.2。&lt;br&gt;
+私はデフォで適当に設定して、個別に必要なところは設定している。&lt;/p&gt;
+&lt;h1 id=&#34;透明度&#34;&gt;透明度&lt;/h1&gt;
+&lt;p&gt;setColor(1, 1, 1, 0.1)などとすれば、全体を透明にできる。&lt;/p&gt;
+&lt;h1 id=&#34;scale&#34;&gt;Scale&lt;/h1&gt;
+&lt;p&gt;Spineで出力時にscaleを変えてもテクスチャの解像度が変わるだけで、モデルのサイズが変わるわけではない。&lt;br&gt;
+ツクール側でscaleを変えないといけない。&lt;/p&gt;
+&lt;h1 id=&#34;モザイク&#34;&gt;モザイク&lt;/h1&gt;
+&lt;p&gt;元ファイルもモザイク処理をする必要ありますが、モザイクしているパーツをメッシュ変形すると違和感がすごい。&lt;br&gt;
+だから元ファイルをモザイク処理した上で用意されているモザイク機能を上からかけるのが良いのではないか。&lt;/p&gt;
+&lt;h1 id=&#34;シーン切り替え&#34;&gt;シーン切り替え&lt;/h1&gt;
+&lt;p&gt;アニメーション状態を保存しているので、メニューを開いたり、場所移動しても前のアニメーションを継続できる&lt;/p&gt;
+&lt;h1 id=&#34;イベント&#34;&gt;イベント&lt;/h1&gt;
+&lt;p&gt;Spine側で設定したオーディオをツクール側で再生したり、スイッチ操作する機能がある。&lt;br&gt;
+Spine側で設定したオーディオは別にエクスポートしたファイルに含まれるわけではない。ファイル名を参照したいだけ。&lt;br&gt;
+スイッチ操作はイベントに直で設定するのではなく、タイムライン上で設定しないといけない。微妙にハマった。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>簡易ログメッセージプラグイン</title>
+      <link>https://kido0617.github.io/rpgmaker/2022-12-11-logmessage/</link>
+      <pubDate>Sun, 11 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2022-12-11-logmessage/</guid>
+      
+      <description>&lt;p&gt;簡易的にログメッセージを表示するプラグインを製作しました。&lt;/p&gt;
+&lt;p&gt;&lt;video src=&#34;logmessage.mp4&#34; width=&#34;720&#34; height=&#34;480&#34; controls&gt;&lt;/video&gt;&lt;/p&gt;
+&lt;p&gt;以下のような感じでプラグインコマンドから指定します。&lt;br&gt;
+最初に初期化コマンドから表示位置とサイズを指定し実行します。&lt;br&gt;
+その後はメッセージ追加コマンドからテキストを追加します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;command.png&#34; alt=&#34;コマンド例&#34;&gt;&lt;/p&gt;
+&lt;p&gt;ダウンロードは&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMZ-plugin/main/LogMessage/LogMessage.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;こちら&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;制限事項&#34;&gt;制限事項&lt;/h2&gt;
+&lt;p&gt;演出で使用することを想定しているので、マップを移動したり、メニューを表示したら消えます。&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>リリース時のチェック項目</title>
+      <link>https://kido0617.github.io/rpgmaker/2021-07-16-deploy-check/</link>
+      <pubDate>Fri, 16 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2021-07-16-deploy-check/</guid>
+      
+      <description>&lt;p&gt;ゲームが完成し、リリースするときにチェックした方が良い項目をまとめました。&lt;br&gt;
+ツクールMVを基準に書いていますが、MZでも大体同じです。&lt;br&gt;
+windowsでexeファイルのリリースを対象としています。&lt;/p&gt;
+&lt;h2 id=&#34;チェックリスト&#34;&gt;チェックリスト&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;不適切なファイルが含まれていないか&lt;br&gt;
+デプロイ後のwwwフォルダを開き、この中に意図していないファイルがないか確認します。&lt;br&gt;
+ライセンス的に問題があるもの、コピーした仮ファイル、制作メモ、不要なファイル（psdファイルなど）がないかチェックします。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;未使用ファイルの削除&lt;br&gt;
+デプロイ時に「未使用ファイルを含まない」をチェックすると、ツクールのエディタ上で使われていない画像やサウンドファイルを削除してくれます。&lt;br&gt;
+しかし、プラグインで使用している画像も削除されてしまうので、このオプションの使用は少々難しいです。&lt;br&gt;
+なので、このオプションを使用せずデプロイすることをオススメします。&lt;br&gt;
+一度、このオプションを使用してデプロイし、削除されたファイルとの差分を見つつ、未使用ファイルをプロジェクトから手動で消すのが無難なのではと思います。&lt;br&gt;
+(プラグインで使用している画像が削除されるのは、ツクールのエディタ側からはどんなプラグインがどう画像を扱うか把握のしようがないため）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;容量のチェック&lt;br&gt;
+可能ならばツールなどを使用し、容量が大きいファイルをリストアップすると良いです。&lt;br&gt;
+明らかに容量が大きい異常なファイルはしばしば見受けられます（未圧縮、不要なほど解像度が大きいなど）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Canvasモードでデプロイしていないか&lt;br&gt;
+デプロイ後のexeを起動し、F2キーを押します。画面左上に表示が出ますが、これがWebGL modeであることを確認します。&lt;br&gt;
+もし、Canvas modeだった場合、描画処理が重く、また一部のプラグインは機能しない可能性があります。&lt;br&gt;
+ツクールMV側のバグらしく、MVを再インストールしてデプロイし直すと直ることがあるようです。&lt;br&gt;
+Steam版使っている人は大丈夫っぽい？&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;デプロイ時の暗号化キーをメモしておく&lt;br&gt;
+この暗号化キーは画像やサウンドファイルの暗号化に使われます。&lt;br&gt;
+暗号化キーをメモしておくと公開後にバグ修正などでデータの一部だけ修正ファイルを公開したいときに役立ちます。&lt;br&gt;
+デプロイ時の暗号化キーが同じならば、dataフォルダだけの差し替えでバージョンアップが可能のため、柔軟な対応ができます。&lt;br&gt;
+（販売サイトによっては差し替えに1日かかる場合があるので、自身のサイトで修正ファイルを公開するなど）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;テスト用のイベントが残っていないか&lt;br&gt;
+よく拠点などにデバッグ用の便利イベントなどを設置したまま忘れてリリースしてしまうことがあります。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ニューゲームの初期位置が正しいか&lt;br&gt;
+テストで初期位置を別の場所へしたままにしていないか。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Readmeを同梱したか&lt;br&gt;
+Readmeや説明ファイルなどがある場合、同梱するのを忘れないようにします。&lt;br&gt;
+バージョンアップ時に入れ忘れることもあるので注意。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;起動に時間がかからないか&lt;br&gt;
+通常のデプロイなら問題ありません。Enigma Virtual boxなどでexeをまとめた場合、起動に時間がかかります。&lt;br&gt;
+許容範囲か確認します。&lt;br&gt;
+ちなみにEnigma Virtual boxを使用した場合、起動するとWindows Defenderにブロックされることがあります。&lt;br&gt;
+ブロックされても無視して起動はできますが、ユーザに知らせることも必要かもしれません。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;テスト用のプラグインパラメータにしていないか&lt;br&gt;
+プラグインパラメータをテストのときのままにしている場合があります。&lt;br&gt;
+また、テスト用のプラグインがある場合、OFFにします。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;体験版の範囲で止まらないか&lt;br&gt;
+体験版と製品版がある場合、製品版なのに体験版の範囲しかプレイできないことがないか確認します。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;セーブファイルを同梱していないか&lt;br&gt;
+普通にデプロイしたらセーブファイルは含まれません。&lt;br&gt;
+デプロイ後に自分でテストしてセーブして、それをそのままアップロードしない限り。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;データを閲覧されても大丈夫か&lt;br&gt;
+ツクールの性質上、データを閲覧されるのを防ぐことはできません。&lt;br&gt;
+コンプライアンスに関わるテキストなどデータベースに残さないようにします。&lt;br&gt;
+（昔、ユーザに見えないエディタ上にしか出ないテキストで販売サイトの審査落ちるみたいなこともありました。）&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>回想の実装を考える</title>
+      <link>https://kido0617.github.io/rpgmaker/2021-06-13-memoryscene/</link>
+      <pubDate>Sun, 13 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2021-06-13-memoryscene/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;ゲーム中のあるシーンだけをもう一度見られるようにする機能として「回想」があります。&lt;br&gt;
+ゲームのタイトルから見られる回想もありますが、今回取り上げるのはゲームプレイ中からの回想シーンです。&lt;br&gt;
+回想は現在進行中の状態から全く別のシーンを再生しないといけないのですが、回想前後で状態が変わってはいけません。&lt;br&gt;
+例えば、以下のような注意があります。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;アイテムやお金が増えたり減ったりしてはいけない&lt;/li&gt;
+&lt;li&gt;スイッチや変数の状態が変わってはいけない&lt;/li&gt;
+&lt;li&gt;ピクチャの状態が変わってはいけない&lt;/li&gt;
+&lt;li&gt;パーティの状態(HP、メンバーなど）が変わってはいけない&lt;/li&gt;
+&lt;li&gt;プラグインの設定が変わってはいけない&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;もちろん、回想中に変えた場合は元に戻せばいいのですが、戻し忘れがあったりして、意外とバグが起こるところです。&lt;/p&gt;
+&lt;h2 id=&#34;実装案&#34;&gt;実装案&lt;/h2&gt;
+&lt;p&gt;上記のような問題に対処するため、回想前にメモリにゲームデータをセーブする方法が考えられます。&lt;br&gt;
+回想後にはそのセーブデータをロードすればいいので、回想中にいくらデータをいじっても一発で元に戻せます。&lt;/p&gt;
+&lt;p&gt;また、回想をいつでもユーザの操作によって終了させることができます。&lt;br&gt;
+ユーザ側は途中で回想を終わらせたいときに、会話スキップで最後まで見る必要なく、いつでも終わらせられるので便利です。&lt;/p&gt;
+&lt;p&gt;この方式は実装実績もあるのですが、問題なく動作しています。&lt;br&gt;
+ただ、仮でセーブしたものをロードするので、いろいろ考慮しないといけないところはあります。&lt;/p&gt;
+&lt;p&gt;唯一問題があったのは、プラグインによってはグローバルな領域に設定値を持つものがあり、回想中でそれを変更するとセーブ・ロードで復元できないものがあったことでした。&lt;br&gt;
+(SomeGlobalObject.flag = false  みたいな設定値でセーブデータに含まれない特殊なもの)&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>環境依存系のエラー調査など</title>
+      <link>https://kido0617.github.io/rpgmaker/2020-12-27-errorandfix2020/</link>
+      <pubDate>Sun, 27 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2020-12-27-errorandfix2020/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;最近調査したツクールMVのエラーのログです。&lt;br&gt;
+解決できていないので、一応情報として残しておきます。&lt;br&gt;
+稀に発生するのか環境依存なのか、通常発生しないため調査困難なものです。&lt;/p&gt;
+&lt;h2 id=&#34;ロードできない問題&#34;&gt;ロードできない問題&lt;/h2&gt;
+&lt;p&gt;セーブしたファイルをロードしようとしてもブザーが鳴り、ロードできないという現象です。&lt;br&gt;
+該当のセーブファイルを確認すると以下のようにデータが壊れていました。&lt;br&gt;
+容量はあるように見えますが、全部0で埋められています。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;zero.png&#34; alt=&#34;セーブファイル&#34;&gt;&lt;/p&gt;
+&lt;p&gt;セーブファイルが壊れているのでロードの問題ではなく、セーブ時の問題なのですが、発生条件はよくわかりませんでした。&lt;br&gt;
+ツクールのセーブは、セーブが実行される直前に.bakファイルが生成されます。&lt;br&gt;
+セーブに失敗した場合、そのbakファイルからセーブを復元するのですが、それも作用してはいないようです。&lt;br&gt;
+セーブファイルが壊れているのでセーブ時にゲームが落ちたとかありえるのかもしれませんが、発生時の状況も不明でこれ以上は無理でした。&lt;/p&gt;
+&lt;h2 id=&#34;音の再生時のエラー&#34;&gt;音の再生時のエラー&lt;/h2&gt;
+&lt;p&gt;以下のエラーが発生しました。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Uncaught RangeError: Failed to execute &amp;#39;start&amp;#39; on &amp;#39;AudioBufferSouceNode&amp;#39;: The offset provided (-22089.3) is less than the minimum bound (0)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;これは音声ファイルの再生位置をマイナスで再生しようとしたときに生じるエラーです。&lt;br&gt;
+例えばコンソールに&lt;code&gt;AudioManager.playBgm({name: &amp;quot;Battle1&amp;quot;, volume : 90, pitch: 100}, -200);&lt;/code&gt;のように打つとエラーを起こせます。&lt;br&gt;
+ですが、プロジェクトを見てもマイナス位置で再生しようとするような場面もなく、発生条件不明でした。&lt;br&gt;
+&lt;code&gt;WebAudio.prototype._startPlaying&lt;/code&gt;メソッドの引数に&lt;code&gt;offset&lt;/code&gt;があり、これがマイナスの場合、0にするような処理を追加すればとりあえずエラーは出なくなるので、一旦これで対処しました。&lt;/p&gt;
+&lt;h2 id=&#34;起動しない問題&#34;&gt;起動しない問題&lt;/h2&gt;
+&lt;p&gt;exeファイルをダブルクリックしてもゲームが起動せず、同フォルダ内に&lt;code&gt;debug.log&lt;/code&gt;が生成されます。&lt;br&gt;
+ログには以下のように記載されていました。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[WARNING:minidump_to_upload_parameters.cc(66)] duplicate annotation name metrics_client_id, discarding value 43cecd601cc84e9e9bbac5991f952aff
+[ERROR:http_transport_win.cc(175)] WinHttpCrackUrl: URL は認識されているプロトコルを使用していません (0x2ee6)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;これはSteamで配信されているMV製のゲームやnw.jsを採用しているゲームでも報告があるのですが、明確な解決手段は示されていませんでした。&lt;/p&gt;
+&lt;p&gt;nw.jsのバージョンを上げると解決するという話もありましたが、リリース後のゲームにそれを適用するのは厳しいです。&lt;br&gt;
+解決するかどうかもわからず、別の問題が発生した場合、問題の切り分けが難しくなります。&lt;br&gt;
+デプロイの工程も複雑になるのでこの手段は採用しませんでした。&lt;/p&gt;
+&lt;p&gt;別の解決方法としてWindows XP (Service Pack 3)互換モードにしたら、起動したというものがありました。&lt;br&gt;
+互換モードの切り替えはexeファイルのプロパティから選択できます。&lt;br&gt;
+掲示板を見るとこの手段で2人解決した報告があるので、興味深いです。&lt;br&gt;
+これで本当に解決するかどうかは手元に再現環境がないので定かではありませんが、試す価値はあるかもしれません。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>アイコンセットの画像が大きすぎると黒い四角が表示される</title>
+      <link>https://kido0617.github.io/rpgmaker/2020-02-21-iconsetsize/</link>
+      <pubDate>Thu, 20 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2020-02-21-iconsetsize/</guid>
+      
+      <description>&lt;h2 id=&#34;現象&#34;&gt;現象&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;black-square.png&#34; alt=&#34;黒い四角&#34;&gt;&lt;/p&gt;
+&lt;p&gt;上図のように、敵の頭上に黒い四角が表示されるケースがあります。&lt;br&gt;
+本来、ここはステートのアイコンが表示される領域です。&lt;/p&gt;
+&lt;h2 id=&#34;ステートアイコン&#34;&gt;ステートアイコン&lt;/h2&gt;
+&lt;p&gt;敵は何のステートにかかっていなくても、透明なアイコンが表示されています。&lt;br&gt;
+&lt;code&gt;IconSet.png&lt;/code&gt;の一番左上の領域がそのアイコンです。&lt;br&gt;
+そのため、左上は必ず透明にしておかなければいけません。&lt;br&gt;
+しかし、透明にしておいても黒い四角が表示されるケースがありました。&lt;/p&gt;
+&lt;h2 id=&#34;原因&#34;&gt;原因&lt;/h2&gt;
+&lt;p&gt;この現象は&lt;code&gt;IconSet.png&lt;/code&gt;のサイズ(width, height)がWebGLで扱えるサイズを超えた場合に発生します。&lt;br&gt;
+このサイズはブラウザやグラフィックスボードなどに影響するので環境によって異なります。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://webglreport.com/?v=2&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;ここのサイト&lt;/a&gt;にアクセスすると使っているPCのWebGLのステータスが表示されます。&lt;br&gt;
+このサイトの&lt;code&gt;Max Texture Size&lt;/code&gt;の値が最大サイズ(width, height)です。&lt;br&gt;
+例えば、私のメインPCは16384ですがノートPCは8192でした。&lt;br&gt;
+&lt;code&gt;Max Texture Size&lt;/code&gt;がNだとすると、N x N が限界で、 2N x 1 は総ピクセル数は少なくても幅が限界超えているのでだめです。&lt;br&gt;
+限界を超えると、真っ黒画像として扱われるので&lt;code&gt;IconSet.png&lt;/code&gt;の左上も真っ黒になってしまいます。&lt;/p&gt;
+&lt;p&gt;しかし、限界サイズを超えてもメッセージウィンドウなどに表示されるアイコンは黒くなりません。&lt;br&gt;
+これらのアイコンとステートアイコンは描画方法が微妙に異なるからです。&lt;/p&gt;
+&lt;p&gt;まずツクールはアイコン画像を一度読み込んだらキャッシュします。&lt;br&gt;
+メッセージウィンドウはこのキャッシュされた画像から使うアイコンを切り出し、WebGLで描画するように転送します。&lt;br&gt;
+一方、ステートアイコンはキャッシュされた画像をまるごとWebGL側に転送し、一部分を表示します。そのため、限界サイズを超えたアイコンセットを使うことになり、黒くなってしまいます。&lt;/p&gt;
+&lt;p&gt;なぜ、ステートアイコンだけこのような処理をしているか考えてみます。  ステートアイコンは複数の状態異常のとき一定時間ごとに切り替わります。恐らく、この処理を簡単に行うためそうしているのではないでしょうか。&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;IconSet.png&lt;/code&gt;はほどほどの大きさにしましょう。&lt;br&gt;
+ピクチャなども扱えるサイズを超えると真っ黒になるので注意が必要です。&lt;br&gt;
+私のノートPCが10年前のオンボードグラフィックスでかなりスペック低くても&lt;code&gt;Max Texture Size&lt;/code&gt;が8192なので、&lt;code&gt;4096&lt;/code&gt; ぐらいは一般的な気がしますが、安全を取ったら、&lt;code&gt;2048&lt;/code&gt; ぐらいなのでしょうか。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>ゲームループの話</title>
+      <link>https://kido0617.github.io/rpgmaker/2019-12-20-game-loop/</link>
+      <pubDate>Fri, 20 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2019-12-20-game-loop/</guid>
+      
+      <description>&lt;h2 id=&#34;ツクールmvのゲームループ&#34;&gt;ツクールMVのゲームループ&lt;/h2&gt;
+&lt;p&gt;jsでゲームループを作る、つまりフレームごとの処理を行うには、&lt;code&gt;requestAnimationFrame&lt;/code&gt;を使用してディスプレイのリフレッシュレートと同期します。requestAnimationFrameは結構最近の話で、2012年ぐらいに私がjsでゲームを作っていたころは&lt;code&gt;setTimeout&lt;/code&gt;を使用していた覚えがあります。&lt;/p&gt;
+&lt;p&gt;ツクールMVでは&lt;code&gt;SceneManager&lt;/code&gt;でrequestAnimationFrameが使用されています。&lt;br&gt;
+&lt;code&gt;SceneManager.update&lt;/code&gt;がrequestAnimationFrameのコールバックで呼ばれ、そこから各updateが伝搬していく形になっています。&lt;/p&gt;
+&lt;h2 id=&#34;updatemain&#34;&gt;updateMain&lt;/h2&gt;
+&lt;p&gt;特に大事なところが以下の&lt;code&gt;SceneManager.updateMain&lt;/code&gt;です。&lt;br&gt;
+&lt;code&gt;Utils.isMobileSafari()&lt;/code&gt;の方はデバイス対応だと思うので今回は無視して良いです。&lt;br&gt;
+大きく分けて2つの要素があります。処理の更新(update)と描画(render)です。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;処理の更新(updateScene)&lt;br&gt;
+キャラクターが移動してどこの座標にいくか、ウィンドウに何を表示するかなどのゲーム全体の処理&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;描画(renderScene)&lt;br&gt;
+updateの結果を元に画面を描画しなおす&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;SceneManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;updateMain&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Utils&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;isMobileSafari&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;())&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;changeScene&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;updateScene&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;newTime&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_getTimeInMsWithoutMobileSafari&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_currentTime&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;===&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;undefined&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_currentTime&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;newTime&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;fTime&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;newTime&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_currentTime&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1000&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;fTime&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.25&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;fTime&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.25&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_currentTime&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;newTime&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_accumulator&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;fTime&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;while&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_accumulator&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_deltaTime&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;updateInputData&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;changeScene&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;updateScene&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_accumulator&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_deltaTime&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;renderScene&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;requestUpdate&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;60fps出ている場合&#34;&gt;60FPS出ている場合&lt;/h2&gt;
+&lt;p&gt;上記処理を簡単な図で示すと以下のようになります。&lt;br&gt;
+60FPSで動作するので、1秒間に60回更新・描画されることになります。&lt;br&gt;
+つまり、1フレーム 1/60[s]=16.6666[ms]です(省略して16[ms]と表記します)。&lt;br&gt;
+処理落ちしなければ以下の図のように毎フレームごとに1回ずつupdateとrenderが走ります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;fps1.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;処理落ちした場合&#34;&gt;処理落ちした場合&lt;/h2&gt;
+&lt;p&gt;仮にupdateで重い処理が1フレーム走って16[ms]内に収まらなかった場合、以下の図のようになります。&lt;br&gt;
+リフレッシュレートに同期しているので3フレーム目の頭から始まり、3フレーム目に辻褄が合うようにupdateを2回実行します。&lt;br&gt;
+renderは結局、最後の結果を描画すればいいので常に1回です。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;fps2.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;実際にDeveloper Toolで見ると、updateSceneが2回呼ばれているのがわかります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;real2.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;処理落ちし続けた場合&#34;&gt;処理落ちし続けた場合&lt;/h2&gt;
+&lt;p&gt;先の例だと1フレームだけ重い処理なので、すぐにfpsは安定します。&lt;br&gt;
+しかし、いわゆる重い並列コモンを実行してしまい解除しなかった場合、以下のようにどんどんupdateが積み重なってしまい、動作しなくなってしまいます。&lt;br&gt;
+よく並列コモンの最後に1フレームのウェイトを入れる話を聞きますが、この図から推察すると意味があるように見えます。&lt;br&gt;
+2回実行されるupdateのうちの片方が小さくなるので、積み重なっていくのが小さくなる可能性があるからです。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;fps3.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;ちなみに積み重なったupdateはDeveloper Toolで見るとこんな感じです。&lt;br&gt;
+&lt;img src=&#34;real3.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;終わりに&#34;&gt;終わりに&lt;/h2&gt;
+&lt;p&gt;実際動かすと今回の図のようにきれいな感じにならないです。&lt;br&gt;
+requestAnimationFrameに誤差があるのか、微妙にずれていきますが、そういう仕様なのかイマイチ私はわかっていません。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>マップのリフレッシュの話</title>
+      <link>https://kido0617.github.io/rpgmaker/2019-12-20-refresh-map/</link>
+      <pubDate>Fri, 20 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2019-12-20-refresh-map/</guid>
+      
+      <description>&lt;h2 id=&#34;マップのリフレッシュとは&#34;&gt;マップのリフレッシュとは&lt;/h2&gt;
+&lt;p&gt;変数やスイッチ、セルフスイッチを変更したり、メンバの加入・脱退、アイテムの増減をするとマップのリフレッシュが走ります。&lt;br&gt;
+リフレッシュとはマップ上のイベントの条件とコモンイベントの条件をチェックする処理です。&lt;br&gt;
+変数やスイッチの値が変わったということはイベントの発生条件に影響があるかもしれないので、すべてチェックしなければいけません。&lt;br&gt;
+マップの全イベントの全ページの条件をチェックし、コモンイベントは自動・並列イベントの条件をチェックします。&lt;/p&gt;
+&lt;h2 id=&#34;この処理は重いのか&#34;&gt;この処理は重いのか&lt;/h2&gt;
+&lt;p&gt;このリフレッシュが重いと考え、並列コモンで変数・スイッチの変更を避けるという話をよく聞きます。&lt;br&gt;
+それでも代入したいときは、スクリプトを使ってリフレッシュを回避しつつ変数・スイッチを変更するという手段も取られるようです。&lt;/p&gt;
+&lt;p&gt;ただ、一般的なプロジェクトではマップ上のイベントとコモンイベントの条件をチェックするぐらいは重い処理ではないと思います。並列コモンで普通に変数に毎フレーム代入しているプロジェクトのパフォーマンス測定をしたこともありますが、それが重さに全くつながってはいませんでした。&lt;br&gt;
+条件の判定を拡張するプラグインなど、リフレッシュ契機で動作するプラグインが毎フレームのリフレッシュの重さに影響を与える可能性もあるので、一概には重くないとは言えないかもしれませんが。&lt;/p&gt;
+&lt;h2 id=&#34;リフレッシュを回避して変数スイッチに代入するスクリプト&#34;&gt;リフレッシュを回避して変数・スイッチに代入するスクリプト&lt;/h2&gt;
+&lt;p&gt;リフレッシュを回避するためにスクリプトを使って変数・スイッチを変更するという手段があります。&lt;br&gt;
+例えば、デフォルトの変数操作は以下のスクリプトで書き換えるというものです。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;varset-default.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;varset-script.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;たしかにこれだとリフレッシュはされませんが、デメリットが大きくチューニングをするのは非常に難しいので個人的にはおすすめできません。&lt;br&gt;
+以下にデメリットを述べていきます。&lt;/p&gt;
+&lt;h3 id=&#34;リフレッシュをしないということ&#34;&gt;リフレッシュをしないということ&lt;/h3&gt;
+&lt;p&gt;リフレッシュをしないということは、各イベントのページが更新されません。&lt;br&gt;
+もしスクリプトで置き換えた変数・スイッチをページの条件に使っていた場合、内容が変わったのにイベントが開始されないということが起きます。&lt;/p&gt;
+&lt;h3 id=&#34;可読性記述ミスの問題&#34;&gt;可読性・記述ミスの問題&lt;/h3&gt;
+&lt;p&gt;上記のツクールデフォの変数操作とスクリプトの操作を見ればわかりますが、スクリプトの方は番号しか表示できず、何の変数なのかわかりません。&lt;br&gt;
+スクリプトを書くときも何番が使いたいものなのか調べなくてはならず、記述をミスる可能性が高いです。&lt;/p&gt;
+&lt;h3 id=&#34;チューニングの難しさ&#34;&gt;チューニングの難しさ&lt;/h3&gt;
+&lt;p&gt;このリフレッシュですが、変数やスイッチを変更した瞬間に行われません。&lt;br&gt;
+変更した次のフレームにまとめて1回だけ行われます。&lt;br&gt;
+以下は4つ操作していますが、同一フレームなのでリフレッシュは1回です。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;var-switch-frame.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;例えば、動作している全並列コモンにある変数操作10個あるうちの9個をスクリプトに置き換えてもリフレッシュを防いだことにはならず、すべての変数・スイッチの操作を把握して置き換えなくてはいけません。&lt;br&gt;
+これは非常に難しいと思います。&lt;br&gt;
+また、もし毎フレームリフレッシュをリクエストするようなプラグインを導入していた場合、この施策は意味のないことになってしまいます。&lt;/p&gt;
+&lt;h2 id=&#34;終わりに&#34;&gt;終わりに&lt;/h2&gt;
+&lt;p&gt;確認用にリフレッシュしたときにコンソールにフレーム番号とメッセージを出すプラグインを作ったので興味があればどうぞ。&lt;/p&gt;
+&lt;p&gt;DLは&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/ShowMapRefresh/ShowMapRefresh.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;こちら&lt;/a&gt;&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>最近制作した細かいプラグイン</title>
+      <link>https://kido0617.github.io/rpgmaker/2019-12-05-recent-plugins/</link>
+      <pubDate>Thu, 05 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2019-12-05-recent-plugins/</guid>
+      
+      <description>&lt;p&gt;最近依頼の過程で制作した細かいプラグインの公開の許可が取れたので公開します。&lt;/p&gt;
+&lt;h2 id=&#34;ピクチャ名だけ変えるプラグイン&#34;&gt;ピクチャ名だけ変えるプラグイン&lt;/h2&gt;
+&lt;p&gt;ピクチャの位置やサイズなどをそのままにファイル名だけを変えるプラグイン。&lt;br&gt;
+UIボタンの色違いに変えるときとか。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/PictureChange/PictureChange.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;PictureChange.js&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ピクチャ番号を変えるプラグイン&#34;&gt;ピクチャ番号を変えるプラグイン&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/PictureCopy/PictureCopy.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;PictureCopy.js&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;メニューのシャットダウンでゲーム終了させるプラグイン&#34;&gt;メニューのシャットダウンでゲーム終了させるプラグイン&lt;/h2&gt;
+&lt;p&gt;メニューのシャットダウンをタイトルじゃなくてゲーム終了させるプラグイン。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/MenuGameEnd/MenuGameEnd.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;MenuGameEnd.js&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;アルファ付きの動画を有効にするプラグイン&#34;&gt;アルファ付きの動画を有効にするプラグイン&lt;/h2&gt;
+&lt;p&gt;そもそもMVはwebmの動画を再生するとたまにフリーズする現象があり、結局使いませんでした。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/EnableVideoAlpha/EnableVideoAlpha.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;EnableVideoAlpha.js&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;敵グループの敵の重なり順を定義するプラグイン&#34;&gt;敵グループの敵の重なり順を定義するプラグイン&lt;/h2&gt;
+&lt;p&gt;デフォだとy座標が上の敵はレイヤーが下になります。&lt;br&gt;
+通常それで問題ありませんが、敵の上に乗っている敵みたいなのを表現しようとするとできません。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/TroopLayerOrder/TroopLayerOrder.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;TroopLayerOrder.js&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>ツクールのピクチャ番号の扱いについて</title>
+      <link>https://kido0617.github.io/rpgmaker/2019-12-02-picture-number/</link>
+      <pubDate>Mon, 02 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2019-12-02-picture-number/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;ツクールのピクチャ番号の扱いについて解説します。&lt;br&gt;
+デフォルトではMVはピクチャは1から100まで使用できますが、マップと戦闘では同じピクチャ番号で別の画像を表示できます。&lt;br&gt;
+マップでピクチャを表示していても、戦闘が始まったら消えますし、戦闘が終われば戦闘で使ったピクチャはマップに持ち越しません。&lt;br&gt;
+このあたりについて、内部的にどうなっているかを解説したいと思います。&lt;/p&gt;
+&lt;h2 id=&#34;ピクチャと実際の表示の関係&#34;&gt;ピクチャと実際の表示の関係&lt;/h2&gt;
+&lt;p&gt;まず2つの要素を抑えておく必要があります。&lt;/p&gt;
+&lt;p&gt;Sprite・・・実際に画面に表示する画像&lt;br&gt;
+ピクチャ・・・画像ファイル名、座標、拡大率などの情報をまとめたデータ(内部的には$gamePicture)&lt;/p&gt;
+&lt;p&gt;Spriteはマップ、戦闘表示時にピクチャ番号分、生成され、ピクチャの情報を使って画面に画像を表示します。&lt;br&gt;
+ピクチャはセーブに含まれるので、ロードしても画像を復元できるようになっています。&lt;br&gt;
+プラグイン制作でよくあるケースなのですが、画面に表示しているSpriteをいじるだけだとセーブ・ロードでその内容が消えてしまいます。&lt;/p&gt;
+&lt;h2 id=&#34;マップと戦闘のピクチャ番号について&#34;&gt;マップと戦闘のピクチャ番号について&lt;/h2&gt;
+&lt;p&gt;戦闘時に使われるピクチャ番号は内部的には101から200になっています。&lt;br&gt;
+以下のコードの箇所で、バトル時だけピクチャ番号にピクチャの最大枚数(100)を足して、ピクチャ番号を変換しています。&lt;br&gt;
+マップや戦闘以外でもピクチャを扱うようなプラグインではさらに201から300を扱うなどの対応をしているものがあります。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;Game_Screen&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;prototype&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;realPictureId&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;pictureId&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;$gameParty&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;inBattle&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;())&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;pictureId&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;maxPictures&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;pictureId&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;コンソールに&lt;code&gt;$gameScreen._pictures&lt;/code&gt;と入力すると使っているピクチャの情報が出力されます(どのピクチャ番号が使われているかを見るのにも便利だったりします）。&lt;br&gt;
+マップと戦闘時にピクチャ10番に表示すると以下のように10と110に設定されているのがわかります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;picture-nums.png&#34; alt=&#34;実際に中身を確認&#34;&gt;&lt;/p&gt;
+&lt;p&gt;ちなみに戦闘が終わってもこの101から200のピクチャは残り続け、次の戦闘の開始時に初期化されます。&lt;br&gt;
+(セーブファイルも多少大きくなるし、無駄な気がするのですが・・・。）&lt;/p&gt;
+&lt;p&gt;そのため、ピクチャ最大数を変更するプラグインを使う場合、マップ画面で戦闘のピクチャにアクセスしてしまうなどのバグが発生するケースがあります。&lt;br&gt;
+プラグインAではピクチャの最大数が150だと認識しているが、プラグインBではデフォルトの100が最大数だと認識している場合などといったケースです。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>容量の大きい音声ファイルをロードするとクラッシュする</title>
+      <link>https://kido0617.github.io/rpgmaker/2019-12-01-big-bgs/</link>
+      <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2019-12-01-big-bgs/</guid>
+      
+      <description>&lt;h2 id=&#34;発生条件&#34;&gt;発生条件&lt;/h2&gt;
+&lt;p&gt;RPGツクールMVで以下のようなスペックのPCで10MB、15分という巨大なBGS(BGMでも同様)を使用したところ、fpsが非常に低下しました。&lt;br&gt;
+その状態でそのBGSを使用しているマップの出入りなどをたくさんするとクラッシュしました。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Windows 7 Home Premium 32-bit 
+Core(TM) i5 CPU M 520
+Intel(R) HD Graphics
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;再生までに時間が非常にかかるので、デコード処理でおそらく重くなっていると考えられます。&lt;br&gt;
+マップの出入りをたくさんすると、前の音声ファイルの読み込みが終わる前に次の巨大なBGSを読み込もうとするので、さらに重くなりクラッシュします。&lt;/p&gt;
+&lt;p&gt;通常、こんな大きなBGSを使用することはないはずですが、公式で販売されているものがそうだったらしいので容量、音声ファイルの長さには注意が必要です。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>テストのレポートを作るプラグイン</title>
+      <link>https://kido0617.github.io/rpgmaker/2019-10-11-test-report/</link>
+      <pubDate>Fri, 11 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2019-10-11-test-report/</guid>
+      
+      <description>&lt;h2 id=&#34;テストのレポート&#34;&gt;テストのレポート&lt;/h2&gt;
+&lt;p&gt;ゲームのテストをしたときにバグや良かったところとか報告をします。&lt;br&gt;
+しかし、画面のキャプチャをしたりセーブファイルを添付したり、結構大変ですし、そういう作業をしながらでは、ゲームに集中できません。&lt;br&gt;
+そこでレポート作成を楽にできるプラグインを制作しました。&lt;/p&gt;
+&lt;h2 id=&#34;レポート作成ウィンドウ&#34;&gt;レポート作成ウィンドウ&lt;/h2&gt;
+&lt;p&gt;ゲーム本体側に影響を与えず、すぐにレポートを書けることを重視して、レポート作成画面は別ウィンドウで自動起動します。&lt;br&gt;
+以下の画面のような構成です。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;make.png&#34; alt=&#34;レポート作成ウィンドウ&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;レポートのhtml&#34;&gt;レポートのHTML&lt;/h2&gt;
+&lt;p&gt;レポートは以下の画像のようにHTMLで出力されます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;sample.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;以下の2つのセーブが添付されます。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;最後にプレイヤーが実際にセーブした時点のセーブファイル&lt;/li&gt;
+&lt;li&gt;レポートを送信した時点のセーブファイル&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;2に関しては場合によっては正しくないセーブファイルになります。&lt;br&gt;
+例えば、イベント途中でレポートを書いた場合、イベントを途中まで実行しているので中途半端なデータになりかねません。&lt;br&gt;
+使用するときは注意が必要です。&lt;/p&gt;
+&lt;h2 id=&#34;使い方&#34;&gt;使い方&lt;/h2&gt;
+&lt;p&gt;動作バージョン: &lt;code&gt;RPGツクールMV1.6&lt;/code&gt;以上&lt;/p&gt;
+&lt;p&gt;以下よりzipをダウンロードし、解凍します。解凍した中身の&lt;code&gt;TestReport&lt;/code&gt;フォルダと&lt;code&gt;TestReport.js&lt;/code&gt;の両方を&lt;code&gt;js/plugins&lt;/code&gt;フォルダに配置します。&lt;br&gt;
+&lt;a href=&#34;https://github.com/kido0617/rpgmakerMV-plugin/raw/master/TestReportSet.zip&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;https://github.com/kido0617/rpgmakerMV-plugin/raw/master/TestReportSet.zip&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;プラグインをONにすれば起動時にウィンドウが表示されます。&lt;br&gt;
+作成されたレポートはエディタだとプロジェクトファイル直下のreportフォルダに、デプロイ後だとwwwフォルダ内に作られます。&lt;/p&gt;
+&lt;h2 id=&#34;制限事項など&#34;&gt;制限事項など&lt;/h2&gt;
+&lt;p&gt;書いているつもりがレポート生成されてなかったら大変なので、テスト時に「レポートを開く」リンクからレポートが正常に生成されているか確認してください。&lt;br&gt;
+レポートを削除するときはreportフォルダを削除してください。&lt;br&gt;
+製品リリース時に残らないよう気をつけてください。&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;br&gt;
+フォルダ内のbootstrap.min.cssはMITライセンスによりTwitter社が配布しています。https://github.com/twbs/bootstrap/blob/v4.1.3/LICENSE&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>フィルタをかけると画面全体が拡大されてしまう</title>
+      <link>https://kido0617.github.io/rpgmaker/2019-09-25-voidfilter/</link>
+      <pubDate>Wed, 25 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2019-09-25-voidfilter/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;以下のようなpixi.jsのオーバーレイフィルタをピクチャにかけると画面全体(マップ全体)が拡大されてしまう現象があるそうで、その解析をしていました。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$gameScreen.picture(1)._blendMode = PIXI.BLEND_MODES.OVERLAY;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;original.png&#34; alt=&#34;フィルタかける前&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;expand.png&#34; alt=&#34;フィルタかけた後&#34;&gt;&lt;/p&gt;
+&lt;p&gt;ただ発生するのはスペックの低めのPCだけであり、通常は発生しないようです。&lt;br&gt;
+手持ちのPCで発生するのが一台あり、簡単なスペックは以下です。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Windows 7 Home Premium 32-bit 
+Core(TM) i5 CPU M 520
+Intel(R) HD Graphics
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;オーバーレイについて&#34;&gt;オーバーレイについて&lt;/h2&gt;
+&lt;p&gt;pixi.jsはデフォルトでは以下にコメントされているようにオーバーレイは利用できず、pixi-picture.jsを読み込むことによって利用できます。&lt;br&gt;
+ファイルはツクールMVのlibフォルダに存在していて自動的に読み込まれています。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;IMPORTANT - The WebGL renderer only supports the NORMAL, ADD, MULTIPLY and SCREEN blend modes.
+Anything else will silently act like NORMAL.
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;フィルタをかけると&#34;&gt;フィルタをかけると&lt;/h2&gt;
+&lt;p&gt;ピクチャのblendModeをOVERLAYに変えると最終的に以下の箇所の処理が大きく変わります。&lt;br&gt;
+細かいことはおいといて、最終的にstageにvoidFilterが適用されるようになります。&lt;br&gt;
+ここでいうstageはScene_Mapです。&lt;br&gt;
+このvoidFilterは何もしないフィルターのはずですが、なぜかこれが適用されると拡大されます。&lt;br&gt;
+Scene_Mapに適用されるので画面全体が拡大されてしまいます。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;Sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;prototype&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_speedUpCustomBlendModes&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;renderer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;picture&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;renderer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;plugins&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;picture&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;blend&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;blendMode&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;renderer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;renderingToScreen&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;renderer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_activeRenderTarget&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;picture&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;drawModes&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;blend&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;stage&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;renderer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_lastObjectRendered&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;f&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;stage&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_filters&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;!&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;f&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;||&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nx&#34;&gt;setTimeout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                    &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;f&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;stage&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_filters&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;!&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;f&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;||&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                        &lt;span class=&#34;nx&#34;&gt;stage&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;filters&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;voidFilter&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                        &lt;span class=&#34;nx&#34;&gt;stage&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;filterArea&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;PIXI&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Rectangle&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Graphics&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;width&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Graphics&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;height&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;p&#34;&gt;},&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;ためしに、コンソールから&lt;code&gt;SceneManager._scene.filters = [Sprite.voidFilter]&lt;/code&gt;と実行すると拡大されるのでOVERLAYフィルタの問題ではなく、このvoidFilterの影響だと考えられます。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>並列実行中のコモンを最初から実行するプラグイン</title>
+      <link>https://kido0617.github.io/rpgmaker/2019-03-13-restart-common/</link>
+      <pubDate>Wed, 13 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2019-03-13-restart-common/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;並列実行中のコモンイベントを中断し、最初から実行します。&lt;/p&gt;
+&lt;p&gt;・プラグインコマンド&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt; RestartCommon 3
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;ダウンロード&#34;&gt;ダウンロード&lt;/h2&gt;
+&lt;p&gt;動作バージョン: &lt;code&gt;RPGツクールMV1.6&lt;/code&gt;以上&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/RestartCommon/RestartCommon.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;こちら&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>メニューとマップのスクリーンショットについて</title>
+      <link>https://kido0617.github.io/rpgmaker/2018-12-24-menu-map-screenshot/</link>
+      <pubDate>Mon, 24 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2018-12-24-menu-map-screenshot/</guid>
+      
+      <description>&lt;h2 id=&#34;メニューの背景のマップ画像&#34;&gt;メニューの背景のマップ画像&lt;/h2&gt;
+&lt;p&gt;以下の画像のようにメニューの背景にはマップが映っています。&lt;br&gt;
+しかし、この画像は実際のマップではなくただの画像です。&lt;br&gt;
+メニューを開く瞬間にスクリーンショットが撮られ、それをぼかして表示しているだけです。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;screenshot.png&#34; alt=&#34;メニューの裏に表示されているマップ&#34;&gt;&lt;/p&gt;
+&lt;p&gt;ツクールはシーンが2つ以上存在するような構造になってなく、別のシーンに遷移したときに前のシーンは破棄されます。&lt;br&gt;
+マップからメニューやショップ、メニューからスキル画面やアイテム画面に遷移したとき、シーンは破棄され、戻った時に作り直されます。&lt;br&gt;
+もちろんマップからメニューなどに遷移するときはそのマップの情報（キャラの位置、歩行ルートの進行状況、使用しているピクチャの情報など）は保持されますが、戻った時はその情報をもとにマップを組み立て直します。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>イベントのテストでエラーになるプラグインのケース</title>
+      <link>https://kido0617.github.io/rpgmaker/2018-12-08-event-test-meta/</link>
+      <pubDate>Sat, 08 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2018-12-08-event-test-meta/</guid>
+      
+      <description>&lt;h2 id=&#34;イベントのテストとは&#34;&gt;イベントのテストとは&lt;/h2&gt;
+&lt;p&gt;ツクールMVにはイベントのテストという機能があります。&lt;br&gt;
+以下のようにイベントコマンドを右クリックすると表示される「テスト」です。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;event-test.png&#34; alt=&#34;イベントのテスト&#34;&gt;&lt;/p&gt;
+&lt;p&gt;自分でプラグイン作っていてもテストするとき考慮が漏れるのですが、このイベントのテストを使用時のみエラーになるケースがあり、何度か対応しています。&lt;/p&gt;
+&lt;h2 id=&#34;普通の場合と何が違うか&#34;&gt;普通の場合と何が違うか&lt;/h2&gt;
+&lt;p&gt;マップのメモ欄が取得できません。&lt;br&gt;
+&lt;code&gt;$dataMap.meta&lt;/code&gt;  が&lt;code&gt;undefined&lt;/code&gt;のため、metaが存在する前提で作るとエラーが発生します。&lt;br&gt;
+そのため、&lt;code&gt;meta&lt;/code&gt;の存在チェックをする必要があります。プラグインを作る際、これに注意が必要です。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>ロードした結果が異なる場合がある</title>
+      <link>https://kido0617.github.io/rpgmaker/2018-12-03-version-id/</link>
+      <pubDate>Mon, 03 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2018-12-03-version-id/</guid>
+      
+      <description>&lt;h2 id=&#34;発生条件&#34;&gt;発生条件&lt;/h2&gt;
+&lt;p&gt;この動画のようにセーブしてすぐにロードするとイベントの位置は変わらないですが、一度ゲームを落としてエディタを保存してからロードするとイベントの位置が元に戻ります。VXAceも同様です。&lt;/p&gt;
+&lt;p&gt;&lt;video src=&#34;load.mp4&#34; width=&#34;720&#34; height=&#34;480&#34; controls&gt;&lt;/video&gt;&lt;/p&gt;
+&lt;p&gt;昔のツクール(RPGツクール3とか)だとイベントの位置は保存されないので、ロード時にイベントの位置が元に戻るのに違和感はないかもしれませんが、今回のように場合によって結果が異なるのはどういうことかと。&lt;/p&gt;
+&lt;h2 id=&#34;解説&#34;&gt;解説&lt;/h2&gt;
+&lt;p&gt;実は内部でバージョンを管理していて、保存をすると作成中のゲームのバージョンが上がります(System.jsonのversionIdです)。&lt;br&gt;
+バージョンといってもランダムな7桁の数字で、例えば77819147だったり2368236だったりします。 　&lt;br&gt;
+このバージョンが肝で、バージョンが変わったらロード時にマップを初期化し直すということをします(マップ移動し直すと同じ挙動)。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;バージョンが変わらない例 セーブ→すぐにロード。この場合バージョンは変わらないのでマップは前回保存時のものをそのまま使用します。&lt;/li&gt;
+&lt;li&gt;バージョンが変わる例 セーブ→ゲームを落とす→エディタで保存→ゲーム起動してロード。この場合、バージョンは変わるのでマップは前回保存時をリセットし、読み込み直します。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;なぜ、バージョンが変わったらマップを読み込み直すのかというと、新しくイベントを追加した場合やイベントを削除した場合に対応していると考えられます。&lt;/p&gt;
+&lt;p&gt;エディタで保存したらバージョンは変わるので、デプロイしたあとは意識しなくて良いかと思ったのですが、アップデートしたときにバージョン変わるので注意が必要です。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>プラグインの使用状況を出すプラグイン</title>
+      <link>https://kido0617.github.io/rpgmaker/2018-09-24-plugin-usage/</link>
+      <pubDate>Mon, 24 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2018-09-24-plugin-usage/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;pluginsフォルダに入っているプラグインの使用状況を以下のように出力します。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;「プラグイン管理」に登録してないONでもOFFでもない、pluginsフォルダに入っているだけのプラグイン&lt;/li&gt;
+&lt;li&gt;ON状態のプラグイン&lt;/li&gt;
+&lt;li&gt;OFF状態のプラグイン&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;usage.png&#34; alt=&#34;使用状況&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ダウンロード&#34;&gt;ダウンロード&lt;/h2&gt;
+&lt;p&gt;動作バージョン: &lt;code&gt;RPGツクールMV1.6&lt;/code&gt;以上&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/ShowPluginsUsage/ShowPluginsUsage.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;こちら&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;導入して起動するとコンソールに出力されます。&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>装備を記憶、ロードするプラグイン</title>
+      <link>https://kido0617.github.io/rpgmaker/2018-09-19-save-equips/</link>
+      <pubDate>Wed, 19 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2018-09-19-save-equips/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;アクターの装備を一度記憶し、それをロードできるプラグインを作りました。&lt;br&gt;
+使用例としては、着せ替えゲームを作ったときにコーディネートを複数保存するということができます。&lt;br&gt;
+あるいは敵に装備を奪われ、取り返したときに復元するみたいなこともできます。&lt;/p&gt;
+&lt;h2 id=&#34;仕様&#34;&gt;仕様&lt;/h2&gt;
+&lt;p&gt;変数の管理みたいに保存領域を用意します。&lt;br&gt;
+例えば、1番にはアクター1の装備を保存、2番にはアクター3の装備を保存ということができます。&lt;br&gt;
+記憶したアクター1の装備をアクター3にロードするということができるようにします。&lt;br&gt;
+ロード時に所持品に該当装備があれば装備し、ない場合は装備なし状態になります。&lt;br&gt;
+ただし、パーティにそれを装備しているアクターがいた場合、それを奪うかどうか設定できます。&lt;br&gt;
+当然、アクター1の装備をアクター3にロードしたとき、装備できない装備は装備されません。&lt;br&gt;
+ゲームのセーブ・ロードに対応。&lt;/p&gt;
+&lt;h2 id=&#34;プラグインコマンド&#34;&gt;プラグインコマンド&lt;/h2&gt;
+&lt;h3 id=&#34;記憶&#34;&gt;記憶&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;SaveEquips arg0 arg1&lt;/p&gt;
+&lt;p&gt;arg0はアクター番号、arg1は保存先番号&lt;br&gt;
+例: SaveEquips 1 1&lt;br&gt;
+引数には変数の制御文字が使えます。&lt;br&gt;
+例: SaveEquips \V[3] \V[4]&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;ロード&#34;&gt;ロード&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;LoadEquips arg0 arg1 arg2&lt;/p&gt;
+&lt;p&gt;arg0はアクター番号、arg1は保存元番号、arg2は所持品に装備がない場合にパーティの装備を奪うか(0か指定なしは奪わない、1は奪う)&lt;br&gt;
+例: LoadEquips 1 1&lt;br&gt;
+例: LoadEquips 1 1 1&lt;br&gt;
+引数には変数の制御文字が使えます。&lt;br&gt;
+例: LoadEquips \V[3] \V[4]&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;ダウンロード&#34;&gt;ダウンロード&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;RPGツクールMV1.6&lt;/code&gt;以上にのみ対応。1.5は対応していません。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/SaveEquips/SaveEquips.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;こちら&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>ピクチャの色あいを変えるプラグイン</title>
+      <link>https://kido0617.github.io/rpgmaker/2018-08-20-tint/</link>
+      <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2018-08-20-tint/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;前回、&lt;a href=&#34;https://kido0617.github.io/rpgmaker/2018-08-16-rotate-hue&#34;&gt;色相を変えるプラグイン&lt;/a&gt;を作りましたが、今回は色合いを変えます。&lt;br&gt;
+色合いを変えると以下の動画のように白い服に対して着色できます。&lt;/p&gt;
+&lt;p&gt;&lt;video src=&#34;tint.mp4&#34; width=&#34;720&#34; height=&#34;480&#34; controls&gt;&lt;/video&gt;&lt;/p&gt;
+&lt;h2 id=&#34;プラグインコマンド&#34;&gt;プラグインコマンド&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;SetTint arg0 arg1&lt;/code&gt;&lt;br&gt;
+arg0はピクチャ番号、arg1は色の値。下記2つは同じ&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;例: &lt;code&gt;SetTint 1 0xFF0000&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;例: &lt;code&gt;SetTint 1 16711680&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;引数には変数の制御文字が使えます。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;例: &lt;code&gt;SetTint \V[3] \V[4]&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;RGBそれぞれに値を指定する場合は以下です。&lt;br&gt;
+&lt;code&gt;SetTint arg0 arg1 arg2 arg3&lt;/code&gt;&lt;br&gt;
+arg0はピクチャ番号、arg1、arg2、arg3にはrgbの値を指定&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;例: &lt;code&gt;SetTint 1 255 0 0&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;引数には変数の制御文字が使えます。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;例: &lt;code&gt;SetTint \V[3] \V[4] \V[5] \V[6]&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;リセットするには&lt;code&gt;0xFFFFFF&lt;/code&gt;を指定します。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;例: &lt;code&gt;SetTint 1 0xFFFFFF&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;ダウンロード&#34;&gt;ダウンロード&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/PictureColorChange/PictureColorChange.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;こちら&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://kido0617.github.io/rpgmaker/2018-08-16-rotate-hue&#34;&gt;色相を変えるプラグイン&lt;/a&gt;と同一です。&lt;br&gt;
+色相を変えるプラグインは&lt;code&gt;RotateHue.js&lt;/code&gt;でしたが、今回統合して&lt;code&gt;PictureColorChange.js&lt;/code&gt;になりました。&lt;br&gt;
+申し訳ないのですが、RotateHue.jsは削除してこちらに差し替えてください(プラグインコマンドは同じなのでファイル差し替えのみ)。&lt;/p&gt;
+&lt;h2 id=&#34;ピクチャ合成について&#34;&gt;ピクチャ合成について&lt;/h2&gt;
+&lt;p&gt;ピクチャ合成系のプラグインには対応していません。ピクチャ合成もピクチャを加工するため、色あいを変えて合成すると競合してしまいます。対応するにはピクチャ合成プラグインとこちらのプラグインを両方セットで調整しなければなりません。&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>ピクチャの色相を変えるプラグイン</title>
+      <link>https://kido0617.github.io/rpgmaker/2018-08-16-rotate-hue/</link>
+      <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2018-08-16-rotate-hue/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;ピクチャの色相を変えるプラグインを作りました。&lt;br&gt;
+デフォルトでは色調を変えることはできますが、色相は変更できません。&lt;br&gt;
+色相を変えると以下の動画のように自然な感じで色違いのピクチャを作れます。&lt;/p&gt;
+&lt;p&gt;&lt;video src=&#34;rotate-hue.mp4&#34; width=&#34;720&#34; height=&#34;480&#34; controls&gt;&lt;/video&gt;&lt;/p&gt;
+&lt;p&gt;以下のような色相環をぐるっと360度回す感じになります。&lt;br&gt;
+白や黒、モノクロの画像は色相を変えても色は変化しませんので注意が必要です。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;huering.png&#34; alt=&#34;色相環&#34;&gt;&lt;/p&gt;
+&lt;p&gt;ちなみに色調は&lt;code&gt;tone&lt;/code&gt;、色相は&lt;code&gt;hue&lt;/code&gt;です。&lt;/p&gt;
+&lt;h2 id=&#34;プラグインコマンド&#34;&gt;プラグインコマンド&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;RotateHue arg0 arg1&lt;/code&gt;&lt;br&gt;
+arg0はピクチャ番号、arg1はデフォルトからの色相の回転角度。単位は度&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;例: &lt;code&gt;RotateHue 1 180&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;引数には変数の制御文字が使えます。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;例: &lt;code&gt;RotateHue \V[3] \V[4]&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;角度なので0～359が有効な値ですが、-180、360、720などを入力は可能です。&lt;br&gt;
+デフォルトからの回転角度なので&lt;code&gt;RotateHue 1 180&lt;/code&gt;を2回呼んでも360にはなりません。&lt;/p&gt;
+&lt;h2 id=&#34;ダウンロード&#34;&gt;ダウンロード&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/PictureColorChange/PictureColorChange.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;こちら&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://kido0617.github.io/rpgmaker/2018-08-20-tint&#34;&gt;色あいを変えるプラグイン&lt;/a&gt;と同一です。&lt;br&gt;
+色相を変えるプラグインは&lt;code&gt;RotateHue.js&lt;/code&gt;でしたが、今回統合して&lt;code&gt;PictureColorChange.js&lt;/code&gt;になりました。&lt;br&gt;
+申し訳ないのですが、RotateHue.jsは削除してこちらに差し替えてください(プラグインコマンドは同じなのでファイル差し替えのみ)。&lt;/p&gt;
+&lt;h2 id=&#34;ピクチャ合成について&#34;&gt;ピクチャ合成について&lt;/h2&gt;
+&lt;p&gt;ピクチャ合成系のプラグインには対応していません。ピクチャ合成もピクチャを加工するため、色相を変えて合成すると競合してしまいます。対応するにはピクチャ合成プラグインとこちらのプラグインを両方セットで調整しなければなりません。&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;
+&lt;h2 id=&#34;技術的な解説&#34;&gt;技術的な解説&lt;/h2&gt;
+&lt;p&gt;色相を変えるメソッドはデフォルトで実装はされていて、&lt;code&gt;Bitmap.prototype.rotateHue&lt;/code&gt; がそのメソッドです。 敵キャラの色相変更で利用されています。&lt;br&gt;
+これを呼べば簡単にできるのですが落とし穴があり、Bitmapをそのまま書き換えます。&lt;br&gt;
+何が問題になるかというと、キャッシュです。画像はロードするとキャッシュされますが、色相をいじるとキャッシュした画像をそのまま書き換えてしまい、その画像はずっと色相が変わったままになってしまいます。&lt;/p&gt;
+&lt;p&gt;一つの解決策としてロード時に色相を指定することが挙げられます。&lt;br&gt;
+&lt;code&gt;ImageManager.loadNormalBitmap = function(path, hue)&lt;/code&gt;とあるようにhueを指定してBitmapをロードできます。実はデフォルトでは色相つきでキャッシュされています。敵キャラの色相の変更がそうなっています。&lt;br&gt;
+以下の箇所でキャッシュのキーを生成しているのですが、画像のパスと色相でキーを作っています。この組み合わせのキーでキャッシュを検索して、存在すればキャッシュの画像を使用し、なければロードするということです。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;ImageManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_generateCacheKey&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;path&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;hue&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt;  &lt;span class=&#34;nx&#34;&gt;path&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;:&amp;#39;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;hue&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;一見、hue付きでロードすれば解決するように見えますが、ちらつきの問題があります。&lt;br&gt;
+プリロードしようにも画像+色相の組み合わせをプリロードするのは無理があります。&lt;br&gt;
+なので今回は、色相を弄る前の画像をコピーして色相を変える方法でこれを回避しています。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>BGSを保存・再開するスクリプト(VXAce版)</title>
+      <link>https://kido0617.github.io/rpgmaker/2018-08-05-save-bgs-vxace/</link>
+      <pubDate>Sun, 05 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2018-08-05-save-bgs-vxace/</guid>
+      
+      <description>&lt;p&gt;この記事はVXAce版です。MV版は&lt;a href=&#34;https://kido0617.github.io/rpgmaker/2018-06-19-save-bgs&#34;&gt;こちら&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;BGMと同様にBGSについても保存と再開を可能にするスクリプトです。&lt;/p&gt;
+&lt;h2 id=&#34;スクリプトコマンド&#34;&gt;スクリプトコマンド&lt;/h2&gt;
+&lt;p&gt;BGSの保存: &lt;code&gt;$game_system.save_bgs&lt;/code&gt;&lt;br&gt;
+BGSの再開: &lt;code&gt;$game_system.replay_bgs&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerVXAce-plugin/master/bgs_save/bgs_save.rb&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;ダウンロード&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>ランダムにアイテムを取得するスクリプト(VXAce版)</title>
+      <link>https://kido0617.github.io/rpgmaker/2018-08-03-random-treasure-vxace/</link>
+      <pubDate>Fri, 03 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2018-08-03-random-treasure-vxace/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;仕様についてはMV版の記事を参照してください&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://kido0617.github.io/rpgmaker/2017-04-17-random-treasure&#34;&gt;ランダムにアイテムを取得するプラグイン(MV版)&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;導入方法&#34;&gt;導入方法&lt;/h2&gt;
+&lt;p&gt;まず、スクリプトが&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerVXAce-plugin/master/random_treasure/random_treasure.rb&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;これ&lt;/a&gt;。&lt;br&gt;
+導入したら、スクリプトコマンドで &lt;code&gt;Random_Treasure::reset&lt;/code&gt; を実行する。&lt;br&gt;
+このコマンド直後のショップ処理で登録したアイテムがランダムに手に入るアイテム群となる。ショップは開かれない。&lt;br&gt;
+アイテムごとの価格の設定がくじの本数となる。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;reset.png&#34; alt=&#34;アイテム群の設定&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;rate.png&#34; alt=&#34;出現確率&#34;&gt;&lt;/p&gt;
+&lt;p&gt;そして、次に宝箱側の設定だ。スクリプトコマンドで &lt;code&gt;Random_Treasure::get&lt;/code&gt; を実行するとランダムに1個手に入る。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;get.png&#34; alt=&#34;ランダムに1個取得&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;入手したアイテムの表示方法&#34;&gt;入手したアイテムの表示方法&lt;/h2&gt;
+&lt;p&gt;アイテム名格納変数とアイテムアイコン番号格納変数を用意した。&lt;br&gt;
+ここに変数番号を入れておくと、その番号の変数にアイテム名とアイコン番号が自動的に入る。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;module&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;RANDOMTREASURE&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;no&#34;&gt;NAME_VAR&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;#取得したアイテム名を格納する変数番号&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;no&#34;&gt;ICON_VAR&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;#取得したアイテムのアイコン番号を格納する変数番号&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;なので、これを使って、メッセージウィンドウに以下のように入力すれば入手したアイテムとアイコンが表示できる。&lt;br&gt;
+(変数番号は上記で指定した値)&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;\I[\V[20]] \V[10]を手に入れた
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;※ 入手インフォメーションスクリプトの &lt;code&gt;インフォメーションfor RGSS3 Ver2.03-β&lt;/code&gt; に対応しています&lt;/p&gt;
+&lt;h2 id=&#34;dl先&#34;&gt;DL先&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerVXAce-plugin/master/random_treasure/random_treasure.rb&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;https://raw.githubusercontent.com/kido0617/rpgmakerVXAce-plugin/master/random_treasure/random_treasure.rb&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>デバッグ画面にショートカットキーを追加するスクリプト(VXAce版)</title>
+      <link>https://kido0617.github.io/rpgmaker/2018-07-05-debug-shortcut-vxace/</link>
+      <pubDate>Thu, 05 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2018-07-05-debug-shortcut-vxace/</guid>
+      
+      <description>&lt;p&gt;この記事はVXAce版です。MV版は&lt;a href=&#34;https://kido0617.github.io/rpgmaker/2018-07-04-debug-shortcut/&#34;&gt;こちら&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;F9で表示するデバッグウィンドウはスイッチと変数の切り替えが面倒なので、ショートカットキーを追加します。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Sキー&lt;/code&gt;  スイッチの先頭に飛ぶ&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Vキー&lt;/code&gt;  変数の先頭に飛ぶ&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;数字キー&lt;/code&gt; 入力した番号に飛ぶ&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;例1: &lt;code&gt;s100&lt;/code&gt; と入力するとスイッチの100番目に飛ぶ&lt;br&gt;
+例2: &lt;code&gt;v12&lt;/code&gt; と入力すると変数の12番目に飛ぶ&lt;/p&gt;
+&lt;p&gt;Backspaceキーも使えます。&lt;/p&gt;
+&lt;p&gt;使用感はこんな感じです。&lt;br&gt;
+&lt;video src=&#34;debug-shortcut.mp4&#34; width=&#34;816&#34; height=&#34;624&#34; controls&gt;&lt;/video&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ダウンロード&#34;&gt;ダウンロード&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerVXAce-plugin/master/debug-shortcut/debug-shortcut.rb&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;こちらから&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>デバッグ画面にショートカットキーを追加するプラグイン</title>
+      <link>https://kido0617.github.io/rpgmaker/2018-07-04-debug-shortcut/</link>
+      <pubDate>Wed, 04 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2018-07-04-debug-shortcut/</guid>
+      
+      <description>&lt;p&gt;この記事はMV版です。VXAce版は&lt;a href=&#34;https://kido0617.github.io/rpgmaker/2018-07-05-debug-shortcut-vxace/&#34;&gt;こちら&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;F9で表示するデバッグウィンドウはスイッチと変数の切り替えが面倒なので、ショートカットキーを追加します。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Sキー&lt;/code&gt;  スイッチの先頭に飛ぶ&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Vキー&lt;/code&gt;  変数の先頭に飛ぶ&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;数字キー&lt;/code&gt; 入力した番号に飛ぶ&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;例1: &lt;code&gt;s100&lt;/code&gt; と入力するとスイッチの100番目に飛ぶ&lt;br&gt;
+例2: &lt;code&gt;v12&lt;/code&gt; と入力すると変数の12番目に飛ぶ&lt;/p&gt;
+&lt;p&gt;Backspaceキーも使えます。&lt;/p&gt;
+&lt;p&gt;使用感はこんな感じです。&lt;br&gt;
+&lt;video src=&#34;debug-shortcut.mp4&#34; width=&#34;816&#34; height=&#34;624&#34; controls&gt;&lt;/video&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ダウンロード&#34;&gt;ダウンロード&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/DebugWindowShortCut/DebugWindowShortCut.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;こちらから&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;注意事項&#34;&gt;注意事項&lt;/h2&gt;
+&lt;p&gt;キーマップに &lt;code&gt;S&lt;/code&gt; &lt;code&gt;V&lt;/code&gt; &lt;code&gt;0～9&lt;/code&gt; &lt;code&gt;BackSpace&lt;/code&gt; キーを登録するのでこれらを使うプラグインを使用している場合、競合起こす可能性がある気がします。&lt;br&gt;
+私は &lt;code&gt;Input.keyMapper[8] = &#39;BackSpace&#39;&lt;/code&gt; と登録していますが、他のプラグインが&lt;code&gt;BackSpace&lt;/code&gt;を&lt;code&gt;backspace&lt;/code&gt;みたいに登録しているとどっちかが動かないことが起こります。&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>VX Aceプロジェクトのデータをテキストに変換する</title>
+      <link>https://kido0617.github.io/rpgmaker/2018-07-01-rvpacker/</link>
+      <pubDate>Sun, 01 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2018-07-01-rvpacker/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;RPGツクールVX Aceのデータはプロジェクト内のDataフォルダに.rvdata2という形式で保存されています。&lt;br&gt;
+バイナリデータのため簡単に編集などはできないのですが、&lt;a href=&#34;https://github.com/Solistra/rvpacker&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;rvpacker&lt;/a&gt;というツールを使うと、テキストデータ(YAML形式)に変換することができます。もちろん、テキストデータから元のデータに戻すこともできます。&lt;br&gt;
+テキストデータにすることにより、会話やファイル名などの全置換を行うことができます。また、バージョン管理もしやすくなる利点があります。&lt;/p&gt;
+&lt;h2 id=&#34;rubyのインストール&#34;&gt;Rubyのインストール&lt;/h2&gt;
+&lt;p&gt;Windows10下でのインストールを説明します。rvpackerのInstallationも参照してください。&lt;br&gt;
+まず、Rubyをインストールする必要があります。&lt;br&gt;
+(Ruby Installer)[https://rubyinstaller.org/downloads/] からRuby+Devkitをダウンロードします(執筆時バージョンは2.5.1-2でした)&lt;br&gt;
+x64かx86かは環境に合わせてください。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;ruby.png&#34; alt=&#34;Ruby Installer&#34;&gt;&lt;/p&gt;
+&lt;p&gt;ダウンロードしたら普通にインストールします。特に途中の選択肢は変更する必要ありません。&lt;br&gt;
+一緒にMSYS2もインストールする必要があり、最後に以下のようなプロンプトが立ち上がります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;msys2.png&#34; alt=&#34;MSYS2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;ここで、1を押してエンターで、&lt;code&gt; MSYS2 base installation&lt;/code&gt;を選択します。&lt;br&gt;
+これでRubyの準備はできました。&lt;/p&gt;
+&lt;h2 id=&#34;rvpackerのインストール&#34;&gt;rvpackerのインストール&lt;/h2&gt;
+&lt;p&gt;Windowsに標準に付属している&lt;code&gt;PowerShell&lt;/code&gt;を立ち上げます。&lt;br&gt;
+&lt;code&gt;gem install rvpacker&lt;/code&gt; と入力し、エンターするとrvpackerがインストールできます。&lt;/p&gt;
+&lt;h2 id=&#34;テキストデータに変換する&#34;&gt;テキストデータに変換する&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;PowerShell&lt;/code&gt;で変換したいツクールのプロジェクト配下(Game.rvproj2があるフォルダ)まで移動します。&lt;br&gt;
+そこで &lt;code&gt;rvpacker --action unpack --project ./ --project-type ace&lt;/code&gt; とコマンドを実行します。&lt;br&gt;
+すると、フォルダに&lt;code&gt;Scripts&lt;/code&gt;と&lt;code&gt;YAML&lt;/code&gt;フォルダが生成されます。&lt;br&gt;
+&lt;code&gt;Scripts&lt;/code&gt;はRGSSスクリプトがruby形式になって保存されています。&lt;br&gt;
+&lt;code&gt;YAML&lt;/code&gt;フォルダ内に以下のように各rvdata2がYAML形式に変換されて保存されます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;yaml.png&#34; alt=&#34;MSYS2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;中身は例えば、&lt;code&gt;Items.yaml&lt;/code&gt;を見ると以下のようにテキストデータになっています。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nn&#34;&gt;---&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;- &lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;- !&lt;span class=&#34;l&#34;&gt;ruby/object:RPG::Item&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;description&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;マッチ&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;consumable&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;occasion&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;icon_index&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;530&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;price&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;scope&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;animation_id&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;note&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;speed&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;id&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;features&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;effects&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;damage&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;!&lt;span class=&#34;l&#34;&gt;ruby/object:RPG::UsableItem::Damage&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;element_id&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;formula&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;0&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;variance&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;critical&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;success_rate&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;hit_type&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;itype_id&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;repeats&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;tp_gain&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Mapxxx.yamlはそれぞれのマップのイベントなどが記載されています。&lt;br&gt;
+メッセージなどがこのように確認できます。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>BGSを保存・再開するプラグイン</title>
+      <link>https://kido0617.github.io/rpgmaker/2018-06-19-save-bgs/</link>
+      <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2018-06-19-save-bgs/</guid>
+      
+      <description>&lt;p&gt;この記事はMV版です。VXAce版は&lt;a href=&#34;https://kido0617.github.io/rpgmaker/2018-08-05-save-bgs-vxace&#34;&gt;こちら&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;BGMと同様にBGSについても保存と再開を可能にするプラグインです。&lt;/p&gt;
+&lt;h2 id=&#34;プラグインコマンド&#34;&gt;プラグインコマンド&lt;/h2&gt;
+&lt;p&gt;BGSの保存  &lt;code&gt;SaveBGS&lt;/code&gt;&lt;br&gt;
+BGSの再開  &lt;code&gt;ReplayBGS&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/SaveBGS/SaveBGS.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;ダウンロード&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>敵キャラにデフォルトのステートを付与するプラグイン</title>
+      <link>https://kido0617.github.io/rpgmaker/2018-03-27-enemy-default-state/</link>
+      <pubDate>Tue, 27 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2018-03-27-enemy-default-state/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;敵キャラにデフォルトのステートを付与できます。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/EnemyDefaultState/EnemyDefaultState.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;ダウンロード&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>ゲーム画面外演出を考える</title>
+      <link>https://kido0617.github.io/rpgmaker/2017-12-07-outside-window/</link>
+      <pubDate>Thu, 07 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2017-12-07-outside-window/</guid>
+      
+      <description>&lt;p&gt;この記事は&lt;a href=&#34;https://adventar.org/calendars/2288&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;RPGツクールMV Advent Calendar&lt;/a&gt;7日目の記事です。&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;color:red;&#34;&gt;この記事に書かれている内容はツクール1.5.1でのみ動作します。それ以降には対応していません。1.6以上ではnw.jsのバージョンが変わるため動作しません。&lt;/span&gt;&lt;/p&gt;
+&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;ゲーム画面（ウィンドウ）の外にピクチャを表示したりして、ゲーム画面外で演出をする方法を考えます。&lt;br&gt;
+結論から言うと、かなり面倒くさくてつらく、内容は開発者向けです。少なくともhtmlの知識は必要です。&lt;br&gt;
+とりあえず、Windows/Mac 向けを考えます。ブラウザ版では別の考え方をします（後述）。&lt;br&gt;
+最後に完成版のプロジェクトファイルを用意するので必要であれば参照してみてください。&lt;/p&gt;
+&lt;p&gt;ゲーム画面外にキャラが表示されると何割か増しでかわいく見える気がする。&lt;br&gt;
+&lt;video src=&#34;outside-picture.mp4&#34; width=&#34;816&#34; height=&#34;624&#34; controls&gt;&lt;/video&gt;&lt;/p&gt;
+&lt;p&gt;※今回はデュアルディスプレイ環境は考慮しません&lt;/p&gt;
+&lt;h2 id=&#34;フルスクリーンを無効化する&#34;&gt;フルスクリーンを無効化する&lt;/h2&gt;
+&lt;p&gt;少しずつ実装していきましょう。&lt;br&gt;
+まず、ゲーム画面外に出すということは、フルスクリーン時には効果ありません。なのでフルスクリーンにする機能をOFFにします。&lt;br&gt;
+ツクールの機能にあるF4キーでフルスクリーンにする機能はプラグインでOFFにできるのですが、ウィンドウの端っこにカーソルを持っていったときに表示されるリサイズや右上の最大化ボタンをプラグインからOFFにすることができません。&lt;br&gt;
+これを無効化するにはデプロイ後にpackage.jsonというファイルの中身を書き換える必要があります&lt;br&gt;
+&lt;img src=&#34;packagejson.png&#34; alt=&#34;package.json&#34;&gt;&lt;/p&gt;
+&lt;p&gt;packages.jsonの中身のwindowの箇所に &lt;code&gt;&amp;quot;resizable&amp;quot;: false,&lt;/code&gt;  を以下のように追加します。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;window&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;s2&#34;&gt;&amp;#34;resizable&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;s2&#34;&gt;&amp;#34;title&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;s2&#34;&gt;&amp;#34;toolbar&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;s2&#34;&gt;&amp;#34;width&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;816&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;s2&#34;&gt;&amp;#34;height&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;624&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;s2&#34;&gt;&amp;#34;icon&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;www/icon/icon.png&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;これでフルスクリーンをOFFにできます。しかし、これはデプロイする度に該当箇所を書き換えないといけないので、かなりつらいです。&lt;/p&gt;
+&lt;h2 id=&#34;とりあえず表示してみる&#34;&gt;とりあえず表示してみる&lt;/h2&gt;
+&lt;p&gt;ゲーム画面外に影響させるにはもう1個別のウィンドウを作るしかありません。&lt;br&gt;
+&lt;a href=&#34;http://docs.nwjs.io/en/latest/&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;nw.js&lt;/a&gt; の機能を使って実装していきます。&lt;br&gt;
+nw.jsのWindowには &lt;a href=&#34;http://docs.nwjs.io/en/latest/References/Window/#windowopenurl-options-callback&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;open&lt;/a&gt;というURLやhtmlファイルを開く機能があり、それを使います。&lt;br&gt;
+つまり、imgタグを記述したhtmlファイルを用意すれば、画像が表示されるウィンドウが用意できますね。&lt;br&gt;
+MVのプロジェクト直下にsubWindowフォルダを作り、そこにwindow.htmlとして以下のようなhtmlを用意しておきます。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;html&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;head&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;meta&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;charset&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;UTF-8&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;title&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;Project1&lt;span class=&#34;p&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;title&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;head&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;body&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;style&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;background-color:rgba(0,0,0,0);&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;img&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;src&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;../img/pictures/p-stella01.png&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;body&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;html&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;そしてツクール側からスクリプトコマンドで以下のようにすると、ウィンドウが表示されます&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;var gui = window.require(&amp;#39;nw.gui&amp;#39;);
+gui.Window.open(&amp;#34;subWindow/window.html&amp;#34;);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;windowopen.png&#34; alt=&#34;window open&#34;&gt;&lt;/p&gt;
+&lt;p&gt;いらないウィンドウの装飾とか透明じゃないとかあるけど、とりあえず表示できました。&lt;br&gt;
+これでわかるように、htmlならなんでもいいのです。ブラウザデプロイしたMV製のゲームでも……。&lt;/p&gt;
+&lt;h2 id=&#34;ウィンドウの表示をちゃんとする&#34;&gt;ウィンドウの表示をちゃんとする&lt;/h2&gt;
+&lt;p&gt;Window.openの引数に&lt;a href=&#34;http://docs.nwjs.io/en/latest/References/Manifest%20Format/&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;マニフェスト&lt;/a&gt;を渡せるのでこれで制御できます。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;gui&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;window&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;require&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;nw.gui&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;nx&#34;&gt;gui&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Window&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;open&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;subWindow/window.html&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;nx&#34;&gt;resizable&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;      &lt;span class=&#34;c1&#34;&gt;//最大化、リサイズ不可
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;   &lt;span class=&#34;nx&#34;&gt;toolbar&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;        &lt;span class=&#34;c1&#34;&gt;//ツールバー非表示
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;   &lt;span class=&#34;nx&#34;&gt;frame&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;          &lt;span class=&#34;c1&#34;&gt;//フレーム非表示
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;   &lt;span class=&#34;nx&#34;&gt;show_in_taskbar&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// タスクバーに表示しない（注意：開発時はtrueにしておいたほうがいい。タスクバーに表示されないとウィンドウが迷子になる）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;   &lt;span class=&#34;nx&#34;&gt;transparent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;       &lt;span class=&#34;c1&#34;&gt;//透明化
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;ちなみに透明化ですが、Vista以降でclassic themeでないことが条件です。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>ニコニコっぽいテキストを表示するプラグイン</title>
+      <link>https://kido0617.github.io/rpgmaker/2017-11-17-niconico-like-text/</link>
+      <pubDate>Fri, 17 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2017-11-17-niconico-like-text/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;現代もののゲームをやるとニコニコ動画的な動画サイトが登場することがあります。そこで、ツクールMVでもそういった表現ができるようにするプラグインを作成しました。&lt;br&gt;
+プラグインの仕様、雰囲気は下記動画参照です。&lt;/p&gt;
+&lt;p&gt;&lt;video src=&#34;nlt.mp4&#34; width=&#34;816&#34; height=&#34;624&#34; controls&gt;&lt;/video&gt;&lt;/p&gt;
+&lt;h2 id=&#34;使い方&#34;&gt;使い方&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;image.png&#34; alt=&#34;イメージ図&#34;&gt;&lt;/p&gt;
+&lt;p&gt;こういう使い方をします。細かい説明は以下で解説します。&lt;/p&gt;
+&lt;h3 id=&#34;ピクチャとリンク&#34;&gt;ピクチャとリンク&lt;/h3&gt;
+&lt;p&gt;まずはじめに本プラグイン対象となるピクチャを指定する必要があります。&lt;br&gt;
+ピクチャ番号が1のときは、スクリプトコマンドで &lt;code&gt;NLTManager.linkPicture(1);&lt;/code&gt; と指定します&lt;/p&gt;
+&lt;h3 id=&#34;文字の表示&#34;&gt;文字の表示&lt;/h3&gt;
+&lt;p&gt;文字の表示方法ですが、一番シンプルな方法は以下です。&lt;br&gt;
+&lt;code&gt;NLTManager.show(&#39;こんにちは&#39;);&lt;/code&gt;&lt;br&gt;
+文字位置指定は以下でできます。ニコニコと同様に naka、ue、shitaに対応しています。デフォルトはnakaです&lt;br&gt;
+&lt;code&gt;NLTManager.show(&#39;こんにちは&#39;, &#39;ue&#39;);&lt;/code&gt;&lt;br&gt;
+文字色指定は以下でできます。色は white、black、red、blue、orange、green、pink、cyan、purple、yellowです。デフォルトはwhiteです&lt;br&gt;
+&lt;code&gt;NLTManager.show(&#39;こんにちは&#39;, &#39;ue&#39;, &#39;red&#39;);&lt;/code&gt;&lt;br&gt;
+文字サイズ指定は以下でできます。 使えるのはb、m、s です。デフォルトはmです。big medium、small の略です&lt;br&gt;
+&lt;code&gt;NLTManager.show(&#39;こんにちは&#39;, &#39;ue&#39;, &#39;red&#39;, &#39;b&#39;);&lt;/code&gt;&lt;br&gt;
+基本的に文字のy位置はランダムです。なので実行ごとに違う結果になります。しかし、演出上必ず決まった位置に表示したい場合もあると思います。&lt;br&gt;
+そのときは、以下のように指定できます。 0 ≦ y &amp;lt; 1 の間で指定してください。 0.5で真ん中です。&lt;br&gt;
+&lt;code&gt;NLTManager.show(&#39;こんにちは&#39;, &#39;ue&#39;, &#39;red&#39;, &#39;b&#39;, 0.5);&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;設定する必要がない、デフォルトで構わない項目はnullでも可&lt;br&gt;
+&lt;code&gt;NLTManager.show(&#39;こんにちは&#39;, null, null, null, 0.5);&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;ディレイ&#34;&gt;ディレイ&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;NLTManager.show(&#39;こんにちは&#39;);&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;NLTManager.show(&#39;おはよう&#39;);&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;NLTManager.show(&#39;こんばんは&#39;);&lt;/code&gt;&lt;br&gt;
+とすると、３個が同じx位置に表示されてしまい、不自然な感じになるので、それぞれの間にデフォルトで10フレームのディレイが設けられています。&lt;br&gt;
+このデフォルトを変えたい場合は以下のようにします。&lt;br&gt;
+&lt;code&gt;NLTManager.setDelay(5);&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;アドリブ&#34;&gt;アドリブ&lt;/h3&gt;
+&lt;p&gt;何も表示するテキストがない場合にランダムに表示されるテキストを登録します。パラメータはNLTManager.showと同じです&lt;br&gt;
+&lt;code&gt;NLTManager.addAdlib(&#39;www&#39;, &#39;naka&#39;, &#39;orange&#39;, &#39;s&#39;);&lt;/code&gt;&lt;br&gt;
+この追加した文言は場所移動、セーブ、ロードなどをしても保持されます。なので初期化したいときは明示的に以下のスクリプトを実行してください&lt;br&gt;
+&lt;code&gt;NLTManager.clearAdlib();&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;リンク解除&#34;&gt;リンク解除&lt;/h3&gt;
+&lt;p&gt;途中でピクチャと本プラグインの関係を絶ちたい場合は以下を実行します&lt;br&gt;
+&lt;code&gt;NLTManager.unLink();&lt;/code&gt;&lt;br&gt;
+また単純にピクチャを消去すればリンクは解除されます&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>一括入力がしやすいテキストエディタプラグインの紹介</title>
+      <link>https://kido0617.github.io/rpgmaker/2017-09-18-texteditor/</link>
+      <pubDate>Mon, 18 Sep 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2017-09-18-texteditor/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;ツクールのメッセージの一括入力用に４行ごとにボーダーが引かれるVisual Studio Codeのプラグインを作りました。&lt;br&gt;
+メッセージを一度テキストエディタでどばっと書いて一括入力で流し込むケースがあると思います。&lt;br&gt;
+そのとき、4行区切りになっていると便利だというニーズがあったからです。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;screenshot.png&#34; alt=&#34;4行ごとにボーダーが引かれるエディタ&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;インストール&#34;&gt;インストール&lt;/h2&gt;
+&lt;p&gt;まず、&lt;a href=&#34;https://code.visualstudio.com/&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Visual Studio Code&lt;/a&gt;をダウンロードします。フリーのマイクロソフト製のエディタです。&lt;br&gt;
+インストールしたら起動して、プラグインのインストールボタンを押します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;plugin.png&#34; alt=&#34;プラグインのインストールボタン&#34;&gt;&lt;/p&gt;
+&lt;p&gt;入力欄に rpgmaker と入力すると rpgmaker-text というプラグインが表示されるのでインストールします。&lt;br&gt;
+インストールしたら再読込しましょう。これで有効になっているはずです。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;rpgmaker-text.png&#34; alt=&#34;rpgmaker-textをインストール&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;tips&#34;&gt;TIPS&lt;/h2&gt;
+&lt;p&gt;機能をOFFにしたいときは、Ctrl + Shift + P で表示されるコマンド欄でrpgmaker-text:Toggleを選択すればON/OFFを切り替えられます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;toggle.png&#34; alt=&#34;On/OFFの切り替え&#34;&gt;&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>ウィンドウをたくさん出すプラグイン</title>
+      <link>https://kido0617.github.io/rpgmaker/2017-07-14-window-manager/</link>
+      <pubDate>Fri, 14 Jul 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2017-07-14-window-manager/</guid>
+      
+      <description>&lt;p&gt;ウィンドウを画面にたくさん出したら何かに使えるかなぁと思い、作った。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;windowmanager.gif&#34; alt=&#34;ウィンドウたくさん出す&#34;&gt;&lt;/p&gt;
+&lt;p&gt;ダウンロードは↓から&lt;br&gt;
+&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/WindowManager/WindowManager.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/WindowManager/WindowManager.js&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;使用方法&#34;&gt;使用方法&lt;/h2&gt;
+&lt;p&gt;プラグインを追加したら、スクリプトコマンドで以下のようにします。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;WindowManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;show&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;180&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;80&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;//0番目のウィンドウを x=10,y=10の座標で 180の幅、80の高さで表示
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;WindowManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;drawText&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;あいうえお&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;//0番目のウィンドウに あいうえお と表示
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;script.png&#34; alt=&#34;スクリプト例&#34;&gt;&lt;/p&gt;
+&lt;p&gt;画像出したいときは以下のような感じ&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;WindowManager.show(3, 400, 200, 300, 300);
+WindowManager.drawPicture(3, &amp;#39;cat&amp;#39;);     //Pictureの名前がcatの画像を表示
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;制御文字使いたい場合は、\を２つ重ねて使う。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;WindowManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;drawText&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;\\I[1]あいうえお&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;制限事項&#34;&gt;制限事項&lt;/h2&gt;
+&lt;p&gt;インスタントにウィンドウを出すだけなので、マップ移動したりメニューを開いたりすると、ウィンドウは消えます。&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>マスクを使ってゲージを作る</title>
+      <link>https://kido0617.github.io/rpgmaker/2017-07-09-gauge/</link>
+      <pubDate>Sun, 09 Jul 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2017-07-09-gauge/</guid>
+      
+      <description>&lt;h2 id=&#34;変わったゲージ&#34;&gt;変わったゲージ&lt;/h2&gt;
+&lt;p&gt;今回はPIXIのマスクの機能を使って変わったゲージを作りたいと思います。&lt;br&gt;
+こういうゲージです。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;result.png&#34; alt=&#34;完成図&#34;&gt;&lt;/p&gt;
+&lt;p&gt;デザインはともかく、ちょっと特殊な形のゲージです。&lt;/p&gt;
+&lt;h2 id=&#34;画像の用意&#34;&gt;画像の用意&lt;/h2&gt;
+&lt;p&gt;画像を２つ用意します。まず、ゲージの枠。&lt;br&gt;
+&lt;img src=&#34;base.png&#34; alt=&#34;ゲージの枠&#34;&gt;&lt;/p&gt;
+&lt;p&gt;そして、ゲージの中身&lt;br&gt;
+&lt;img src=&#34;gauge.png&#34; alt=&#34;ゲージの中身&#34;&gt;&lt;/p&gt;
+&lt;p&gt;想像のとおり、この２つを重ねるゲージが満タンの状態になります。&lt;/p&gt;
+&lt;h2 id=&#34;マスクを作る&#34;&gt;マスクを作る&lt;/h2&gt;
+&lt;p&gt;扇形のマスクを使って、ゲージの中身を部分的に描画します。&lt;br&gt;
+例えば下図のようにするとマスクをすると下半分の白い部分だけが描画されます。&lt;br&gt;
+&lt;img src=&#34;mask.png&#34; alt=&#34;マスク&#34;&gt;&lt;br&gt;
+なので、ゲージが100%のときは360度の円、ゲージが50%なら180度の円のマスクを設定すれば、パーセンテージに応じたゲージが出来上がります。&lt;br&gt;
+ソースコードはこんな感じになります。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;//ウィンドウとしてゲージを作ります
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Window_Gauge&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;prototype&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;initialize&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;Window_Base&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;prototype&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;initialize&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;call&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;300&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;300&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;opacity&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//ウィンドウ部分を消すため
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;c1&#34;&gt;//ゲージの枠を読み込み
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;base&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ImageManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;loadPicture&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;Base&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;c1&#34;&gt;//ゲージの中身を読み込み
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;gauge&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ImageManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;loadPicture&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;Gauge&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;c1&#34;&gt;//マスクを作る
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;mask&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;PIXI&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Graphics&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;mask&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;beginFill&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mh&#34;&gt;0xffffff&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;//白画像で塗りつぶす設定
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;c1&#34;&gt;//扇を描く。(144, 151)を中心に半径150で0度の角度からπ[rad]の角度で描画
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;//ここで角度を変数などに格納して描画するようにすれば、値に応じたゲージが出来ます
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;nx&#34;&gt;mask&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;arc&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;144&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;151&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;150&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;3.14&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;mask&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;endFill&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;gauge&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;mask&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;mask&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;//ゲージの中身にマスクを設定
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;nx&#34;&gt;base&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;addChild&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;gauge&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;//ゲージの枠にゲージの中身をaddChild
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;addChild&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;base&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;//できたゲージをウィンドウにaddChild
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>複雑な計算式はプラグインで記述する</title>
+      <link>https://kido0617.github.io/rpgmaker/2017-06-26-calc/</link>
+      <pubDate>Mon, 26 Jun 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2017-06-26-calc/</guid>
+      
+      <description>&lt;h2 id=&#34;ダメージ計算式のプラグイン化&#34;&gt;ダメージ計算式のプラグイン化&lt;/h2&gt;
+&lt;p&gt;ダメージの計算式は基本的に直接テキストボックスに書けば良い。&lt;br&gt;
+しかし、何行にも渡るような複雑な計算式を実現したい場合、狭すぎて記載しにくい。&lt;br&gt;
+そこで、そういった場合はプラグインとして記述する方法がある。&lt;/p&gt;
+&lt;p&gt;例えば、以下のようなプラグインを作る。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;global&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;global&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Calc&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;SpecialAtk&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;b&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;c1&#34;&gt;//a b は計算式で使っているのと同様
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;      
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;c1&#34;&gt;//ここでは例として生きているメンバーのatkの合計をダメージとする
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;      &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;members&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;$gameParty&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;aliveMembers&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;atk&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;members&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;length&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nx&#34;&gt;atk&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;members&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;].&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;atk&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;atk&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;b&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;def&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;//returnした数値が計算式の結果となる
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;})(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;そして、計算式を記述する際に、&lt;code&gt;Calc.SpecialAtk(a, b);&lt;/code&gt; のように記載すればOK。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;calc.png&#34; alt=&#34;こんな感じ&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;応用&#34;&gt;応用&lt;/h2&gt;
+&lt;p&gt;これと同様に条件分岐のスクリプトの箇所もプラグイン化すると複雑な条件分岐を書きやすくなる。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;condition.png&#34; alt=&#34;こんな感じ&#34;&gt;&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>シーンからマップに場所移動</title>
+      <link>https://kido0617.github.io/rpgmaker/2017-05-08-reservetransfer/</link>
+      <pubDate>Mon, 08 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2017-05-08-reservetransfer/</guid>
+      
+      <description>&lt;h2 id=&#34;reservetransferを使う&#34;&gt;reserveTransferを使う&lt;/h2&gt;
+&lt;p&gt;独自に作ったシーンからあるマップのある位置に移動するには$gamePlayer.reserveTransferを使う。&lt;br&gt;
+このメソッドの詳しい説明は以下のサイトが詳しい。&lt;br&gt;
+&lt;a href=&#34;https://ameblo.jp/rpgmaker1892/entry-12103797314.html&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;ツクールMVのスクリプトで場所移動を行う方法&lt;/a&gt;&lt;br&gt;
+ただ、Scene_MapからScene_Mapへの移動なら$gamePlayer.reserveTransferを呼び出すだけで移動できるが、&lt;br&gt;
+Scene_Map以外のシーンからの移動の場合は、reserveTransferに加えて、SceneManager.goto(Scene_Map)が必要。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;$gamePlayer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;reserveTransfer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;8&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;SceneManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;kr&#34;&gt;goto&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Scene_Map&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;map-idの特定方法&#34;&gt;Map IDの特定方法&lt;/h2&gt;
+&lt;p&gt;ところで、$gamePlayer.reserveTransferの第一引数にMapのIDを渡さなければいけないが、これをどこで確認するか。&lt;br&gt;
+2つ方法があり、1つはエディタのマップの編集画面の以下の箇所。&lt;br&gt;
+&lt;img src=&#34;mapid.png&#34;  width=&#34;400&#34;&gt;&lt;/p&gt;
+&lt;p&gt;もう1つは data/MapInfos.json を開くとidがわかる。&lt;/p&gt;
+&lt;h2 id=&#34;map-idを名前から検索&#34;&gt;Map IDを名前から検索&lt;/h2&gt;
+&lt;p&gt;私はよく使うのだが、マップ名からMAP IDを検索する方法を載せておく。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;getMapId&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;mapName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;$dataMapInfos&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;length&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;$dataMapInfos&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;$dataMapInfos&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;].&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;name&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;mapName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;$dataMapInfos&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;].&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;id&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>シーンに引数を渡す</title>
+      <link>https://kido0617.github.io/rpgmaker/2017-05-08-scene-attr/</link>
+      <pubDate>Mon, 08 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2017-05-08-scene-attr/</guid>
+      
+      <description>&lt;p&gt;シーンを切り替える際、SceneManager.goto とか SceneManager.push を使うが、このとき引数を次のシーンに渡すことができる。それがprepareNextSceneだ。&lt;br&gt;
+例えば、Scene_Testに遷移するとき、以下のような感じで渡せる。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;SceneManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;push&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Scene_Test&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;SceneManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;prepareNextScene&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;123&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;abc&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;遷移先のシーンでは、以下のprepareメソッドで受け取れる。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;Scene_Test&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;prototype&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;prepare&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;b&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;b&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;//123, &amp;#34;abc&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>ウィンドウに画像を表示する</title>
+      <link>https://kido0617.github.io/rpgmaker/2017-05-03-contents-blt/</link>
+      <pubDate>Wed, 03 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2017-05-03-contents-blt/</guid>
+      
+      <description>&lt;p&gt;ウィンドウに画像を表示するには簡単にいうと2つ方法があります。&lt;br&gt;
+それぞれ解説します。&lt;/p&gt;
+&lt;h2 id=&#34;spriteを作る方法&#34;&gt;Spriteを作る方法&lt;/h2&gt;
+&lt;p&gt;Spriteを作ってウィンドウにaddChildするだけで表示できます。&lt;br&gt;
+このSpriteはPIXIのSpriteを継承しているので、そのメソッドなどを使えます。&lt;br&gt;
+&lt;a href=&#34;http://pixijs.download/release/docs/PIXI.Sprite.html&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;PIXI.Sprite&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sprite&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;bitmap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ImageManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;loadBitmap&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;img/path/&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;image-name&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;addChild&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;contentsblt-を使用する方法&#34;&gt;contents.blt を使用する方法&lt;/h2&gt;
+&lt;p&gt;Window_Baseはメンバーにcontentsを持っており、このbltメソッドで表示できます。&lt;br&gt;
+ただし、このとき指定するbitmapはロード済みでないと表示できません。キャッシュにあれば表示できます。&lt;br&gt;
+そこで、bitmapのロードイベントにfunctionを登録してロード完了後にbltを呼び出す方法があります。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;bitmap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ImageManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;loadBitmap&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;img/path/&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;image-name&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;bitmap&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;addLoadListener&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;contents&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;blt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;bitmap&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;bitmap&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;width&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;bitmap&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;height&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;rect&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;rect&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;rect&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;width&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;rect&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;height&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;bind&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>スプレッドシートからjsonにしてツクールに取り込む</title>
+      <link>https://kido0617.github.io/rpgmaker/2017-05-02-spreadsheet/</link>
+      <pubDate>Tue, 02 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2017-05-02-spreadsheet/</guid>
+      
+      <description>&lt;p&gt;ツクールMVでは自分で作成したjsonファイルをゲームに取り込むことができます。&lt;br&gt;
+デフォルトにある武器、防具、アイテムといったデータベースだけでなく、自由にデータを取り込めるので便利です。&lt;br&gt;
+私はGoogleのスプレッドシートでデータを管理していることが多いので、そこからjsonファイルを吐き出して取り込むということをよくします。今回はそのやり方を書きます。&lt;/p&gt;
+&lt;h2 id=&#34;スプレッドシートからjsonを吐く&#34;&gt;スプレッドシートからjsonを吐く&lt;/h2&gt;
+&lt;p&gt;今回、例として英和単語帳を作ります。こんなの。&lt;/p&gt;
+&lt;img src=&#34;en-ja.png&#34; width=&#34;500&#34;&gt;
+&lt;p&gt;スプレッドシートのメニューの「ツール」から「スクリプトエディタ」を開きます。&lt;br&gt;
+開いたら、以下のようなコードを用意します。シート名は適宜変更してください。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;myFunction&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sheet&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;SpreadsheetApp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;getActiveSpreadsheet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;().&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;getSheetByName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;シート1&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;keys&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sheet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;getSheetValues&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sheet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;getLastColumn&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;())[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;//キー取得
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;data&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sheet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;getSheetValues&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sheet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;getLastRow&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sheet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;getLastColumn&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;());&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;//キー以外の全列取得
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;list&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;forEach&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;row&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;obj&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;keys&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;length&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;nx&#34;&gt;obj&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;keys&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;row&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;push&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;obj&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;Browser&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;msgBox&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;JSON&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;stringify&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;//表示
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;そしたら、実行ボタンで実行。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;script-editor.png&#34; alt=&#34;実行&#34;&gt;&lt;/p&gt;
+&lt;p&gt;スプレッドシート画面に戻ると以下のように出力されてます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;output.png&#34; alt=&#34;和英のjson&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;[{&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;en&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;use&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;ja&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;使う、用いる、使用する、利用する&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;},{&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;en&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;make&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;ja&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;作る、造る、作る、製作する&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;},{&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;en&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;eat&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;ja&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;食べる&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;},{&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;en&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;push&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;ja&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;押す&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;},{&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;en&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;pull&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;ja&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;引く&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;},{&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;en&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;drink&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;ja&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;飲む&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;},{&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;en&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;sound&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;ja&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;音&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;},{&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;en&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;tree&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;ja&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;木&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;辞書データになってますね。&lt;/p&gt;
+&lt;h2 id=&#34;ツクール側から使用する&#34;&gt;ツクール側から使用する&lt;/h2&gt;
+&lt;p&gt;ツクールフォルダのdataフォルダにDictionary.jsonとしてファイルを作成し、上記出力内容をコピペします。&lt;br&gt;
+そしたら、以下のようなプラグインを作って有効化します。&lt;br&gt;
+これで自動的にjsonファイルを読み込み、$dataDictionary変数から使えるようになります。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;DataManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_databaseFiles&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;push&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;$dataDictionary&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;src&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;Dictionary.json&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;})();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;試しに、以下のようなイベントを実行してみます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;event.png&#34; alt=&#34;イベント&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;display.png&#34; alt=&#34;実行結果&#34;&gt;&lt;/p&gt;
+&lt;p&gt;うん。ちゃんと扱えてます。&lt;br&gt;
+こんな感じで、スプレッドシートから作ったjsonファイルをツクールで読み込むことができました。&lt;/p&gt;
+&lt;h2 id=&#34;イベントテストで読み込めない&#34;&gt;イベントテストで読み込めない&lt;/h2&gt;
+&lt;p&gt;上記のイベントをイベントテストするとロードエラーがでます。&lt;br&gt;
+というのも、イベントテスト時はdataフォルダ配下にTest_Actors.jsonみたいにTest_が付与されたデータファイルが生成されます。自分で追加したjsonファイルは自動的にTest_ファイルが生成されないため、エラーが出るのです。&lt;br&gt;
+対策としては、Test_のファイルを手動で作っておいておくことが挙げられます。&lt;br&gt;
+今回でいえば、Test_Ditionary.jsonを置いておくことになります。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>ランダムにアイテムを取得するプラグイン(MV版)</title>
+      <link>https://kido0617.github.io/rpgmaker/2017-04-17-random-treasure/</link>
+      <pubDate>Mon, 17 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2017-04-17-random-treasure/</guid>
+      
+      <description>&lt;p&gt;この記事はMV版です。VXAce版は&lt;a href=&#34;https://kido0617.github.io/rpgmaker/2018-08-03-random-treasure-vxace&#34;&gt;こちら&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;らんだむダンジョンがすごい好きで周回要素ないのに50時間ぐらいかかるのを2週プレイした。&lt;br&gt;
+らんだむダンジョンはランダムにアイテムが手に入る宝箱がある。今回はそれを実装した。&lt;br&gt;
+ツクールのデフォルトの機能でも実現できるけど、結構面倒くさいので、簡単にできるプラグインを作る。&lt;/p&gt;
+&lt;p&gt;こういう仕様にしたい。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;ランダムに手に入るアイテム群を設定できる（ダンジョンごとに異なるアイテム群を設定できる）&lt;/li&gt;
+&lt;li&gt;アイテムごとに異なる確率を設定できる&lt;/li&gt;
+&lt;li&gt;できるだけ設定しやすく、1と2を実現する&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;ランダムに手に入るアイテム群を設定できる&#34;&gt;ランダムに手に入るアイテム群を設定できる&lt;/h2&gt;
+&lt;p&gt;アイテム選択があるコマンドを乗っ取ることにした。ショップコマンドだ。&lt;br&gt;
+ショップコマンドはアイテムをGUIで選択できるので設定しやすくて良い。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;shop.png&#34; alt=&#34;ショップコマンド&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;アイテムごとに異なる確率を設定できる&#34;&gt;アイテムごとに異なる確率を設定できる&lt;/h2&gt;
+&lt;p&gt;レアなアイテムは出にくくしたい。ショップコマンドはアイテムごとに価格を設定できる。&lt;br&gt;
+ちょうどいいので、この価格を確率にしてしまう。&lt;br&gt;
+くじの本数だと考えてほしい。例えば、アイテムが3つあって、アイテム1=10、アイテム2=10、アイテム3=1だったとする。&lt;br&gt;
+こうすれば、くじの本数が1本しかないアイテム3は出にくくなる。&lt;br&gt;
+※くじを引いたら戻す仕様とし、引き続けてもなくならない。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;rate.png&#34; alt=&#34;確率&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;ratelist.png&#34; alt=&#34;確率一覧&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;導入方法&#34;&gt;導入方法&lt;/h2&gt;
+&lt;p&gt;まず、プラグインが&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/RandomTreasure/RandomTreasure.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;これ&lt;/a&gt;。&lt;br&gt;
+導入したら、まずプラグインコマンドで &lt;code&gt;RandomTreasure reset&lt;/code&gt; を実行する。&lt;br&gt;
+このコマンド直後のショップ処理で登録したアイテムがランダムに手に入るアイテム群となる。ショップは開かれない。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;plugin-command1.png&#34; alt=&#34;設定プラグインコマンド&#34;&gt;&lt;/p&gt;
+&lt;p&gt;そして、次に宝箱側の設定だ。プラグインコマンドで &lt;code&gt;RandomTreasure get&lt;/code&gt; を実行するとランダムに1個手に入る。&lt;/p&gt;
+&lt;h2 id=&#34;入手したアイテムの表示方法&#34;&gt;入手したアイテムの表示方法&lt;/h2&gt;
+&lt;p&gt;プラグインパラメータにアイテム名格納変数とアイテムアイコン番号格納変数を用意した。&lt;br&gt;
+ここに変数番号を入れておくと、その番号の変数にアイテム名とアイコン番号が自動的に入る。&lt;br&gt;
+&lt;img src=&#34;param.png&#34; alt=&#34;パラメータ&#34;&gt;&lt;br&gt;
+なので、これを使って、メッセージウィンドウに以下のように入力すれば入手したアイテムとアイコンが表示できる。&lt;br&gt;
+(変数番号はパラメータで指定した値)&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;\I[\V[20]] \V[10]を手に入れた
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;get.png&#34; alt=&#34;ランダムに取得&#34;&gt;&lt;/p&gt;
+&lt;p&gt;※ 2017/12/09 入手インフォメーション系プラグイン(TinyGetInfoWnd.jsやGetInformation.js)に対応しました。&lt;br&gt;
+連携する場合は、それらのプラグインの機能をONにして単体で動くことを確認してください。&lt;br&gt;
+(導入しても動かないという報告がありますが、それらのプラグインのパラメータが適切でない場合が多いです)&lt;/p&gt;
+&lt;h2 id=&#34;レア度に応じた演出&#34;&gt;レア度に応じた演出&lt;/h2&gt;
+&lt;p&gt;プラグインパラメータにアイテムのくじの本数格納変数を用意した。&lt;br&gt;
+ここに変数番号を入れておくと、その番号に手に入れたアイテムのくじの本数が入る。&lt;br&gt;
+レア度に応じた演出をしたい場合、この変数を分岐にして演出を行えば良い&lt;/p&gt;
+&lt;h2 id=&#34;手に入れたアイテムの詳細を取得&#34;&gt;手に入れたアイテムの詳細を取得&lt;/h2&gt;
+&lt;p&gt;もし、手に入れたアイテムのDB上の情報を取得したい場合は、スクリプトの処理になりますが以下のようにして取得できます。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;var item = $gameSystem.getLastRandomTreasure();
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Ver.1.4前は&lt;code&gt;$gameSystem.lastRandomTreasure&lt;/code&gt;で取得可能でしたが、セーブ容量が増えて適切でないため変更しました。&lt;/p&gt;
+&lt;h2 id=&#34;dl先&#34;&gt;DL先&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/RandomTreasure/RandomTreasure.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/RandomTreasure/RandomTreasure.js&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>TweenプラグインのTorigoya_Tween.jsが便利</title>
+      <link>https://kido0617.github.io/rpgmaker/2017-04-13-tween/</link>
+      <pubDate>Thu, 13 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2017-04-13-tween/</guid>
+      
+      <description>&lt;p&gt;ウィンドウをアニメーションさせたく、updateメソッド内でちまちま動かしていた。&lt;br&gt;
+しかし、さすがに汎用性に欠けるし、コードが複雑になりすぎる。&lt;br&gt;
+jQueryのanimateメソッドみたいな、UnityでいうiTweenみたいなプラグインないかなと思っていたら、まさにそのとおりのがあった。&lt;br&gt;
+鳥小屋.txtさんの&lt;a href=&#34;http://torigoya.hatenadiary.jp/entry/tween_mv&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Torigoya_Tween.js&lt;/a&gt;だ。&lt;/p&gt;
+&lt;p&gt;例えば、以下のようなスクリプトでこんな感じのアニメーションができる。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;height&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;window&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Window_Base&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Graphics&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;height&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Graphics&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;width&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;height&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;window&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;opacity&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;SceneManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_scene&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;addWindow&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;window&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;toY&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Graphics&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;height&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;height&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;Torigoya&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Tween&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;create&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;window&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;to&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;({&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;toY&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;opacity&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;255&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;},&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;15&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Torigoya&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Tween&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Easing&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;easeOutSine&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;to&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;({&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;toY&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;},&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Torigoya&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Tween&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Easing&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;easeInSine&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;wait&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;60&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;to&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;({&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;opacity&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;},&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;60&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Torigoya&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Tween&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Easing&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;linear&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;tween.gif&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;超便利。すばらしー。&lt;/p&gt;
+&lt;p&gt;easingがどんなのかわからないときは、&lt;a href=&#34;http://easings.net/ja&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;ここ&lt;/a&gt;が参考になる。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>全てのアイテムを取得するプラグイン</title>
+      <link>https://kido0617.github.io/rpgmaker/2017-04-13-get-all-items/</link>
+      <pubDate>Thu, 13 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2017-04-13-get-all-items/</guid>
+      
+      <description>&lt;p&gt;デバッグ用で、ゲーム開始時に全てのアイテム、武器、防具を取得済みの状態で始めたかった。&lt;br&gt;
+探せばあるような気がするんだけど、探しても見つからなかったのでプラグインを制作した。&lt;/p&gt;
+&lt;p&gt;下記からダウンロードできます。&lt;br&gt;
+&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/GetAlIItems/GetAllItems.js&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/GetAlIItems/GetAllItems.js&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;プラグインコマンドで以下のようにして使う。&lt;br&gt;
+それぞれ全アイテムを99個獲得、全武器を1個獲得、全防具を10個獲得の意味。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;GetAllItems item 99
+GetAllItems weapon 1
+GetAllItems armor 10
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;こんな感じにゲーム開始時にそれぞれ取得するように書いておけば、全所持状態から開始できる。&lt;br&gt;
+&lt;img src=&#34;get-all-items.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>loadBitmapを使うときはsmoothに注意する</title>
+      <link>https://kido0617.github.io/rpgmaker/2017-04-12-loadbitmap/</link>
+      <pubDate>Wed, 12 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2017-04-12-loadbitmap/</guid>
+      
+      <description>&lt;p&gt;画像をスクリプトから読み込むときにImageManager.loadBitmapを使う。&lt;br&gt;
+これを使って、画像を表示するには以下のようなコードをスクリプトコマンドから実行すれば良い。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;bitmap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ImageManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;loadBitmap&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;img/sample/&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;a&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sprite&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;bitmap&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;SceneManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_scene&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;addChild&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;a.png&#34; alt=&#34;画像を表示&#34;&gt;&lt;/p&gt;
+&lt;p&gt;ここで、例えば、画像を80%で表示するとする。そういうときは、spriteのscaleをいじれば良い。&lt;br&gt;
+しかし、このままだと縮小された画像にジャギーが発生する。以下のコードと画像を参照。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;bitmap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ImageManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;loadBitmap&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;img/sample/&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;a&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sprite&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;bitmap&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;scale&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.8&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;scale&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.8&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;SceneManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_scene&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;addChild&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;scale-ng.png&#34; alt=&#34;ジャギーが発生&#34;&gt;&lt;/p&gt;
+&lt;p&gt;これを抑止するには、loadBitmapの第４引数(smooth)をtrueにすれば良い。第３引数は色相なので使わなければnull。&lt;br&gt;
+以下のようにコードを変更すれば、ジャギーなく表示できる。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;bitmap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ImageManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;loadBitmap&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;img/sample/&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;a&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sprite&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;bitmap&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;scale&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.8&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;scale&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.8&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;SceneManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_scene&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;addChild&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;sprite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;scale-ok.png&#34; alt=&#34;ジャギーがない&#34;&gt;&lt;/p&gt;
+&lt;p&gt;ちなみに、内部的に何が変わるのかという話だけど、Bitmapの以下の箇所で分岐する。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;if (this._smooth) {
+  this._baseTexture.scaleMode = PIXI.SCALE_MODES.LINEAR;
+} else {
+  this._baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;PIXIのテクスチャーのscaleModeがLINEARかNEARESTの違い。&lt;br&gt;
+多分、バイリニア法かニアレストネイバー法使うかの差っぽい。&lt;br&gt;
+それぞれ検索するとどんな感じか出るのでそちらを&lt;a href=&#34;https://www.google.co.jp/webhp?q=%E8%A3%9C%E9%96%93&amp;#43;%E3%83%8B%E3%82%A2%E3%83%AC%E3%82%B9%E3%83%88&amp;#43;%E3%83%90%E3%82%A4%E3%83%AA%E3%83%8B%E3%82%A2&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;参照&lt;/a&gt;。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>独自のデータをセーブする</title>
+      <link>https://kido0617.github.io/rpgmaker/2017-04-12-custom-save/</link>
+      <pubDate>Wed, 12 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2017-04-12-custom-save/</guid>
+      
+      <description>&lt;h2 id=&#34;はじめに&#34;&gt;はじめに&lt;/h2&gt;
+&lt;p&gt;ツクールMVのセーブデータはjson。正確には以下のコードのようにLZStringライブラリを使って、Base64にしつつ圧縮している。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;LZString&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;compressToBase64&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;json&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;自分の好きなデータを保存したい場合、既にある$gameSystemとか$gameVariablesといった変数に付け足す方法がある。&lt;br&gt;
+デフォルトで入っているアイテム図鑑プラグインのItemBook.jsは$gameSystemを拡張して、アイテムの取得済みかどうかを保存している。以下のようにGame_System($gameSystem)に_itemBookFlagsを追加している。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;Game_System&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;prototype&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;clearItemBook&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_ItemBookFlags&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[[],&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[],&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[]];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;この方法でも問題ないが、がっつり独自のセーブデータを作った方がいいケースもある。その方法を解説する。&lt;/p&gt;
+&lt;h2 id=&#34;datamanagerを拡張&#34;&gt;DataManagerを拡張&lt;/h2&gt;
+&lt;p&gt;ツクールのセーブする変数は$gameで始まるのでそれにのっとる。今回は、$gameMyというのを作る。&lt;br&gt;
+必要なのは、初期化、セーブ、ロード、の３つ。&lt;br&gt;
+以下のような感じになる。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nb&#34;&gt;window&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;$gameMy&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;_createGameObjects&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;DataManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;createGameObjects&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;DataManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;createGameObjects&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;_createGameObjects&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;call&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;$gameMy&lt;/span&gt;      &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Game_My&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;_makeSaveContents&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;DataManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;makeSaveContents&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;DataManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;makeSaveContents&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;contents&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;_makeSaveContents&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;call&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;contents&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;gameMy&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;$gameMy&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;contents&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;_extractSaveContents&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;DataManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;extractSaveContents&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;DataManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;extractSaveContents&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;contents&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;_extractSaveContents&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;call&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;contents&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;$gameMy&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;contents&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;gameMy&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Game_My&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;saveSomething&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;aaa&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;//自由にデータを追加できる
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;})();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;これでGame_My($gameMy)を通して自由にデータを追加して保存できる。&lt;/p&gt;</description>
+      
+    </item>
+    
+  </channel>
+</rss>

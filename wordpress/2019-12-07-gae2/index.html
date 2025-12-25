@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">GAEでWordPressを運用する上でつまづいたところ | kido</title>
+<meta property="og:title" content="GAEでWordPressを運用する上でつまづいたところ | kido" />
+<meta name="twitter:title" content="GAEでWordPressを運用する上でつまづいたところ | kido" />
+<meta itemprop="name" content="GAEでWordPressを運用する上でつまづいたところ | kido" />
+<meta name="application-name" content="GAEでWordPressを運用する上でつまづいたところ | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/wordpress/2019-12-07-gae2/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/wordpress/2019-12-07-gae2/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="GAEでWordPressを運用する上でつまづいたところ">
+  <meta property="og:description" content="参考資料 WordPressをGAEにデプロイする方法は英語記事ですが公式のものがあり、これを参照するのが良いと思います。
+Run WordPress on Google App Engine standard environment
+Cloud Storageにアップロードされたファイルのフォルダ構造 WordPressからファイルをアップロードすると1/2019/11/xxxx.jpgのようにWordPressで設定したフォルダ構造の前に1というフォルダが作られます。
+この数字は何かというと、get_current_blog_id()で返却される値です。
+マルチブログ機能に対応するためのもので、復数ブログを運用することを想定されているようです。
+デプロイするファイル ローカルで開発してそのままデプロイするとwp-content/uploads/など不要なファイルもデプロイしてしまいます。
+基本的にWordPress用の.gitignoreで除外されているファイルはアップロードされるべきではありません。
+GAEにデプロイするとき除外するファイルを指定する.gcloudignoreにこれらのファイルを含めても良いですが、デプロイするときに最新のファイルをcloneしてきてそれをデプロイした方が安全な気がします。
+その上で.gcloudignoreは以下のように私はしています。
+.gcloudignore .DS_Store app.yaml cron.yaml dispatch.yaml .git .gitignore デプロイ用のシェルは以下のようにしています。
+最新だけcloneしてきて、デプロイして、消すという手順です。
+git clone --depth 1 git@github.com:kido0617/xxxxxxx.git cd xxxxxxx gcloud app deploy app.yaml cron.yaml cd ../ rm -rf xxxxxx siteamp.xmlが読めない Google XML Sitemapsプラグインを使用しているのですが、/sitemap.xmlにアクセスするとParse error: syntax error,でアクセスできず。
+GAE上でファイルは動的に生成できないのでその関係かと思いましたが、このプラグインは動的に生成はしていないようです。
+結果はshort_open_tagがOnでxmlが読み込めていないのが原因でした。
+php.iniにshort_open_tag = Offを追加して解決しました。">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="wordpress">
+    <meta property="article:published_time" content="2019-12-07T00:00:00+00:00">
+    <meta property="article:modified_time" content="2019-12-07T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="GAEでWordPressを運用する上でつまづいたところ">
+  <meta name="twitter:description" content="参考資料 WordPressをGAEにデプロイする方法は英語記事ですが公式のものがあり、これを参照するのが良いと思います。
+Run WordPress on Google App Engine standard environment
+Cloud Storageにアップロードされたファイルのフォルダ構造 WordPressからファイルをアップロードすると1/2019/11/xxxx.jpgのようにWordPressで設定したフォルダ構造の前に1というフォルダが作られます。
+この数字は何かというと、get_current_blog_id()で返却される値です。
+マルチブログ機能に対応するためのもので、復数ブログを運用することを想定されているようです。
+デプロイするファイル ローカルで開発してそのままデプロイするとwp-content/uploads/など不要なファイルもデプロイしてしまいます。
+基本的にWordPress用の.gitignoreで除外されているファイルはアップロードされるべきではありません。
+GAEにデプロイするとき除外するファイルを指定する.gcloudignoreにこれらのファイルを含めても良いですが、デプロイするときに最新のファイルをcloneしてきてそれをデプロイした方が安全な気がします。
+その上で.gcloudignoreは以下のように私はしています。
+.gcloudignore .DS_Store app.yaml cron.yaml dispatch.yaml .git .gitignore デプロイ用のシェルは以下のようにしています。
+最新だけcloneしてきて、デプロイして、消すという手順です。
+git clone --depth 1 git@github.com:kido0617/xxxxxxx.git cd xxxxxxx gcloud app deploy app.yaml cron.yaml cd ../ rm -rf xxxxxx siteamp.xmlが読めない Google XML Sitemapsプラグインを使用しているのですが、/sitemap.xmlにアクセスするとParse error: syntax error,でアクセスできず。
+GAE上でファイルは動的に生成できないのでその関係かと思いましたが、このプラグインは動的に生成はしていないようです。
+結果はshort_open_tagがOnでxmlが読み込めていないのが原因でした。
+php.iniにshort_open_tag = Offを追加して解決しました。">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/wordpress/2019-12-07-gae2/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">GAEでWordPressを運用する上でつまづいたところ</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/wordpress" style="margin-right:10px;">WordPress</a>
+                    <time datetime="2019-12-07T00:00:00&#43;00:00" itemprop="datePublished"> 2019/12/07 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <h2 id="参考資料">参考資料</h2>
+<p>WordPressをGAEにデプロイする方法は英語記事ですが公式のものがあり、これを参照するのが良いと思います。</p>
+<p><a href="https://cloud.google.com/community/tutorials/run-wordpress-on-appengine-standard?hl=ja" class="blankA" target="_blank" rel="noopener noreferrer">Run WordPress on Google App Engine standard environment</a></p>
+<h2 id="cloud-storageにアップロードされたファイルのフォルダ構造">Cloud Storageにアップロードされたファイルのフォルダ構造</h2>
+<p>WordPressからファイルをアップロードすると<code>1/2019/11/xxxx.jpg</code>のようにWordPressで設定したフォルダ構造の前に<code>1</code>というフォルダが作られます。<br>
+この数字は何かというと、<code>get_current_blog_id()</code>で返却される値です。<br>
+マルチブログ機能に対応するためのもので、復数ブログを運用することを想定されているようです。</p>
+<h2 id="デプロイするファイル">デプロイするファイル</h2>
+<p>ローカルで開発してそのままデプロイすると<code>wp-content/uploads/</code>など不要なファイルもデプロイしてしまいます。<br>
+基本的に<a href="https://github.com/github/gitignore/blob/master/WordPress.gitignore" class="blankA" target="_blank" rel="noopener noreferrer">WordPress用の.gitignore</a>で除外されているファイルはアップロードされるべきではありません。<br>
+GAEにデプロイするとき除外するファイルを指定する<code>.gcloudignore</code>にこれらのファイルを含めても良いですが、デプロイするときに最新のファイルをcloneしてきてそれをデプロイした方が安全な気がします。<br>
+その上で<code>.gcloudignore</code>は以下のように私はしています。</p>
+<pre tabindex="0"><code>.gcloudignore
+.DS_Store
+app.yaml
+cron.yaml
+dispatch.yaml
+.git
+.gitignore
+</code></pre><p>デプロイ用のシェルは以下のようにしています。<br>
+最新だけcloneしてきて、デプロイして、消すという手順です。</p>
+<pre tabindex="0"><code>git clone --depth 1 git@github.com:kido0617/xxxxxxx.git
+cd xxxxxxx
+gcloud app deploy app.yaml cron.yaml
+cd ../
+rm -rf xxxxxx
+</code></pre><h2 id="siteampxmlが読めない">siteamp.xmlが読めない</h2>
+<p><code>Google XML Sitemaps</code>プラグインを使用しているのですが、<code>/sitemap.xml</code>にアクセスすると<code>Parse error: syntax error,</code>でアクセスできず。<br>
+GAE上でファイルは動的に生成できないのでその関係かと思いましたが、このプラグインは動的に生成はしていないようです。<br>
+結果は<code>short_open_tag</code>がOnでxmlが読み込めていないのが原因でした。<br>
+php.iniに<code>short_open_tag = Off</code>を追加して解決しました。</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

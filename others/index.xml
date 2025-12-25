@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Others on kido</title>
+    <link>https://kido0617.github.io/others/</link>
+    <description>Recent content in Others on kido</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <lastBuildDate>Fri, 18 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://kido0617.github.io/others/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>sitemap.xml登録の「取得できませんでした」について</title>
+      <link>https://kido0617.github.io/others/2021-06-18-search-console-pending/</link>
+      <pubDate>Fri, 18 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/others/2021-06-18-search-console-pending/</guid>
+      
+      <description>&lt;p&gt;Search Consoleにsitemap.xmlを登録したときに「取得できませんでした」と表示されることがあります。&lt;br&gt;
+最初、xmlの形式や件数がオーバーしているなどのこちらのミスかと思ったのですが、10個に分割しているsitemap.xmlのいくつかは登録できていました。&lt;br&gt;
+言語を英語にして見ると「Couldn&amp;rsquo;t fetch」と表示されており、これで検索してみたところ、いくつか回答が見つかりました。&lt;br&gt;
+robot.txtやmetaタグでnoindexにしているという説もありましたが、これは違いました。&lt;br&gt;
+もう一つ、Search Console側の表示が違くて、実際はPendingだという説。&lt;br&gt;
+実際、そのとおりで1日置いたら徐々に取得可能なものが増えていきました。&lt;br&gt;
+単純に表示に惑わされただけで、待つのが正解だったという話。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>再インストール後のwin10 Proへのアップグレード</title>
+      <link>https://kido0617.github.io/others/2021-06-16-win10upgrade/</link>
+      <pubDate>Wed, 16 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/others/2021-06-16-win10upgrade/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;前にWindows10 HomeからProにWindows Storeでアップグレードを購入しました。&lt;br&gt;
+その後、最インストールしなおして、もう一度HomeからProにアップグレードしようとしました。&lt;br&gt;
+「設定」→「ライセンス認証」を選択し、そこからアップグレードを選択するとWindowsストアに遷移します。&lt;br&gt;
+しかし、ページを開くと「お探しのものはここにはありません」と表示され、アップグレードできません。&lt;br&gt;
+購入履歴からも表示できませんでした。&lt;br&gt;
+仕方なくサポートに電話したところ、以下の手順で解決しました。&lt;/p&gt;
+&lt;h2 id=&#34;手順&#34;&gt;手順&lt;/h2&gt;
+&lt;p&gt;サポートによると、OSの表示言語を「英語」にして試すとうまくいくことがあるようです。&lt;br&gt;
+「設定」→「言語」を選択し、言語の追加から「English 米国」を追加し、英語を優先にします。&lt;br&gt;
+再起動し、ストアにアクセスすると無事、Win10 Proのページが表示され、アップグレードできました。&lt;/p&gt;
+&lt;h2 id=&#34;おまけ&#34;&gt;おまけ&lt;/h2&gt;
+&lt;p&gt;サポートに久しぶりに電話したのですが、今のWindowsってデフォルト遠隔操作できるソフト（クイックアシスト）が入っていて、サポートがこっちのパソコンを遠隔で操作して解決してくれるんですね。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>自分専用のFirefoxアドオンを作る</title>
+      <link>https://kido0617.github.io/others/2018-07-22-firefox-ext/</link>
+      <pubDate>Sun, 22 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/others/2018-07-22-firefox-ext/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://addons.mozilla.org/ja/firefox/&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Firefox Add-ons - Mozilla&lt;/a&gt;でWeb公開せず、自分だけ使えればいいアドオンを作りたくなったので作りました。&lt;br&gt;
+そのときの手順をメモします。&lt;/p&gt;
+&lt;p&gt;アドオンそのものについては&lt;a href=&#34;https://developer.mozilla.org/ja/Add-ons/WebExtensions/Your_first_WebExtension&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;初めての拡張機能&lt;/a&gt;を参照して作ります。&lt;br&gt;
+デバッグ時は一時的にアドオンを有効化できますが、再起動すると使えなくなってしまうのでインストールして永続的に利用可能にする必要があります。&lt;br&gt;
+今回は作ったあとのパッケージ化からインストールまでを説明します。&lt;/p&gt;
+&lt;h2 id=&#34;パッケージ化署名&#34;&gt;パッケージ化・署名&lt;/h2&gt;
+&lt;p&gt;作ったあと作成したファイルをzip化します。&lt;br&gt;
+その際、ディレクトリごとではなく、ファイルを直接zip化する必要があります (&lt;a href=&#34;https://developer.mozilla.org/ja/Add-ons/WebExtensions/Publishing_your_WebExtension&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;拡張機能をパッケージ化する&lt;/a&gt;)&lt;br&gt;
+zip化したフォルダの拡張子を&lt;code&gt;zip&lt;/code&gt;から&lt;code&gt;xpi&lt;/code&gt;に単純に変更します。&lt;/p&gt;
+&lt;p&gt;アドオンは署名をする必要があります (&lt;a href=&#34;https://developer.mozilla.org/ja/Add-ons/Distribution&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;アドオンを署名して配布する&lt;/a&gt;)。&lt;br&gt;
+FirefoxのDeveloper Edition、Nightly(プレリリース版)は署名なくてもインストール可能にできるそうですが、通常版を利用しているので署名が必要です。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://addons.mozilla.org/ja/developers/&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;https://addons.mozilla.org (AMO)&lt;/a&gt;で開発者登録をします (&lt;a href=&#34;https://developer.mozilla.org/ja/Add-ons/Distribution/Submitting_an_add-on&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;アドオンを投稿する&lt;/a&gt;)。その後は作成した.xpiファイルをアップロードすれば良いです。&lt;br&gt;
+その際、Webに公開しないオプションを選択しましょう。審査はないのですぐに完了します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;amo.png&#34; alt=&#34;Webに公開しない&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;インストール&#34;&gt;インストール&lt;/h2&gt;
+&lt;p&gt;署名が完了すると、署名完了後のファイルをダウンロードできるのでそれをダウンロードします。Firefoxのアドオンウィンドウを開いて、&lt;code&gt;ファイルからアドオンをインストール&lt;/code&gt;からダウンロードしたファイルを選択すればインストールできます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;install.png&#34; alt=&#34;ファイルからインストール&#34;&gt;&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>Nexus7 使って Androidアプリ開発</title>
+      <link>https://kido0617.github.io/others/2013-02-04-nexus7-android/</link>
+      <pubDate>Mon, 04 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/others/2013-02-04-nexus7-android/</guid>
+      
+      <description>&lt;p&gt;環境構築になかなか手間取りました。&lt;/p&gt;
+&lt;h2 id=&#34;ダウンロードとインストール&#34;&gt;ダウンロードとインストール&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;http://developer.android.com/sdk/index.html&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Android SDK&lt;/a&gt;より 「Download the SDK ADT Bundle for Windows」からSDKをダウンロード。&lt;br&gt;
+Eclipseやツールが既に入っているバンドル版で便利。&lt;br&gt;
+ダウンロードしたものをCドライブ直下とか短いパスのところで解凍。&lt;/p&gt;
+&lt;p&gt;解凍した中に入っているEclipseを立ち上げようとするも、JDKが入っていなくてエラー。&lt;br&gt;
+仕方なく、OracleのところからJDKをダウンロードして、インストール。&lt;br&gt;
+これでEclipseが無事に立ち上がった。&lt;/p&gt;
+&lt;h2 id=&#34;エミュレータで実行&#34;&gt;エミュレータで実行&lt;/h2&gt;
+&lt;p&gt;適当に新規作成からAndroidアプリケーションのプロジェクトを作る。&lt;br&gt;
+アプリケーション名とかパッケージ名は適当で、どんどん進める。完了すると、Hello Worldな画面が出来上がる。&lt;br&gt;
+画面左上の方に「Android仮想デバイスマネージャー」というのがあるので、そこでエミューレータ用の仮想端末を作る。&lt;br&gt;
+「新規」ボタンを押して、AVD名は適当につけて、装置はNexus7を選択。&lt;br&gt;
+ここでメモリー・オプションを512ぐらいにしておかないと起動しない。&lt;br&gt;
+「ＯＫ」ボタンを押して、今作った仮想デバイスを選択し、「開始」を押すとエミュレータが起動する。かっこいい&lt;/p&gt;
+&lt;p&gt;Eclipseの実行ボタンから「Androidアプリケーション」を選択すれば、エミュレータ上に Hello World されるはず。&lt;/p&gt;
+&lt;h2 id=&#34;実機で実行&#34;&gt;実機で実行&lt;/h2&gt;
+&lt;p&gt;Nexus7の「設定」→「タブレット情報」から「ビルド番号」と書かれた項目をタッチしまくる。しまくると開発者モードが解禁される。どんな仕様だ。&lt;br&gt;
+一つ前の画面に戻ると、「｛｝開発者向けオプション」が表示されている。&lt;br&gt;
+その中の「USBデバッグ」をONにする。&lt;/p&gt;
+&lt;p&gt;「設定」→「セキュリティ」→「提供元不明のアプリ」をＯＮにする&lt;/p&gt;
+&lt;p&gt;Windowsに戻り、Android仮想デバイスマネージャーのボタンの隣にある「Android SDKマネージャー」を選択する。&lt;br&gt;
+一番下のExtrasに「Google USB Driver」があるのでそれをダウンロード。&lt;br&gt;
+ここまできたらUSBケーブルでNexus7とパソコンをつなぐ。USBドライバがちゃんとインストールされないので、デバイスマネージャから解決する。&lt;br&gt;
+ドライバはSDKをインストールしたフォルダの中の「sdk\extras\google」にあるのでそれを指定。&lt;/p&gt;
+&lt;h2 id=&#34;接続確認&#34;&gt;接続確認&lt;/h2&gt;
+&lt;p&gt;ここでちゃんと、端末とＰＣが接続できているか確認したい。adbなるものを使う。&lt;br&gt;
+「sdk\platform-tools」にadbはある。パスを通すか、このフォルダに行く。&lt;br&gt;
+コマンドプロンプトから「adb devices」と打つ。&lt;br&gt;
+「List of devices attached」の次の行に何かしら表示されればＯＫ。そして、それはoffline となっているのではないだろうか。&lt;br&gt;
+「adb start-server」と打つとonline になる。&lt;br&gt;
+これでエミュレータのときと同様にAndroidアプリケーションを実行すれば、端末の方で起動されるはずだ。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>日本語版 WordNet から辞書を作成する</title>
+      <link>https://kido0617.github.io/others/2013-02-01-wordnet/</link>
+      <pubDate>Fri, 01 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/others/2013-02-01-wordnet/</guid>
+      
+      <description>&lt;p&gt;前からフリーの英和辞書のデータが欲しいと思っていて、探していたのだが、&lt;a href=&#34;http://nlpwww.nict.go.jp/wn-ja/&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;WordNet&lt;/a&gt;というのがあるらしい。&lt;br&gt;
+wordnetは「ライセンスを保持していただければ、基本的に日本語ワードネットは無償で使用、複写、改変、頒布していただけます」らしい。&lt;br&gt;
+うれしい情報であるのだが、データ形式がsqlite3のデータベース形式なのである。しかも単純な形式じゃなく、いろいろと構造がややこしい。&lt;/p&gt;
+&lt;p&gt;出力結果はこんな感じ。&lt;br&gt;
+179	abase	凹ます,凹ませる,卑しめる&lt;br&gt;
+180	abasement	屈辱,恥,恥辱,汚辱&lt;br&gt;
+181	abash	まごつかせる,困らせる&lt;br&gt;
+182	abashment	内気,羞恥&lt;br&gt;
+183	abate	和らぐ,弛む,弱まる,消和,緩む,衰える,鎮まる,静まる&lt;br&gt;
+184	abatement	中断,中止,軽減&lt;br&gt;
+185	abatis	逆茂木&lt;/p&gt;
+&lt;p&gt;ちなみにSQLを逆にすれば和英も作れることに気づいた&lt;br&gt;
+4464	ほどなく	before long,presently,shortly,soon&lt;br&gt;
+4465	ほど近い	nearby&lt;br&gt;
+4466	ほのか	dim,faint,shadowy,vague,weak,wispy&lt;br&gt;
+4467	ほのぼの	darkly,faintly&lt;br&gt;
+4468	ほのめかし	glimmer,glimmering,inkling,intimation&lt;br&gt;
+4469	ほのめかす	adumbrate,insinuate,intimate&lt;br&gt;
+4470	ほの暗い	dim,subdued&lt;/p&gt;
+&lt;p&gt;Python3.2で動作確認。&lt;br&gt;
+動かすには日本語WordNetの&lt;a href=&#34;http://nlpwww.nict.go.jp/wn-ja/&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;サイト&lt;/a&gt;にあるダウンロードから「Japanese Wordnet and English WordNet in an sqlite3 database」を入手する必要がある。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# coding: UTF-8&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;sqlite3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;nn&#34;&gt;pprint&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;mode&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;       &lt;span class=&#34;c1&#34;&gt;#モード指定  0:英和  1:和英&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#ダウンロードした wnjpn.dbのパスを指定&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;conn&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sqlite3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;connect&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;./wnjpn.db&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;cur&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;conn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cursor&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;running&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mode&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;c1&#34;&gt;#英和用SQL&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;cur&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;execute&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;        SELECT DISTINCT word_en.wordid, word_en.lemma,  word_ja.lemma&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;        FROM sense sense_A, sense sense_B , word word_en , word word_ja &lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;        WHERE word_en.wordid = sense_A.wordid&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;            and sense_A.lang = &amp;#39;eng&amp;#39;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;            and sense_B.lang = &amp;#39;jpn&amp;#39;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;            and sense_A.synset = sense_B.synset&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;            and sense_B.wordid = word_ja.wordid&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;        ORDER BY word_en.lemma&amp;#34;&lt;/span&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;				&lt;span class=&#34;c1&#34;&gt;#和英用SQL&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;cur&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;execute&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;        SELECT DISTINCT word_ja.wordid, word_ja.lemma,  word_en.lemma&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;        FROM sense sense_A, sense sense_B , word word_en , word word_ja &lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;        WHERE word_ja.wordid = sense_A.wordid&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;            and sense_A.lang = &amp;#39;jpn&amp;#39;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;            and sense_B.lang = &amp;#39;eng&amp;#39;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;            and sense_A.synset = sense_B.synset&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;            and sense_B.wordid = word_en.wordid&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;        ORDER BY word_ja.lemma ASC&amp;#34;&lt;/span&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#ワードIDを整理しつつ、結果を一度配列に詰める。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#英単語に含まれるアンダーバーはスペースであるべきなので置換する(ハイフンはハイフンのままで良い)。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;before&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;word_list&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;row&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cur&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;before&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;row&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;word_list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;row&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;replace&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;_&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;row&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;replace&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;_&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)])&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;before&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;row&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;word_list&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;][&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;row&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;replace&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;_&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#タブ区切りでファイルに出力&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;open&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;./output.txt&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;w&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;word&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;word_list&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;write&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;str&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\t&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;word&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\t&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;word&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;close&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;done&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;cur&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;close&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;conn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;close&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>Visual C&#43;&#43; 実行時にコマンドプロンプトを消えないようにする</title>
+      <link>https://kido0617.github.io/others/2013-01-20-visual-c-prompt/</link>
+      <pubDate>Sun, 20 Jan 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/others/2013-01-20-visual-c-prompt/</guid>
+      
+      <description>&lt;h2 id=&#34;勝手に消えるウィンドウ&#34;&gt;勝手に消えるウィンドウ&lt;/h2&gt;
+&lt;p&gt;Visual C++ Express 2010 を使っている。&lt;br&gt;
+コンソールでデバッグ開始（F5)を実行すると、実行完了時に勝手にコマンドプロンプトが消えてしまう。&lt;br&gt;
+それを防ぐためにプログラムの最後にwhile(1)とかscanf()とかを書いたりする方法もあるが、途中でexit()した場合、効果ないので不便だ。&lt;/p&gt;
+&lt;p&gt;そこで、「デバッグなしで開始(CTRL+F5)」を使うと便利。これなら実行完了時に勝手にコマンドプロンプトが消えないで済む。&lt;/p&gt;
+&lt;h2 id=&#34;デバッグなしで開始を表示&#34;&gt;デバッグなしで開始を表示&lt;/h2&gt;
+&lt;p&gt;デフォルトで「デバッグなしで開始」は表示されていない。&lt;br&gt;
+「ツール」→「設定」→「上級者用の設定」をクリックしたら「デバッグ」のところに表示される。&lt;/p&gt;
+&lt;p&gt;やけにメニューにコマンドが少ないなと思っていたが、こういう設定があるようで。&lt;/p&gt;
+&lt;h2 id=&#34;追記&#34;&gt;追記&lt;/h2&gt;
+&lt;p&gt;普通は上記に加えて、以下の操作が必要なようだ。&lt;br&gt;
+メニューからプロジェクトのプロパティを選択し、構成プロパティのリンカーのシステムを選択。 サブシステムのリストからコンソール (/SUBSYSTEM:CONSOLE)を選択。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>コヒーレンシプロトコル</title>
+      <link>https://kido0617.github.io/others/2013-01-12-coherency/</link>
+      <pubDate>Tue, 15 Jan 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/others/2013-01-12-coherency/</guid>
+      
+      <description>&lt;p&gt;最近、コヒーレンシプロトコルについて調べていたのでまとめる。&lt;/p&gt;
+&lt;p&gt;MSI、MESI、MOSI、MOESIはマイナビジャーナルの記事がとても参考になるので、そっちを参照することとする。「マイナビ MESI」とかで検索すれば出る。&lt;/p&gt;
+&lt;p&gt;各プロトコルの内容を理解した後、ひとつ疑問が出る。L2キャッシュなど多階層のキャッシュの場合はどうするのだ。特に、最近のプロセッサは最下位層のL2かL3をコア共通で持っていることがある。そういう場合はどうするのか。&lt;br&gt;
+調べてもL1キャッシュしかない場合のことしか想定していないのが多い。&lt;br&gt;
+いろいろ調べた結果、「Cache Coherence Techniques  Silvia Lametti」というpdfがコヒーレンシのことについてよく書かれていて参考になった。&lt;/p&gt;
+&lt;p&gt;前提として、インクルーシブキャッシュを用いる。これにより最下位の共有キャッシュを見るだけで、上位層のデータの存在を確かめられる。&lt;br&gt;
+また、MOSI、MOESIプロトコルではキャッシュ同士でデータを転送し合うということを行っていたけれど、共有キャッシュの場合、L1 キャッシュでキャッシュミスが発生した場合，共有キャッシュにアクセスされる。だから、L1キャッシュ間での転送を行えないと思う。&lt;br&gt;
+大事な点は、Modified-But-Stale という状態を共有キャッシュに追加する必要がある点だ(stale とは古いとか無効の意味)。&lt;/p&gt;
+&lt;p&gt;インテルのNehalemだとMESIFらしい。 FはForward。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;coherency.png&#34; alt=&#34;coherency&#34;&gt;&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>文字認識　方向線素特徴量</title>
+      <link>https://kido0617.github.io/others/2013-01-15-word-recognition/</link>
+      <pubDate>Tue, 15 Jan 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/others/2013-01-15-word-recognition/</guid>
+      
+      <description>&lt;p&gt;方向線素特徴量が文字認識でかなり使われている方法のようで。&lt;/p&gt;
+&lt;p&gt;文字認識に使われる特徴量に方向線素特徴量というものがある。これは文字の線が縦，横，斜め上，斜め下の４方向のどの方向であるかを調べる方法である。例えば、下図のように64×64ドットの画像を16×16 ドットのマス目に分けて，それを8 ドットずつずらしながら，その16×16の領域内にある方向線素の数を調べる。この方法で調べると，7×7の領域を調べることになり，その領域で4方向の線素の数を調べるので，7×7×4の196次元の特徴量を抽出することになる。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;moji.png&#34; alt=&#34;文字例&#34;&gt;&lt;/p&gt;
+&lt;p&gt;補足として、方向線素の数を調べるとは2×2ドットの領域のドットの形から判断する。以下が例。&lt;br&gt;
+４ドットがすべて黒の場合は全ての方向を持つとする（でいいのかな）。この各方向の数をカウントすればよい。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;senso.png&#34; alt=&#34;方向線素&#34;&gt;&lt;/p&gt;
+&lt;p&gt;結果的に特徴量として、領域ごとに以下のような196次元のベクトルが取得できる。&lt;br&gt;
+[ 縦の数  横の数  斜下の数  斜上の数   縦の数  横の数  斜下の数  斜上の数・・・・]&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>fork で子プロセスを複数生成する</title>
+      <link>https://kido0617.github.io/others/2013-01-06-c-fork/</link>
+      <pubDate>Sun, 06 Jan 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/others/2013-01-06-c-fork/</guid>
+      
+      <description>&lt;p&gt;C言語のforkで子プロセスを複数生成する方法。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#define P_MAX  10             &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//プロセス数
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pid&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;P_MAX&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;cm&#34;&gt;/*
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;	子プロセス生成。子プロセスは次の行から始まるため、
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;	このような記述をすると、子プロセスが子プロセスを生成しないで済む。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;	*/&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;P_MAX&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pid&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;fork&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;())&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;P_MAX&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;			&lt;span class=&#34;c1&#34;&gt;//親プロセスはすべての子プロセスの終了を待つ
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;  &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;P_MAX&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			&lt;span class=&#34;nf&#34;&gt;wait&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;val&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pid&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;		&lt;span class=&#34;c1&#34;&gt;//子プロセス
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;child:%d&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;nf&#34;&gt;exit&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;else&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	    &lt;span class=&#34;nf&#34;&gt;perror&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;child process&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	    &lt;span class=&#34;nf&#34;&gt;exit&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      
+    </item>
+    
+  </channel>
+</rss>

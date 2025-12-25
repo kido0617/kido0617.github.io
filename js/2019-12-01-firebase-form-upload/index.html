@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">Firebaseのstorageにformの画像をアップロードする | kido</title>
+<meta property="og:title" content="Firebaseのstorageにformの画像をアップロードする | kido" />
+<meta name="twitter:title" content="Firebaseのstorageにformの画像をアップロードする | kido" />
+<meta itemprop="name" content="Firebaseのstorageにformの画像をアップロードする | kido" />
+<meta name="application-name" content="Firebaseのstorageにformの画像をアップロードする | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/js/2019-12-01-firebase-form-upload/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/js/2019-12-01-firebase-form-upload/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="Firebaseのstorageにformの画像をアップロードする">
+  <meta property="og:description" content="概要 type=&#39;file&#39;指定したinputから画像を選択し、formがsubmitされたときにFirebaseのstorageにその画像をアップロードします。
+その際、複数画像のアップロードにも対応します。
+storageのルール ルールは以下のようにします。
+バケットの/form-uploaded 配下にのみアップロードを許可し、MAX20MBの画像ファイルを許可する設定です。
+rules_version = &#39;2&#39;; service firebase.storage { match /b/{bucket}/o { match /form-uploaded/{id} { allow write : if request.resource.size &lt; 20 * 1024 * 1024 &amp;&amp; request.resource.contentType.matches(&#39;image/.*&#39;); } } } htmlとjs htmlとjsは以下です。
+&lt;html&gt; &lt;head&gt;&lt;/head&gt; &lt;body&gt; &lt;form&gt; &lt;input type=&#39;file&#39; accept=&#39;image/*&#39; multiple=&#39;multiple&#39; name=&#39;imgs[]&#39;&gt; &lt;button type=&#39;submit&#39;&gt;送信&lt;/button&gt; &lt;/form&gt; &lt;script src=&#39;https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js&#39;&gt;&lt;/script&gt; &lt;script src=&#39;https://www.gstatic.com/firebasejs/7.5.0/firebase-storage.js&#39;&gt;&lt;/script&gt; &lt;script&gt; //firebase初期化 var firebaseConfig = { apiKey: &#39;xxxxx&#39;, projectId: &#39;yyyyy&#39;, storageBucket: &#39;zzzzzz&#39;, } firebase.initializeApp(firebaseConfig); //formのsubmitにイベント設定 var form = document.querySelector(&#39;form&#39;); form.addEventListener(&#39;submit&#39;, function (e) { e.preventDefault(); var imgs = form.querySelector(&#39;input&#39;); var uploads = []; for (var file of imgs.files) { //選択したファイルのファイル名を使うが、場合によってはかぶるので注意 var storageRef = firebase.storage().ref(&#39;form-uploaded/&#39; &#43; file.name); uploads.push(storageRef.put(file)); } //すべての画像のアップロード完了を待つ Promise.all(uploads).then(function () { console.log(&#39;アップロード完了&#39;); }); }); &lt;/script&gt; &lt;/body&gt; &lt;/html&gt;">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="js">
+    <meta property="article:published_time" content="2019-12-01T00:00:00+00:00">
+    <meta property="article:modified_time" content="2019-12-01T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Firebaseのstorageにformの画像をアップロードする">
+  <meta name="twitter:description" content="概要 type=&#39;file&#39;指定したinputから画像を選択し、formがsubmitされたときにFirebaseのstorageにその画像をアップロードします。
+その際、複数画像のアップロードにも対応します。
+storageのルール ルールは以下のようにします。
+バケットの/form-uploaded 配下にのみアップロードを許可し、MAX20MBの画像ファイルを許可する設定です。
+rules_version = &#39;2&#39;; service firebase.storage { match /b/{bucket}/o { match /form-uploaded/{id} { allow write : if request.resource.size &lt; 20 * 1024 * 1024 &amp;&amp; request.resource.contentType.matches(&#39;image/.*&#39;); } } } htmlとjs htmlとjsは以下です。
+&lt;html&gt; &lt;head&gt;&lt;/head&gt; &lt;body&gt; &lt;form&gt; &lt;input type=&#39;file&#39; accept=&#39;image/*&#39; multiple=&#39;multiple&#39; name=&#39;imgs[]&#39;&gt; &lt;button type=&#39;submit&#39;&gt;送信&lt;/button&gt; &lt;/form&gt; &lt;script src=&#39;https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js&#39;&gt;&lt;/script&gt; &lt;script src=&#39;https://www.gstatic.com/firebasejs/7.5.0/firebase-storage.js&#39;&gt;&lt;/script&gt; &lt;script&gt; //firebase初期化 var firebaseConfig = { apiKey: &#39;xxxxx&#39;, projectId: &#39;yyyyy&#39;, storageBucket: &#39;zzzzzz&#39;, } firebase.initializeApp(firebaseConfig); //formのsubmitにイベント設定 var form = document.querySelector(&#39;form&#39;); form.addEventListener(&#39;submit&#39;, function (e) { e.preventDefault(); var imgs = form.querySelector(&#39;input&#39;); var uploads = []; for (var file of imgs.files) { //選択したファイルのファイル名を使うが、場合によってはかぶるので注意 var storageRef = firebase.storage().ref(&#39;form-uploaded/&#39; &#43; file.name); uploads.push(storageRef.put(file)); } //すべての画像のアップロード完了を待つ Promise.all(uploads).then(function () { console.log(&#39;アップロード完了&#39;); }); }); &lt;/script&gt; &lt;/body&gt; &lt;/html&gt;">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/js/2019-12-01-firebase-form-upload/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">Firebaseのstorageにformの画像をアップロードする</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/javascript" style="margin-right:10px;">JavaScript</a>
+                    <time datetime="2019-12-01T00:00:00&#43;00:00" itemprop="datePublished"> 2019/12/01 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <h2 id="概要">概要</h2>
+<p><code>type='file'</code>指定したinputから画像を選択し、formがsubmitされたときにFirebaseのstorageにその画像をアップロードします。<br>
+その際、複数画像のアップロードにも対応します。</p>
+<h2 id="storageのルール">storageのルール</h2>
+<p>ルールは以下のようにします。<br>
+バケットの<code>/form-uploaded</code> 配下にのみアップロードを許可し、MAX20MBの画像ファイルを許可する設定です。</p>
+<pre tabindex="0"><code>rules_version = &#39;2&#39;;
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /form-uploaded/{id} {
+      allow write : if request.resource.size &lt; 20 * 1024 * 1024
+                   &amp;&amp; request.resource.contentType.matches(&#39;image/.*&#39;);
+    }
+  }
+}
+</code></pre><h2 id="htmlとjs">htmlとjs</h2>
+<p>htmlとjsは以下です。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">form</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#39;file&#39;</span> <span class="na">accept</span><span class="o">=</span><span class="s">&#39;image/*&#39;</span> <span class="na">multiple</span><span class="o">=</span><span class="s">&#39;multiple&#39;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#39;imgs[]&#39;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">button</span> <span class="na">type</span><span class="o">=</span><span class="s">&#39;submit&#39;</span><span class="p">&gt;</span>送信<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#39;https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#39;https://www.gstatic.com/firebasejs/7.5.0/firebase-storage.js&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">//firebase初期化
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kd">var</span> <span class="nx">firebaseConfig</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">apiKey</span><span class="o">:</span> <span class="s1">&#39;xxxxx&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">projectId</span><span class="o">:</span> <span class="s1">&#39;yyyyy&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">storageBucket</span><span class="o">:</span> <span class="s1">&#39;zzzzzz&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">firebase</span><span class="p">.</span><span class="nx">initializeApp</span><span class="p">(</span><span class="nx">firebaseConfig</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">//formのsubmitにイベント設定
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kd">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">form</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">      <span class="kd">var</span> <span class="nx">imgs</span> <span class="o">=</span> <span class="nx">form</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="kd">var</span> <span class="nx">uploads</span> <span class="o">=</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">file</span> <span class="k">of</span> <span class="nx">imgs</span><span class="p">.</span><span class="nx">files</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="c1">//選択したファイルのファイル名を使うが、場合によってはかぶるので注意
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kd">var</span> <span class="nx">storageRef</span> <span class="o">=</span> <span class="nx">firebase</span><span class="p">.</span><span class="nx">storage</span><span class="p">().</span><span class="nx">ref</span><span class="p">(</span><span class="s1">&#39;form-uploaded/&#39;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">uploads</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">storageRef</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="nx">file</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">//すべての画像のアップロード完了を待つ
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nb">Promise</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">uploads</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;アップロード完了&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="p">});</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></span></code></pre></div>
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

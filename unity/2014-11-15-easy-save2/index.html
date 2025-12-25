@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">Easy Save2 を使ってみる | kido</title>
+<meta property="og:title" content="Easy Save2 を使ってみる | kido" />
+<meta name="twitter:title" content="Easy Save2 を使ってみる | kido" />
+<meta itemprop="name" content="Easy Save2 を使ってみる | kido" />
+<meta name="application-name" content="Easy Save2 を使ってみる | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/unity/2014-11-15-easy-save2/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/unity/2014-11-15-easy-save2/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="Easy Save2 を使ってみる">
+  <meta property="og:description" content="はじめに Unityではデータの保存にPlayerPrefsを使うことはできるけど、int, float, stringしか保存できないので、簡単な用途にしか使えない。
+データの保存を簡単にできるアセットに Easy Save2 がある。
+これをセールで安かったため、購入し使ってみることにした。
+対応しているプラットフォーム PC、Mac、Web、Linux、iOS、Android、Windows Phone 8、Windows Store となっており、ひと通り動くようだ。
+Webプレイヤーはデータの保存容量に1MBの制限があるみたい。
+対応している型 Supported Typesを見れば一目瞭然。
+ListやDictionaryなどのコレクション系はもちろん、VectorとかTransofrmもいけるらしい。
+実際にセーブ・ロードする 特に難しいこともなく、PlayerPrefsを使う感覚と同じ感じ。リストとtransformのセーブとロードはこんな感じ。
+//リストのセーブ. List&lt;string&gt; strs = new List&lt;string&gt;(); strs.Add(&#34;abc&#34;); strs.Add(&#34;def&#34;); ES2.Save(strs, &#34;stringList&#34;); //リストのロード. List&lt;string&gt; loadStrings = ES2.LoadList&lt;string&gt;(&#34;stringList&#34;); //transformのセーブ. transform.position = new Vector3(0.5f, 1f, 2f); ES2.Save(transform, &#34;transform&#34;); //transformのロード. Transform t = ES2.Load&lt;Transform&gt;(&#34;transform&#34;); 保存場所 Application.persistentDataPathがデフォルトの保存場所のようだ。
+Windowsだと C:\Users\xxxx\AppData\LocalLow{Company Name}{Product Name} 。
+Company Name と Product Name は Player Settings の項目にあるやつ。
+もちろん、保存場所を変更することができ、ビルドしてできたexeファイルと同じ場所に保存することも可能。
+iOSやAndroidの保存場所は下記が参考になる。
+【Unity3D】ファイル保存パス
+データファイル 保存場所を開くと、前述で試したファイルが存在しているのがわかる。
+keyごとにファイルが生成されているが、タグという機能を使うと1つのファイルにまとめることができる。
+ES2.Save(strs, &#34;someFile?tag=stringList&#34;); ES2.Save(transform, &#34;someFile?tag=transform&#34;); こうすると、someFile というファイルだけが生成される。
+暗号化 ファイルの暗号化にも対応している。こんな感じ。
+ES2.Save(strs, &#34;stringList?encrypt=true&amp;password=test&#34;); loadStrings = ES2.LoadList&lt;string&gt;(&#34;stringList?encrypt=true&amp;password=test&#34;); loadStrings = ES2.LoadList&lt;string&gt;(&#34;stringList&#34;); //エラー. 毎回、設定するのが面倒な場合は、デフォルト設定で暗号化をONにすれば良い。
+Projectのところで右クリックすると、Easy Save2 用のメニューが追加されているので、「Add Default Settings Object to Scene」 を選択すればデフォルト設定ができる。">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="unity">
+    <meta property="article:published_time" content="2014-11-15T00:00:00+00:00">
+    <meta property="article:modified_time" content="2014-11-15T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Easy Save2 を使ってみる">
+  <meta name="twitter:description" content="はじめに Unityではデータの保存にPlayerPrefsを使うことはできるけど、int, float, stringしか保存できないので、簡単な用途にしか使えない。
+データの保存を簡単にできるアセットに Easy Save2 がある。
+これをセールで安かったため、購入し使ってみることにした。
+対応しているプラットフォーム PC、Mac、Web、Linux、iOS、Android、Windows Phone 8、Windows Store となっており、ひと通り動くようだ。
+Webプレイヤーはデータの保存容量に1MBの制限があるみたい。
+対応している型 Supported Typesを見れば一目瞭然。
+ListやDictionaryなどのコレクション系はもちろん、VectorとかTransofrmもいけるらしい。
+実際にセーブ・ロードする 特に難しいこともなく、PlayerPrefsを使う感覚と同じ感じ。リストとtransformのセーブとロードはこんな感じ。
+//リストのセーブ. List&lt;string&gt; strs = new List&lt;string&gt;(); strs.Add(&#34;abc&#34;); strs.Add(&#34;def&#34;); ES2.Save(strs, &#34;stringList&#34;); //リストのロード. List&lt;string&gt; loadStrings = ES2.LoadList&lt;string&gt;(&#34;stringList&#34;); //transformのセーブ. transform.position = new Vector3(0.5f, 1f, 2f); ES2.Save(transform, &#34;transform&#34;); //transformのロード. Transform t = ES2.Load&lt;Transform&gt;(&#34;transform&#34;); 保存場所 Application.persistentDataPathがデフォルトの保存場所のようだ。
+Windowsだと C:\Users\xxxx\AppData\LocalLow{Company Name}{Product Name} 。
+Company Name と Product Name は Player Settings の項目にあるやつ。
+もちろん、保存場所を変更することができ、ビルドしてできたexeファイルと同じ場所に保存することも可能。
+iOSやAndroidの保存場所は下記が参考になる。
+【Unity3D】ファイル保存パス
+データファイル 保存場所を開くと、前述で試したファイルが存在しているのがわかる。
+keyごとにファイルが生成されているが、タグという機能を使うと1つのファイルにまとめることができる。
+ES2.Save(strs, &#34;someFile?tag=stringList&#34;); ES2.Save(transform, &#34;someFile?tag=transform&#34;); こうすると、someFile というファイルだけが生成される。
+暗号化 ファイルの暗号化にも対応している。こんな感じ。
+ES2.Save(strs, &#34;stringList?encrypt=true&amp;password=test&#34;); loadStrings = ES2.LoadList&lt;string&gt;(&#34;stringList?encrypt=true&amp;password=test&#34;); loadStrings = ES2.LoadList&lt;string&gt;(&#34;stringList&#34;); //エラー. 毎回、設定するのが面倒な場合は、デフォルト設定で暗号化をONにすれば良い。
+Projectのところで右クリックすると、Easy Save2 用のメニューが追加されているので、「Add Default Settings Object to Scene」 を選択すればデフォルト設定ができる。">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/unity/2014-11-15-easy-save2/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">Easy Save2 を使ってみる</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/unity" style="margin-right:10px;">Unity</a>
+                    <time datetime="2014-11-15T00:00:00&#43;00:00" itemprop="datePublished"> 2014/11/15 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <h2 id="はじめに">はじめに</h2>
+<p>Unityではデータの保存にPlayerPrefsを使うことはできるけど、int, float, stringしか保存できないので、簡単な用途にしか使えない。<br>
+データの保存を簡単にできるアセットに <a href="https://www.assetstore.unity3d.com/jp/#!/content/768" class="blankA" target="_blank" rel="noopener noreferrer">Easy Save2</a> がある。<br>
+これをセールで安かったため、購入し使ってみることにした。</p>
+<h2 id="対応しているプラットフォーム">対応しているプラットフォーム</h2>
+<p>PC、Mac、Web、Linux、iOS、Android、Windows Phone 8、Windows Store となっており、ひと通り動くようだ。<br>
+Webプレイヤーはデータの保存容量に1MBの制限があるみたい。</p>
+<h2 id="対応している型">対応している型</h2>
+<p><a href="http://moodkie.com/easysave/documentation/supported-types/" class="blankA" target="_blank" rel="noopener noreferrer">Supported Types</a>を見れば一目瞭然。<br>
+ListやDictionaryなどのコレクション系はもちろん、VectorとかTransofrmもいけるらしい。</p>
+<h2 id="実際にセーブロードする">実際にセーブ・ロードする</h2>
+<p>特に難しいこともなく、PlayerPrefsを使う感覚と同じ感じ。リストとtransformのセーブとロードはこんな感じ。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="c1">//リストのセーブ.</span>
+</span></span><span class="line"><span class="cl"><span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">strs</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
+</span></span><span class="line"><span class="cl"><span class="n">strs</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&#34;abc&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">strs</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&#34;def&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">ES2</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="n">strs</span><span class="p">,</span> <span class="s">&#34;stringList&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//リストのロード.</span>
+</span></span><span class="line"><span class="cl"><span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">loadStrings</span> <span class="p">=</span> <span class="n">ES2</span><span class="p">.</span><span class="n">LoadList</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="s">&#34;stringList&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//transformのセーブ.</span>
+</span></span><span class="line"><span class="cl"><span class="n">transform</span><span class="p">.</span><span class="n">position</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">(</span><span class="m">0.5f</span><span class="p">,</span> <span class="m">1f</span><span class="p">,</span> <span class="m">2f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">ES2</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="s">&#34;transform&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//transformのロード.</span>
+</span></span><span class="line"><span class="cl"><span class="n">Transform</span> <span class="n">t</span> <span class="p">=</span> <span class="n">ES2</span><span class="p">.</span><span class="n">Load</span><span class="p">&lt;</span><span class="n">Transform</span><span class="p">&gt;(</span><span class="s">&#34;transform&#34;</span><span class="p">);</span>
+</span></span></code></pre></div><h2 id="保存場所">保存場所</h2>
+<p><a href="http://docs.unity3d.com/ScriptReference/Application-persistentDataPath.html" class="blankA" target="_blank" rel="noopener noreferrer">Application.persistentDataPath</a>がデフォルトの保存場所のようだ。<br>
+Windowsだと C:\Users\xxxx\AppData\LocalLow{Company Name}{Product Name} 。<br>
+Company Name と Product Name は Player Settings の項目にあるやつ。<br>
+もちろん、保存場所を変更することができ、ビルドしてできたexeファイルと同じ場所に保存することも可能。</p>
+<p>iOSやAndroidの保存場所は下記が参考になる。<br>
+<a href="http://qiita.com/bokkuri_orz/items/c37b2fd543458a189d4d" class="blankA" target="_blank" rel="noopener noreferrer">【Unity3D】ファイル保存パス</a></p>
+<h2 id="データファイル">データファイル</h2>
+<p>保存場所を開くと、前述で試したファイルが存在しているのがわかる。<br>
+<img src="easy-save-folder.jpg" alt="保存場所"></p>
+<p>keyごとにファイルが生成されているが、タグという機能を使うと1つのファイルにまとめることができる。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="n">ES2</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="n">strs</span><span class="p">,</span> <span class="s">&#34;someFile?tag=stringList&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">ES2</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="s">&#34;someFile?tag=transform&#34;</span><span class="p">);</span>
+</span></span></code></pre></div><p>こうすると、someFile というファイルだけが生成される。</p>
+<h2 id="暗号化">暗号化</h2>
+<p>ファイルの暗号化にも対応している。こんな感じ。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="n">ES2</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="n">strs</span><span class="p">,</span> <span class="s">&#34;stringList?encrypt=true&amp;password=test&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">loadStrings</span> <span class="p">=</span> <span class="n">ES2</span><span class="p">.</span><span class="n">LoadList</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="s">&#34;stringList?encrypt=true&amp;password=test&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">loadStrings</span> <span class="p">=</span> <span class="n">ES2</span><span class="p">.</span><span class="n">LoadList</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="s">&#34;stringList&#34;</span><span class="p">);</span> <span class="c1">//エラー.</span>
+</span></span></code></pre></div><p>毎回、設定するのが面倒な場合は、デフォルト設定で暗号化をONにすれば良い。<br>
+Projectのところで右クリックすると、Easy Save2 用のメニューが追加されているので、「Add Default Settings Object to Scene」 を選択すればデフォルト設定ができる。</p>
+<p>ざっと紹介したけど、紹介したことは全部<a href="http://moodkie.com/easysave/documentation/" target="_blank">Easy Save 2 Documentation</a>に載っているので、最新の情報や詳しいことはそちらを参照してほしい。</p>
+<h2 id="応用">応用</h2>
+<p><a href="/unity/2015-01-12-easy-save2-serialize">Easy Save2 で シリアライズされたクラスを保存する</a></p>
+<h2 id="確認バージョン">確認バージョン</h2>
+<p>Unity 4.6</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

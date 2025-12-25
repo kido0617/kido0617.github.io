@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">SpineのSkeletonAnimationとSkeletonMecanimについて | kido</title>
+<meta property="og:title" content="SpineのSkeletonAnimationとSkeletonMecanimについて | kido" />
+<meta name="twitter:title" content="SpineのSkeletonAnimationとSkeletonMecanimについて | kido" />
+<meta itemprop="name" content="SpineのSkeletonAnimationとSkeletonMecanimについて | kido" />
+<meta name="application-name" content="SpineのSkeletonAnimationとSkeletonMecanimについて | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/spine/2021-06-24-spine-animation/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/spine/2021-06-24-spine-animation/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="SpineのSkeletonAnimationとSkeletonMecanimについて">
+  <meta property="og:description" content="基本的に以下のURLのドキュメントを参考にしています。
+spine-unity Runtime Documentation Spine Runtimesガイド Unityで使用するSpineコンポーネント UnityでSpineで作成したアニメーションを再生するためのコンポーネントとして以下の3つが用意されています。
+SkeletonAnimation SkeletonGraphic (UI) SkeletonMecanim SkeletonGraphic (UI)に関しては名前のとおりUGUIのcanvasに使用するものなので用途は限られているのですが、問題はSkeletonAnimationとSkeletonMecanimです。
+Spineのアニメーションを再生するにはどちらかを使う必要がありますが、調べたり実装したりして考えたことを書いておきます。
+SkeletonAnimation or SkeletonMecanim 公式で推奨されているのはSkeletonAnimationですが、それぞれ比べていきます。
+アニメーションの再現 Mecanimを使用した場合、Spineのエディタのプレビューで再生したものと同じになることを保証しない記載があります。
+また、アニメーション間のトランジションを最初のフレームに追加のキーを設定する必要があります。
+それらのキーはExport時にオプションの Animation clean up をONにすると消されるので、そのオプションはMecanimの場合使用できません。
+詳しくはこちら
+トランジションはただでさえ、見た目を整える難しさがあるので、さらに考慮すべき項目が増えるのはちょっとしんどい印象です。
+機能面 トラック
+SkeletonAnimation : アニメーション再生のAPI使用時に指定する
+SkeletonMecanim : Animatorウィンドウのレイヤーで指定する
+ミックス
+SkeletonAnimation : Skeleton Data Assetで設定しておくか、アニメーション再生時TrackEntryを介して指定する
+SkeletonMecanim : AnimatorウィンドウのTransitionの各値で設定する
+アルファ
+SkeletonAnimation : アニメーション再生時TrackEntryを介して指定する
+SkeletonMecanim : レイヤーのweightで指定する
+Spineで設定したイベント
+SkeletonAnimation : AnimationStateのEventのdelegateに追加して受け取る
+SkeletonMecanim : Animation Clipのイベントとして設定される
+どちらも基本的な機能は備えています。
+SkeletonAnimationはstarted, interrupted, completed, ended, disposedといった5つのイベントを受け取ることができ、アニメーション再生時のイベントの扱いが便利そうだと思いました。">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="spine">
+    <meta property="article:published_time" content="2021-06-24T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-06-24T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="SpineのSkeletonAnimationとSkeletonMecanimについて">
+  <meta name="twitter:description" content="基本的に以下のURLのドキュメントを参考にしています。
+spine-unity Runtime Documentation Spine Runtimesガイド Unityで使用するSpineコンポーネント UnityでSpineで作成したアニメーションを再生するためのコンポーネントとして以下の3つが用意されています。
+SkeletonAnimation SkeletonGraphic (UI) SkeletonMecanim SkeletonGraphic (UI)に関しては名前のとおりUGUIのcanvasに使用するものなので用途は限られているのですが、問題はSkeletonAnimationとSkeletonMecanimです。
+Spineのアニメーションを再生するにはどちらかを使う必要がありますが、調べたり実装したりして考えたことを書いておきます。
+SkeletonAnimation or SkeletonMecanim 公式で推奨されているのはSkeletonAnimationですが、それぞれ比べていきます。
+アニメーションの再現 Mecanimを使用した場合、Spineのエディタのプレビューで再生したものと同じになることを保証しない記載があります。
+また、アニメーション間のトランジションを最初のフレームに追加のキーを設定する必要があります。
+それらのキーはExport時にオプションの Animation clean up をONにすると消されるので、そのオプションはMecanimの場合使用できません。
+詳しくはこちら
+トランジションはただでさえ、見た目を整える難しさがあるので、さらに考慮すべき項目が増えるのはちょっとしんどい印象です。
+機能面 トラック
+SkeletonAnimation : アニメーション再生のAPI使用時に指定する
+SkeletonMecanim : Animatorウィンドウのレイヤーで指定する
+ミックス
+SkeletonAnimation : Skeleton Data Assetで設定しておくか、アニメーション再生時TrackEntryを介して指定する
+SkeletonMecanim : AnimatorウィンドウのTransitionの各値で設定する
+アルファ
+SkeletonAnimation : アニメーション再生時TrackEntryを介して指定する
+SkeletonMecanim : レイヤーのweightで指定する
+Spineで設定したイベント
+SkeletonAnimation : AnimationStateのEventのdelegateに追加して受け取る
+SkeletonMecanim : Animation Clipのイベントとして設定される
+どちらも基本的な機能は備えています。
+SkeletonAnimationはstarted, interrupted, completed, ended, disposedといった5つのイベントを受け取ることができ、アニメーション再生時のイベントの扱いが便利そうだと思いました。">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/spine/2021-06-24-spine-animation/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">SpineのSkeletonAnimationとSkeletonMecanimについて</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/spine" style="margin-right:10px;">Spine</a>
+                    <time datetime="2021-06-24T00:00:00&#43;00:00" itemprop="datePublished"> 2021/06/24 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <p>基本的に以下のURLのドキュメントを参考にしています。</p>
+<ul>
+<li><a href="http://ja.esotericsoftware.com/spine-unity" class="blankA" target="_blank" rel="noopener noreferrer">spine-unity Runtime Documentation</a></li>
+<li><a href="http://ja.esotericsoftware.com/spine-runtimes-guide" class="blankA" target="_blank" rel="noopener noreferrer">Spine Runtimesガイド</a></li>
+</ul>
+<h2 id="unityで使用するspineコンポーネント">Unityで使用するSpineコンポーネント</h2>
+<p>UnityでSpineで作成したアニメーションを再生するためのコンポーネントとして以下の3つが用意されています。</p>
+<ul>
+<li>SkeletonAnimation</li>
+<li>SkeletonGraphic (UI)</li>
+<li>SkeletonMecanim</li>
+</ul>
+<p>SkeletonGraphic (UI)に関しては名前のとおりUGUIのcanvasに使用するものなので用途は限られているのですが、問題はSkeletonAnimationとSkeletonMecanimです。<br>
+Spineのアニメーションを再生するにはどちらかを使う必要がありますが、調べたり実装したりして考えたことを書いておきます。</p>
+<h2 id="skeletonanimation-or-skeletonmecanim">SkeletonAnimation or SkeletonMecanim</h2>
+<p>公式で推奨されているのはSkeletonAnimationですが、それぞれ比べていきます。</p>
+<h3 id="アニメーションの再現">アニメーションの再現</h3>
+<p>Mecanimを使用した場合、Spineのエディタのプレビューで再生したものと同じになることを保証しない記載があります。<br>
+また、アニメーション間のトランジションを最初のフレームに追加のキーを設定する必要があります。<br>
+それらのキーはExport時にオプションの Animation clean up をONにすると消されるので、そのオプションはMecanimの場合使用できません。<br>
+詳しくは<a href="http://esotericsoftware.com/spine-unity#Required-Additional-Keys" class="blankA" target="_blank" rel="noopener noreferrer">こちら</a></p>
+<p>トランジションはただでさえ、見た目を整える難しさがあるので、さらに考慮すべき項目が増えるのはちょっとしんどい印象です。</p>
+<h3 id="機能面">機能面</h3>
+<ul>
+<li>
+<p>トラック<br>
+SkeletonAnimation : アニメーション再生のAPI使用時に指定する<br>
+SkeletonMecanim : Animatorウィンドウのレイヤーで指定する</p>
+</li>
+<li>
+<p>ミックス<br>
+SkeletonAnimation : Skeleton Data Assetで設定しておくか、アニメーション再生時TrackEntryを介して指定する<br>
+SkeletonMecanim : AnimatorウィンドウのTransitionの各値で設定する</p>
+</li>
+<li>
+<p>アルファ<br>
+SkeletonAnimation : アニメーション再生時TrackEntryを介して指定する<br>
+SkeletonMecanim : レイヤーのweightで指定する</p>
+</li>
+<li>
+<p>Spineで設定したイベント<br>
+SkeletonAnimation : AnimationStateのEventのdelegateに追加して受け取る<br>
+SkeletonMecanim : Animation Clipのイベントとして設定される</p>
+</li>
+</ul>
+<p>どちらも基本的な機能は備えています。</p>
+<p>SkeletonAnimationは<a href="http://ja.esotericsoftware.com/spine-unity#Processing-AnimationState-Events" class="blankA" target="_blank" rel="noopener noreferrer">started, interrupted, completed, ended, disposed</a>といった5つのイベントを受け取ることができ、アニメーション再生時のイベントの扱いが便利そうだと思いました。</p>
+<p>また、SkeletonAnimationは<a href="http://ja.esotericsoftware.com/spine-api-reference#TrackEntry" class="blankA" target="_blank" rel="noopener noreferrer">TrackEntry</a>を介したアニメーションの細かい設定ができる点も気になります。<br>
+attachmentのON/OFFやdrawOrderの順番の変更、eventの発火といった徐々に変化せずミックスができない項目に対してしきい値を設定できます。</p>
+<h3 id="パフォーマンス面">パフォーマンス面</h3>
+<p>SkeletonMecanimはSkeletonAnimatonに比べるとパフォーマンスで劣るそうです。<br>
+ゲームプレイに影響ある程ではないと思いますが、以下のフォーラムで書かれているように大量に生成したときにパフォーマンスに差が出たという話があります。<br>
+<a href="http://ja.esotericsoftware.com/forum/Performance-Analysis-of-Mecanim-vs-Animation-15046" class="blankA" target="_blank" rel="noopener noreferrer">Performance Analysis of Mecanim vs Animation</a></p>
+<p>両者の差がパフォーマンスにとってクリティカルになるケースは稀な気がします。<br>
+正直多少のパフォーマンスを犠牲にしてでもMecanimのようにGUIでアニメーションの遷移を設定出来たほうが良いという気持ちはあります。</p>
+<h3 id="ステートマシン">ステートマシン</h3>
+<p>Mecanimを使う最大のメリットはやはりGUIでアニメーションの遷移を定義できることです。<br>
+スパゲッティな遷移になりがちとはいえ、アニメーションの遷移をステートマシンで表現できるのは強みです。<br>
+逆にSkeletonAnimationを使う際の一番の問題点はこれで、アニメーションを変化させるのにプログラムからAPIを呼ぶしかないのです。<br>
+SkeletonAnimationを使いつつ、Mecanimnのようなステートマシンを使いたいというニーズはあり、以下のフォーラムのように<a href="https://assetstore.unity.com/packages/tools/visual-scripting/nodecanvas-14914?locale=ja-JP" class="blankA" target="_blank" rel="noopener noreferrer">NodeCanvas</a>というアセットを使う方法が提案されています。</p>
+<p><a href="http://ja.esotericsoftware.com/forum/Spine-NodeCanvas-6366" class="blankA" target="_blank" rel="noopener noreferrer">Spine + NodeCanvas?</a></p>
+<p>NodeCanvasは少し高価ですが、触った感じ、確かにステートマシンでアニメーションを管理できますし、使いやすいアセットです。<br>
+上記フォーラムで紹介されているようなSpine用のアクションを自分で作る必要があるものの、一つの解であると言えそうです。<br>
+同様にステートマシンを扱うPlaymakerのSpine実装も存在しているのですが、PlaymakerでMecanimのようなアニメーション遷移を作るのは難しいです。</p>
+<h2 id="まとめ">まとめ</h2>
+<p>どちらもメリット・デメリットあるのでどちらを採用するかは一概に言えない感じでした。<br>
+個人的にはSkeletonAimatonを使っていこうかと思っています。やはり公式で推奨されているなら・・・。</p>
+<h2 id="使用バージョン">使用バージョン</h2>
+<p>Unity 2019.4.24<br>
+Spine 3.8.99</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

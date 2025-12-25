@@ -1,0 +1,101 @@
+.author {
+  margin-bottom: 3rem !important;
+  margin-top: 3rem !important;
+
+  @media screen and (max-width: 768px) {
+    margin-top: 6.3em !important;
+  }
+}
+
+.blankA::after {
+  content: "" !important;
+}
+
+.footer_social-icons svg {
+  position: relative;
+  top: 6px;
+}
+
+.menu .author-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 100%;
+  user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  object-fit: cover;
+}
+
+.footer_social-icons .mailIcon:hover {
+  color: #888a90 !important;
+}
+
+
+.mygame {
+  margin-top: 3rem;
+
+  a:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .mygame-embed--desktop {
+    display: none;
+  }
+
+  .mygame-embed--mobile {
+    display: block;
+  }
+}
+
+@media (min-width: 769px) {
+  .mygame-embed--desktop {
+    display: block;
+  }
+
+  .mygame-embed--mobile {
+    display: none;
+  }
+}
+
+.mygame iframe {
+  margin-top: 10px;
+}
+
+
+
+.switch-link {
+  position: relative;
+  top: -26px;
+}
+
+.nintendo-link {
+  height: 60px;
+}
+
+.game--mobile {
+  margin-top: 20px;
+
+  .nintendo-link {
+    margin-left: 20px;
+  }
+
+  .game-link--mobile {
+    margin-top: 10px;
+  }
+}
+
+.dark .steam-banner-b {
+  display: none;
+}
+
+.light .steam-banner-w {
+  display: none;
+}
+
+.steam-link-mobile {
+  width: 160px;
+}

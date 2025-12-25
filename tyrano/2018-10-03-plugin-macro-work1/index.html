@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">最近作ったティラノスクリプトのプラグインとマクロ | kido</title>
+<meta property="og:title" content="最近作ったティラノスクリプトのプラグインとマクロ | kido" />
+<meta name="twitter:title" content="最近作ったティラノスクリプトのプラグインとマクロ | kido" />
+<meta itemprop="name" content="最近作ったティラノスクリプトのプラグインとマクロ | kido" />
+<meta name="application-name" content="最近作ったティラノスクリプトのプラグインとマクロ | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/tyrano/2018-10-03-plugin-macro-work1/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/tyrano/2018-10-03-plugin-macro-work1/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="最近作ったティラノスクリプトのプラグインとマクロ">
+  <meta property="og:description" content="はじめに 最近頼まれて作ったティラノスクリプトのプラグインとマクロたちをまとめました。
+限定的な用途のものも結構あります。
+ティラノスクリプト バージョン471bで動作を確認しています。
+自動的に喋っているキャラが前面に来るプラグイン chara_configタグを使うと喋っているキャラの明るさを変えるような演出はできます。
+それに加えて、喋っているキャラを前面にする機能を追加します。
+喋っているキャラのz-indexをキャラ内で最大にします。
+ダウンロードはこちら
+targetFocusZIndexというフォルダが自動的に喋っているキャラが前面に来るプラグインです。
+導入するだけで機能は有効になりますが、On、Offする機能があります。
+・OFFにしたいとき
+[offTargetFocusZIndex]
+・OFFからONにしたいとき
+[onTargetFocusZIndex]
+アニメーション待ちのカウントを0にしてフリーズを抑止するマクロ 前にアニメーション待ちのwaタグでフリーズするケースで説明しました。
+waタグはアニメーションしている数が0になるまで待つタグですが、そのアニメーションしている数が0にならないケースが存在し、フリーズします。
+そこで、強制的にこの数を0にするのがこのマクロです。
+シーンの遷移時に呼ぶことによって、アニメーションが完了しない不慮の事態を別のシーンに持ち越すことがなくなります。
+[macro name=&#34;clearAnimCount&#34;] [eval exp=&#34;TYRANO.kag.tmp.num_anim=0&#34;] [endmacro] cmだとbuttonが全て消えてしまうので、一部だけ消すマクロ buttonタグはすべてフリーレイヤーに配置され、cmタグを呼ぶことによって消去されます。
+しかし、一部のボタンだけ消したいケースがあったため、buttonタグのnameを指定してbuttonを消すマクロを用意しました。
+[macro name=&#34;cfl&#34;] [iscript] var fl = TYRANO.kag.layer.getFreeLayer(); if(mp.include) { fl.find(&#34;.&#34; &#43; mp.include).remove(); }else if(mp.exclude){ fl.find(&#34;:not(.&#34; &#43; mp.exclude &#43; &#34;)&#34;).remove(); } [endscript] [endmacro] 例えば、以下のようなbuttonタグがあったとき、group1のボタンだけ消したい場合は、
+[cfl include=&#34;group1&#34;] とします。
+逆にgroup1以外を消したい場合は、
+[cfl exclude=&#34;group1&#34;] とします。
+[button graphic=&#34;button1.png&#34; x=&#34;100&#34; y=&#34;100&#34; target=&#34;t1&#34; name=&#34;btn1,group1&#34;] [button graphic=&#34;button1.png&#34; x=&#34;100&#34; y=&#34;200&#34; target=&#34;t2&#34; name=&#34;btn2,group1&#34;] [button graphic=&#34;button1.png&#34; x=&#34;100&#34; y=&#34;300&#34; target=&#34;t3&#34; name=&#34;btn3,group2&#34;] [button graphic=&#34;button1.png&#34; x=&#34;100&#34; y=&#34;400&#34; target=&#34;t4&#34; name=&#34;btn4,group2&#34;] キャラのz-indexを変えるマクロ chara_showでキャラを登場時にz-indexを指定することはできますが、途中で変えたいという要望に対応したマクロです。">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="tyrano">
+    <meta property="article:published_time" content="2018-10-03T00:00:00+00:00">
+    <meta property="article:modified_time" content="2018-10-03T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="最近作ったティラノスクリプトのプラグインとマクロ">
+  <meta name="twitter:description" content="はじめに 最近頼まれて作ったティラノスクリプトのプラグインとマクロたちをまとめました。
+限定的な用途のものも結構あります。
+ティラノスクリプト バージョン471bで動作を確認しています。
+自動的に喋っているキャラが前面に来るプラグイン chara_configタグを使うと喋っているキャラの明るさを変えるような演出はできます。
+それに加えて、喋っているキャラを前面にする機能を追加します。
+喋っているキャラのz-indexをキャラ内で最大にします。
+ダウンロードはこちら
+targetFocusZIndexというフォルダが自動的に喋っているキャラが前面に来るプラグインです。
+導入するだけで機能は有効になりますが、On、Offする機能があります。
+・OFFにしたいとき
+[offTargetFocusZIndex]
+・OFFからONにしたいとき
+[onTargetFocusZIndex]
+アニメーション待ちのカウントを0にしてフリーズを抑止するマクロ 前にアニメーション待ちのwaタグでフリーズするケースで説明しました。
+waタグはアニメーションしている数が0になるまで待つタグですが、そのアニメーションしている数が0にならないケースが存在し、フリーズします。
+そこで、強制的にこの数を0にするのがこのマクロです。
+シーンの遷移時に呼ぶことによって、アニメーションが完了しない不慮の事態を別のシーンに持ち越すことがなくなります。
+[macro name=&#34;clearAnimCount&#34;] [eval exp=&#34;TYRANO.kag.tmp.num_anim=0&#34;] [endmacro] cmだとbuttonが全て消えてしまうので、一部だけ消すマクロ buttonタグはすべてフリーレイヤーに配置され、cmタグを呼ぶことによって消去されます。
+しかし、一部のボタンだけ消したいケースがあったため、buttonタグのnameを指定してbuttonを消すマクロを用意しました。
+[macro name=&#34;cfl&#34;] [iscript] var fl = TYRANO.kag.layer.getFreeLayer(); if(mp.include) { fl.find(&#34;.&#34; &#43; mp.include).remove(); }else if(mp.exclude){ fl.find(&#34;:not(.&#34; &#43; mp.exclude &#43; &#34;)&#34;).remove(); } [endscript] [endmacro] 例えば、以下のようなbuttonタグがあったとき、group1のボタンだけ消したい場合は、
+[cfl include=&#34;group1&#34;] とします。
+逆にgroup1以外を消したい場合は、
+[cfl exclude=&#34;group1&#34;] とします。
+[button graphic=&#34;button1.png&#34; x=&#34;100&#34; y=&#34;100&#34; target=&#34;t1&#34; name=&#34;btn1,group1&#34;] [button graphic=&#34;button1.png&#34; x=&#34;100&#34; y=&#34;200&#34; target=&#34;t2&#34; name=&#34;btn2,group1&#34;] [button graphic=&#34;button1.png&#34; x=&#34;100&#34; y=&#34;300&#34; target=&#34;t3&#34; name=&#34;btn3,group2&#34;] [button graphic=&#34;button1.png&#34; x=&#34;100&#34; y=&#34;400&#34; target=&#34;t4&#34; name=&#34;btn4,group2&#34;] キャラのz-indexを変えるマクロ chara_showでキャラを登場時にz-indexを指定することはできますが、途中で変えたいという要望に対応したマクロです。">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/tyrano/2018-10-03-plugin-macro-work1/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">最近作ったティラノスクリプトのプラグインとマクロ</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/%E3%83%86%E3%82%A3%E3%83%A9%E3%83%8E%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88" style="margin-right:10px;">ティラノスクリプト</a>
+                    <time datetime="2018-10-03T00:00:00&#43;00:00" itemprop="datePublished"> 2018/10/03 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <h2 id="はじめに">はじめに</h2>
+<p>最近頼まれて作ったティラノスクリプトのプラグインとマクロたちをまとめました。<br>
+限定的な用途のものも結構あります。<br>
+<code>ティラノスクリプト バージョン471b</code>で動作を確認しています。</p>
+<h2 id="自動的に喋っているキャラが前面に来るプラグイン">自動的に喋っているキャラが前面に来るプラグイン</h2>
+<p><code>chara_config</code>タグを使うと喋っているキャラの明るさを変えるような演出はできます。<br>
+それに加えて、喋っているキャラを前面にする機能を追加します。<br>
+喋っているキャラの<code>z-index</code>をキャラ内で最大にします。</p>
+<p>ダウンロードは<a href="https://github.com/kido0617/tyrano-plugin/archive/master.zip" class="blankA" target="_blank" rel="noopener noreferrer">こちら</a><br>
+<code>targetFocusZIndex</code>というフォルダが自動的に喋っているキャラが前面に来るプラグインです。</p>
+<p>導入するだけで機能は有効になりますが、On、Offする機能があります。<br>
+・OFFにしたいとき<br>
+<code>[offTargetFocusZIndex]</code></p>
+<p>・OFFからONにしたいとき<br>
+<code>[onTargetFocusZIndex]</code></p>
+<h2 id="アニメーション待ちのカウントを0にしてフリーズを抑止するマクロ">アニメーション待ちのカウントを0にしてフリーズを抑止するマクロ</h2>
+<p>前に<a href="/tyrano/2018-09-10-wa-freeze/">アニメーション待ちのwaタグでフリーズするケース</a>で説明しました。<br>
+<code>wa</code>タグはアニメーションしている数が0になるまで待つタグですが、そのアニメーションしている数が0にならないケースが存在し、フリーズします。<br>
+そこで、強制的にこの数を0にするのがこのマクロです。<br>
+シーンの遷移時に呼ぶことによって、アニメーションが完了しない不慮の事態を別のシーンに持ち越すことがなくなります。</p>
+<pre tabindex="0"><code>[macro name=&#34;clearAnimCount&#34;]
+[eval exp=&#34;TYRANO.kag.tmp.num_anim=0&#34;]
+[endmacro]
+</code></pre><h2 id="cmだとbuttonが全て消えてしまうので一部だけ消すマクロ">cmだとbuttonが全て消えてしまうので、一部だけ消すマクロ</h2>
+<p><code>button</code>タグはすべてフリーレイヤーに配置され、<code>cm</code>タグを呼ぶことによって消去されます。<br>
+しかし、一部のボタンだけ消したいケースがあったため、<code>button</code>タグの<code>name</code>を指定して<code>button</code>を消すマクロを用意しました。</p>
+<pre tabindex="0"><code>[macro name=&#34;cfl&#34;]
+[iscript]
+var fl = TYRANO.kag.layer.getFreeLayer();
+if(mp.include) {
+  fl.find(&#34;.&#34; + mp.include).remove();
+}else if(mp.exclude){
+  fl.find(&#34;:not(.&#34; + mp.exclude + &#34;)&#34;).remove();
+}
+[endscript]
+[endmacro]
+</code></pre><p>例えば、以下のような<code>button</code>タグがあったとき、group1のボタンだけ消したい場合は、<br>
+<code>[cfl include=&quot;group1&quot;]</code> とします。<br>
+逆にgroup1以外を消したい場合は、<br>
+<code>[cfl exclude=&quot;group1&quot;]</code> とします。</p>
+<pre tabindex="0"><code>[button graphic=&#34;button1.png&#34; x=&#34;100&#34; y=&#34;100&#34;  target=&#34;t1&#34; name=&#34;btn1,group1&#34;]
+[button graphic=&#34;button1.png&#34; x=&#34;100&#34; y=&#34;200&#34;  target=&#34;t2&#34; name=&#34;btn2,group1&#34;]
+[button graphic=&#34;button1.png&#34; x=&#34;100&#34; y=&#34;300&#34;  target=&#34;t3&#34; name=&#34;btn3,group2&#34;]
+[button graphic=&#34;button1.png&#34; x=&#34;100&#34; y=&#34;400&#34;  target=&#34;t4&#34; name=&#34;btn4,group2&#34;]
+</code></pre><h2 id="キャラのz-indexを変えるマクロ">キャラのz-indexを変えるマクロ</h2>
+<p><code>chara_show</code>でキャラを登場時にz-indexを指定することはできますが、途中で変えたいという要望に対応したマクロです。</p>
+<pre tabindex="0"><code>[macro name=&#34;charaZIndex&#34;]
+[iscript]
+if(mp.name &amp;&amp; mp.z){
+  $(&#34;.&#34; + mp.name).css(&#39;z-index&#39;, mp.z);
+}
+[endscript]
+[endmacro]
+</code></pre><p>マクロは以下のように使います。<br>
+<code>[charaZIndex name=&quot;akane&quot; z=10]</code></p>
+<h2 id="buttonホバー時にxy座標を変えるプラグイン">buttonホバー時にx,y座標を変えるプラグイン</h2>
+<p>buttonタグのホバー時にx,y座標を変更するプラグインです。<br>
+buttonタグのパラメータに enterimgXとenterimgYを追加。<br>
+座標は現在座標からの相対位置になります。</p>
+<p>使用例:<br>
+<code>[button x=100 y=150 graphic=&quot;button1.png&quot; target=&quot;gamestart&quot; enterimg=&quot;button2.png&quot; enterimgX=&quot;-20&quot; enterimgY=&quot;-10&quot;]</code></p>
+<p>ダウンロードは<a href="https://github.com/kido0617/tyrano-plugin/archive/master.zip" class="blankA" target="_blank" rel="noopener noreferrer">こちら</a><br>
+<code>enterimgExtension</code>というフォルダがbuttonホバー時にx,y座標を変えるプラグインです。</p>
+<h2 id="すべてのボタンのクリックを抑止するプラグイン">すべてのボタンのクリックを抑止するプラグイン</h2>
+<p>画面に透明な壁を作り、ボタンなどのクリックを吸収し、すべてのボタンに対するクリックを無効にします。</p>
+<p><code>[preventClick]</code> で発動し、<code>[preventClick off=true]</code> で解除です。</p>
+<p>ダウンロードは<a href="https://github.com/kido0617/tyrano-plugin/archive/master.zip" class="blankA" target="_blank" rel="noopener noreferrer">こちら</a><br>
+<code>preventClick</code>というフォルダがすべてのボタンのクリックを抑止するプラグインです。</p>
+<h2 id="ボタンクリック時にウェイトを挟むのでその間ボタンを連打できなくするプラグイン">ボタンクリック時にウェイトを挟むので、その間ボタンを連打できなくするプラグイン</h2>
+<p>ボタンをクリックしてすぐに遷移するのではなく、アニメーションをしてから遷移したいというニーズに対応したときに作ったプラグイン。<br>
+以下のようにアニメーションしてウェイト挟んでからjumpするようなイメージ。<br>
+この場合、ウェイト中にボタンをクリックすると何度もイベントが発行されてしまい困るということです。</p>
+<pre tabindex="0"><code>[anim name=&#34;anim&#34; left=&#34;+=300&#34; opacity=&#34;255&#34; effect=&#34;jswing&#34; time=1000]
+[wait time=1000]
+[jump storage=scene.ks]
+</code></pre><p><code>wait</code>と同じ機能で<code>button</code>タグのクリックを無効にする<code>waitNoClick</code>タグを追加しました。<br>
+ただし、role指定の<code>button</code>には対応していません。</p>
+<pre tabindex="0"><code>[anim name=&#34;anim&#34; left=&#34;+=300&#34; opacity=&#34;255&#34; effect=&#34;jswing&#34; time=1000]
+[waitNoClick time=1000]
+[jump storage=scene.ks]
+</code></pre><p>ダウンロードは<a href="https://github.com/kido0617/tyrano-plugin/archive/master.zip" class="blankA" target="_blank" rel="noopener noreferrer">こちら</a><br>
+<code>waitNoClick</code>というフォルダがウェイト中にボタンを連打できなくするプラグインです。</p>
+<h2 id="ライセンス">ライセンス</h2>
+<p>Released under the MIT license</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

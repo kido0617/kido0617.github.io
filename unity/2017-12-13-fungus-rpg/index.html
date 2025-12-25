@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">フリーのビジュアルノベルアセットFungusを使ってRPGのイベントを作る | kido</title>
+<meta property="og:title" content="フリーのビジュアルノベルアセットFungusを使ってRPGのイベントを作る | kido" />
+<meta name="twitter:title" content="フリーのビジュアルノベルアセットFungusを使ってRPGのイベントを作る | kido" />
+<meta itemprop="name" content="フリーのビジュアルノベルアセットFungusを使ってRPGのイベントを作る | kido" />
+<meta name="application-name" content="フリーのビジュアルノベルアセットFungusを使ってRPGのイベントを作る | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/unity/2017-12-13-fungus-rpg/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/unity/2017-12-13-fungus-rpg/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="フリーのビジュアルノベルアセットFungusを使ってRPGのイベントを作る">
+  <meta property="og:description" content="この記事はUnity #2 Advent Calendar 201713日目の記事です。
+概要 Fungusはフリーで使えるビジュアルノベルアセットです。
+簡単な概要についてはフリーのビジュアルノベルアセットのFungusが便利で紹介しています。
+今回はこのFungusを使って、シーン切り替えありのRPGのイベント処理を作りたいと思います。
+いわゆる、おつかいイベントを実装します。こんなのを作ります。
+Flowchart作成 とりあえず、町と人を適当に配置し、操作用にStandard AssetsのFPSControllerを配置したとします。
+ToolsメニューからFungusのフローチャートを作成します。
+ここで、町の人に話しかけたときのイベントを実装します。新しくブロックを作成し、ブロック名を設定します。
+町の人に話しかけたときにこのブロック名を指定して呼ぶことによって会話を始めます。
+町の人のイベントトリガーを作成 Flowchartのblock名を保存するだけのクラスを作り、町の人につけます。
+public class BlockTrigger : MonoBehaviour { public string blockName; } 話しかける/調べるを実装 特定のキーを押したらRayを飛ばして、ぶつかったオブジェクトが上記のBlockTriggerを持っていたら、FungusのFlowchartのblockを実行します。
+これをFPSのカメラにAddすれば、見ている方向を調べるコマンドが実装できます。
+public class CheckCommand : MonoBehaviour { [SerializeField] float rayLength = 3f; Flowchart flowchart; void Start() { flowchart = FindObjectOfType&lt;Flowchart&gt;(); } // Update is called once per frame void Update() { if (Input.GetKeyDown(KeyCode.E)) { //Eキーに調べるコマンドを割り当てる Ray ray = new Ray(transform.position, transform.forward); RaycastHit hit; if (Physics.Raycast(ray, out hit, rayLength)) { //衝突したものがBlockTriggerを持っているか調べ、持っていたらそのblockを実行する var trigger = hit.transform.GetComponent&lt;BlockTrigger&gt;(); if (trigger != null) { flowchart.ExecuteBlock(trigger.blockName); } } } } } こんな感じで町の人を向いてキーを押すことによってFungusのblockを実行できました。
+しかし、このままではメッセージが表示されている間もプレイヤーが移動できてしまいます。
+Fungusが動いている間は移動できないように制限しましょう。
+Flowchartオブジェクトに以下のようなクラスを追加して実現します。
+public class FlowchartExecution : MonoBehaviour { Flowchart flowchart; FirstPersonController fpc; void Start() { flowchart = GetComponent&lt;Flowchart&gt;(); //Standard AssetsのFPSのコントローラを取得する fpc = GameObject.FindGameObjectWithTag(&#34;Player&#34;).GetComponent&lt;FirstPersonController&gt;(); } void Update() { //実行中のフローチャートがあるかチェックし、あれば移動を不可にする if (flowchart.GetExecutingBlocks().Count == 0) { fpc.enabled = true; } else { fpc.enabled = false; } } } 上記コードだと１点問題があり、選択メニューを表示しているときに動けてしまいます。">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="unity">
+    <meta property="article:published_time" content="2017-12-13T00:00:00+00:00">
+    <meta property="article:modified_time" content="2017-12-13T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="フリーのビジュアルノベルアセットFungusを使ってRPGのイベントを作る">
+  <meta name="twitter:description" content="この記事はUnity #2 Advent Calendar 201713日目の記事です。
+概要 Fungusはフリーで使えるビジュアルノベルアセットです。
+簡単な概要についてはフリーのビジュアルノベルアセットのFungusが便利で紹介しています。
+今回はこのFungusを使って、シーン切り替えありのRPGのイベント処理を作りたいと思います。
+いわゆる、おつかいイベントを実装します。こんなのを作ります。
+Flowchart作成 とりあえず、町と人を適当に配置し、操作用にStandard AssetsのFPSControllerを配置したとします。
+ToolsメニューからFungusのフローチャートを作成します。
+ここで、町の人に話しかけたときのイベントを実装します。新しくブロックを作成し、ブロック名を設定します。
+町の人に話しかけたときにこのブロック名を指定して呼ぶことによって会話を始めます。
+町の人のイベントトリガーを作成 Flowchartのblock名を保存するだけのクラスを作り、町の人につけます。
+public class BlockTrigger : MonoBehaviour { public string blockName; } 話しかける/調べるを実装 特定のキーを押したらRayを飛ばして、ぶつかったオブジェクトが上記のBlockTriggerを持っていたら、FungusのFlowchartのblockを実行します。
+これをFPSのカメラにAddすれば、見ている方向を調べるコマンドが実装できます。
+public class CheckCommand : MonoBehaviour { [SerializeField] float rayLength = 3f; Flowchart flowchart; void Start() { flowchart = FindObjectOfType&lt;Flowchart&gt;(); } // Update is called once per frame void Update() { if (Input.GetKeyDown(KeyCode.E)) { //Eキーに調べるコマンドを割り当てる Ray ray = new Ray(transform.position, transform.forward); RaycastHit hit; if (Physics.Raycast(ray, out hit, rayLength)) { //衝突したものがBlockTriggerを持っているか調べ、持っていたらそのblockを実行する var trigger = hit.transform.GetComponent&lt;BlockTrigger&gt;(); if (trigger != null) { flowchart.ExecuteBlock(trigger.blockName); } } } } } こんな感じで町の人を向いてキーを押すことによってFungusのblockを実行できました。
+しかし、このままではメッセージが表示されている間もプレイヤーが移動できてしまいます。
+Fungusが動いている間は移動できないように制限しましょう。
+Flowchartオブジェクトに以下のようなクラスを追加して実現します。
+public class FlowchartExecution : MonoBehaviour { Flowchart flowchart; FirstPersonController fpc; void Start() { flowchart = GetComponent&lt;Flowchart&gt;(); //Standard AssetsのFPSのコントローラを取得する fpc = GameObject.FindGameObjectWithTag(&#34;Player&#34;).GetComponent&lt;FirstPersonController&gt;(); } void Update() { //実行中のフローチャートがあるかチェックし、あれば移動を不可にする if (flowchart.GetExecutingBlocks().Count == 0) { fpc.enabled = true; } else { fpc.enabled = false; } } } 上記コードだと１点問題があり、選択メニューを表示しているときに動けてしまいます。">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/unity/2017-12-13-fungus-rpg/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">フリーのビジュアルノベルアセットFungusを使ってRPGのイベントを作る</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/unity" style="margin-right:10px;">Unity</a>
+                    <time datetime="2017-12-13T00:00:00&#43;00:00" itemprop="datePublished"> 2017/12/13 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <p>この記事は<a href="https://qiita.com/advent-calendar/2017/unity2" class="blankA" target="_blank" rel="noopener noreferrer">Unity #2 Advent Calendar 2017</a>13日目の記事です。</p>
+<h2 id="概要">概要</h2>
+<p><a href="https://www.assetstore.unity3d.com/jp/#!/content/34184" class="blankA" target="_blank" rel="noopener noreferrer">Fungus</a>はフリーで使えるビジュアルノベルアセットです。<br>
+簡単な概要については<a href="/unity/2017-08-22-fungus/" target="_blank">フリーのビジュアルノベルアセットのFungusが便利</a>で紹介しています。</p>
+<p>今回はこのFungusを使って、シーン切り替えありのRPGのイベント処理を作りたいと思います。<br>
+いわゆる、おつかいイベントを実装します。こんなのを作ります。</p>
+<p><video src="rpg.mp4" controls width="100%"></video></p>
+<h2 id="flowchart作成">Flowchart作成</h2>
+<p>とりあえず、町と人を適当に配置し、操作用にStandard AssetsのFPSControllerを配置したとします。<br>
+ToolsメニューからFungusのフローチャートを作成します。<br>
+<img src="create.png" alt="create"></p>
+<p>ここで、町の人に話しかけたときのイベントを実装します。新しくブロックを作成し、ブロック名を設定します。<br>
+<img src="flowchart.png" alt="flowchart"></p>
+<p>町の人に話しかけたときにこのブロック名を指定して呼ぶことによって会話を始めます。</p>
+<p><img src="block.png" alt="block"></p>
+<h2 id="町の人のイベントトリガーを作成">町の人のイベントトリガーを作成</h2>
+<p>Flowchartのblock名を保存するだけのクラスを作り、町の人につけます。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">BlockTrigger</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">public</span> <span class="kt">string</span> <span class="n">blockName</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p><img src="blocktrigger.png" alt="block"></p>
+<h2 id="話しかける調べるを実装">話しかける/調べるを実装</h2>
+<p>特定のキーを押したらRayを飛ばして、ぶつかったオブジェクトが上記のBlockTriggerを持っていたら、FungusのFlowchartのblockを実行します。<br>
+これをFPSのカメラにAddすれば、見ている方向を調べるコマンドが実装できます。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">CheckCommand</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="na">  [SerializeField]</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">float</span> <span class="n">rayLength</span> <span class="p">=</span> <span class="m">3f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Flowchart</span> <span class="n">flowchart</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">void</span> <span class="n">Start</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">flowchart</span> <span class="p">=</span> <span class="n">FindObjectOfType</span><span class="p">&lt;</span><span class="n">Flowchart</span><span class="p">&gt;();</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// Update is called once per frame</span>
+</span></span><span class="line"><span class="cl">  <span class="k">void</span> <span class="n">Update</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="n">GetKeyDown</span><span class="p">(</span><span class="n">KeyCode</span><span class="p">.</span><span class="n">E</span><span class="p">))</span> <span class="p">{</span>  <span class="c1">//Eキーに調べるコマンドを割り当てる</span>
+</span></span><span class="line"><span class="cl">      <span class="n">Ray</span> <span class="n">ray</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Ray</span><span class="p">(</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">,</span> <span class="n">transform</span><span class="p">.</span><span class="n">forward</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="n">RaycastHit</span> <span class="n">hit</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="n">Physics</span><span class="p">.</span><span class="n">Raycast</span><span class="p">(</span><span class="n">ray</span><span class="p">,</span> <span class="k">out</span> <span class="n">hit</span><span class="p">,</span> <span class="n">rayLength</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//衝突したものがBlockTriggerを持っているか調べ、持っていたらそのblockを実行する</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">var</span> <span class="n">trigger</span> <span class="p">=</span> <span class="n">hit</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">BlockTrigger</span><span class="p">&gt;();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">trigger</span> <span class="p">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="n">flowchart</span><span class="p">.</span><span class="n">ExecuteBlock</span><span class="p">(</span><span class="n">trigger</span><span class="p">.</span><span class="n">blockName</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>こんな感じで町の人を向いてキーを押すことによってFungusのblockを実行できました。</p>
+<p><img src="hello.png" alt="talk"></p>
+<p>しかし、このままではメッセージが表示されている間もプレイヤーが移動できてしまいます。<br>
+Fungusが動いている間は移動できないように制限しましょう。<br>
+Flowchartオブジェクトに以下のようなクラスを追加して実現します。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">FlowchartExecution</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">Flowchart</span> <span class="n">flowchart</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">FirstPersonController</span> <span class="n">fpc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">void</span> <span class="n">Start</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">flowchart</span> <span class="p">=</span> <span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">Flowchart</span><span class="p">&gt;();</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//Standard AssetsのFPSのコントローラを取得する</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fpc</span> <span class="p">=</span> <span class="n">GameObject</span><span class="p">.</span><span class="n">FindGameObjectWithTag</span><span class="p">(</span><span class="s">&#34;Player&#34;</span><span class="p">).</span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">FirstPersonController</span><span class="p">&gt;();</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">void</span> <span class="n">Update</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//実行中のフローチャートがあるかチェックし、あれば移動を不可にする</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">flowchart</span><span class="p">.</span><span class="n">GetExecutingBlocks</span><span class="p">().</span><span class="n">Count</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">fpc</span><span class="p">.</span><span class="n">enabled</span> <span class="p">=</span> <span class="kc">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">fpc</span><span class="p">.</span><span class="n">enabled</span> <span class="p">=</span> <span class="kc">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>上記コードだと１点問題があり、選択メニューを表示しているときに動けてしまいます。</p>
+<p><img src="menu.png" alt="選択メニュー"></p>
+<p>選択メニュー表示中はどこのblockも実行していない待ち状態だからです。<br>
+また、FPSコントローラを使用しているとマウスのカーソルがロックされているため、メニューを選択できません。<br>
+それらを考慮して上記のコードを改良したのが以下です。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="k">void</span> <span class="n">Update</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">var</span> <span class="n">menuDialog</span> <span class="p">=</span> <span class="n">GameObject</span><span class="p">.</span><span class="n">Find</span><span class="p">(</span><span class="s">&#34;MenuDialog&#34;</span><span class="p">);</span>    <span class="c1">//メニュー表示中か判定用</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">flowchart</span><span class="p">.</span><span class="n">GetExecutingBlocks</span><span class="p">().</span><span class="n">Count</span> <span class="p">==</span> <span class="m">0</span> <span class="p">&amp;&amp;</span> <span class="n">menuDialog</span> <span class="p">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">fpc</span><span class="p">.</span><span class="n">enabled</span> <span class="p">=</span> <span class="kc">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">fpc</span><span class="p">.</span><span class="n">SetCursorLock</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>  <span class="c1">//マウスをカーソルロック</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">fpc</span><span class="p">.</span><span class="n">enabled</span> <span class="p">=</span> <span class="kc">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">fpc</span><span class="p">.</span><span class="n">SetCursorLock</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>  <span class="c1">//マウスのカーソルロックを解除</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h2 id="コマンドについて">コマンドについて</h2>
+<p>Fungusの各ブロックのコマンドですが、これに関しては見たままなのでここでは特に記載することはありません。<br>
+例えば、ドアの処理では以下のように、<code>音を出す→フェードアウト→シーン切り替え</code> とやれば自然になります。<br>
+このとき、次シーンの開始時に<code>フェードイン</code>コマンドを実行する必要はあります。</p>
+<p><img src="door.png" alt="シーン切替時のコマンド"></p>
+<p>コマンドで表現できないものはソース書いてスクリプト実行コマンドを使ったりします。<br>
+冒頭の動画にあるようなクエスト完了時のカットシーン的なのもFungusでオブジェクトのアクティブを切り変えたり、iTweenコマンドで動かしたりして実装しています。</p>
+<p><img src="quest.png" alt="クエスト成功カットシーン"></p>
+<h2 id="セーブについて">セーブについて</h2>
+<p>町の外でフラグを立てて、シーンを切り替えて建物の中でそのフラグを判定します。<br>
+flowchartで変数の管理はできます。</p>
+<p><img src="variables.png" alt="変数"></p>
+<p>しかし、シーン切り替えが入るので、Fungusのflowchartの変数の値をどこかに保存しないといけません。<br>
+幸い、変数のセーブ機能はあります。しかし、変数一つ一つにコマンドを実行しないといけないので結構つらさがあります。</p>
+<p><img src="save.png" alt="セーブ"></p>
+<p>ロードに関しても同様です。<br>
+<img src="load.png" alt="ロード"></p>
+<p>また、保存先はPlayerPrefsなので利用シーンによっては改良する必要があります。</p>
+<h2 id="まとめ">まとめ</h2>
+<p>セーブ周りがちょっとしんどいですが、簡単なイベントを作るにはFungusは便利です。<br>
+RPGツクールを触っていた人間からすると、これが一番しっくりきたアセットでした。</p>
+<h2 id="使用バージョン">使用バージョン</h2>
+<p>Unity 5.6.4f1<br>
+Fungus 3.6.0</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

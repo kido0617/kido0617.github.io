@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">環境依存系のエラー調査など | kido</title>
+<meta property="og:title" content="環境依存系のエラー調査など | kido" />
+<meta name="twitter:title" content="環境依存系のエラー調査など | kido" />
+<meta itemprop="name" content="環境依存系のエラー調査など | kido" />
+<meta name="application-name" content="環境依存系のエラー調査など | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/rpgmaker/2020-12-27-errorandfix2020/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/rpgmaker/2020-12-27-errorandfix2020/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="環境依存系のエラー調査など">
+  <meta property="og:description" content="概要 最近調査したツクールMVのエラーのログです。
+解決できていないので、一応情報として残しておきます。
+稀に発生するのか環境依存なのか、通常発生しないため調査困難なものです。
+ロードできない問題 セーブしたファイルをロードしようとしてもブザーが鳴り、ロードできないという現象です。
+該当のセーブファイルを確認すると以下のようにデータが壊れていました。
+容量はあるように見えますが、全部0で埋められています。
+セーブファイルが壊れているのでロードの問題ではなく、セーブ時の問題なのですが、発生条件はよくわかりませんでした。
+ツクールのセーブは、セーブが実行される直前に.bakファイルが生成されます。
+セーブに失敗した場合、そのbakファイルからセーブを復元するのですが、それも作用してはいないようです。
+セーブファイルが壊れているのでセーブ時にゲームが落ちたとかありえるのかもしれませんが、発生時の状況も不明でこれ以上は無理でした。
+音の再生時のエラー 以下のエラーが発生しました。
+Uncaught RangeError: Failed to execute &#39;start&#39; on &#39;AudioBufferSouceNode&#39;: The offset provided (-22089.3) is less than the minimum bound (0) これは音声ファイルの再生位置をマイナスで再生しようとしたときに生じるエラーです。
+例えばコンソールにAudioManager.playBgm({name: &#34;Battle1&#34;, volume : 90, pitch: 100}, -200);のように打つとエラーを起こせます。
+ですが、プロジェクトを見てもマイナス位置で再生しようとするような場面もなく、発生条件不明でした。
+WebAudio.prototype._startPlayingメソッドの引数にoffsetがあり、これがマイナスの場合、0にするような処理を追加すればとりあえずエラーは出なくなるので、一旦これで対処しました。
+起動しない問題 exeファイルをダブルクリックしてもゲームが起動せず、同フォルダ内にdebug.logが生成されます。
+ログには以下のように記載されていました。
+[WARNING:minidump_to_upload_parameters.cc(66)] duplicate annotation name metrics_client_id, discarding value 43cecd601cc84e9e9bbac5991f952aff [ERROR:http_transport_win.cc(175)] WinHttpCrackUrl: URL は認識されているプロトコルを使用していません (0x2ee6) これはSteamで配信されているMV製のゲームやnw.jsを採用しているゲームでも報告があるのですが、明確な解決手段は示されていませんでした。
+nw.jsのバージョンを上げると解決するという話もありましたが、リリース後のゲームにそれを適用するのは厳しいです。
+解決するかどうかもわからず、別の問題が発生した場合、問題の切り分けが難しくなります。
+デプロイの工程も複雑になるのでこの手段は採用しませんでした。
+別の解決方法としてWindows XP (Service Pack 3)互換モードにしたら、起動したというものがありました。
+互換モードの切り替えはexeファイルのプロパティから選択できます。
+掲示板を見るとこの手段で2人解決した報告があるので、興味深いです。
+これで本当に解決するかどうかは手元に再現環境がないので定かではありませんが、試す価値はあるかもしれません。">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="rpgmaker">
+    <meta property="article:published_time" content="2020-12-27T00:00:00+00:00">
+    <meta property="article:modified_time" content="2020-12-27T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="環境依存系のエラー調査など">
+  <meta name="twitter:description" content="概要 最近調査したツクールMVのエラーのログです。
+解決できていないので、一応情報として残しておきます。
+稀に発生するのか環境依存なのか、通常発生しないため調査困難なものです。
+ロードできない問題 セーブしたファイルをロードしようとしてもブザーが鳴り、ロードできないという現象です。
+該当のセーブファイルを確認すると以下のようにデータが壊れていました。
+容量はあるように見えますが、全部0で埋められています。
+セーブファイルが壊れているのでロードの問題ではなく、セーブ時の問題なのですが、発生条件はよくわかりませんでした。
+ツクールのセーブは、セーブが実行される直前に.bakファイルが生成されます。
+セーブに失敗した場合、そのbakファイルからセーブを復元するのですが、それも作用してはいないようです。
+セーブファイルが壊れているのでセーブ時にゲームが落ちたとかありえるのかもしれませんが、発生時の状況も不明でこれ以上は無理でした。
+音の再生時のエラー 以下のエラーが発生しました。
+Uncaught RangeError: Failed to execute &#39;start&#39; on &#39;AudioBufferSouceNode&#39;: The offset provided (-22089.3) is less than the minimum bound (0) これは音声ファイルの再生位置をマイナスで再生しようとしたときに生じるエラーです。
+例えばコンソールにAudioManager.playBgm({name: &#34;Battle1&#34;, volume : 90, pitch: 100}, -200);のように打つとエラーを起こせます。
+ですが、プロジェクトを見てもマイナス位置で再生しようとするような場面もなく、発生条件不明でした。
+WebAudio.prototype._startPlayingメソッドの引数にoffsetがあり、これがマイナスの場合、0にするような処理を追加すればとりあえずエラーは出なくなるので、一旦これで対処しました。
+起動しない問題 exeファイルをダブルクリックしてもゲームが起動せず、同フォルダ内にdebug.logが生成されます。
+ログには以下のように記載されていました。
+[WARNING:minidump_to_upload_parameters.cc(66)] duplicate annotation name metrics_client_id, discarding value 43cecd601cc84e9e9bbac5991f952aff [ERROR:http_transport_win.cc(175)] WinHttpCrackUrl: URL は認識されているプロトコルを使用していません (0x2ee6) これはSteamで配信されているMV製のゲームやnw.jsを採用しているゲームでも報告があるのですが、明確な解決手段は示されていませんでした。
+nw.jsのバージョンを上げると解決するという話もありましたが、リリース後のゲームにそれを適用するのは厳しいです。
+解決するかどうかもわからず、別の問題が発生した場合、問題の切り分けが難しくなります。
+デプロイの工程も複雑になるのでこの手段は採用しませんでした。
+別の解決方法としてWindows XP (Service Pack 3)互換モードにしたら、起動したというものがありました。
+互換モードの切り替えはexeファイルのプロパティから選択できます。
+掲示板を見るとこの手段で2人解決した報告があるので、興味深いです。
+これで本当に解決するかどうかは手元に再現環境がないので定かではありませんが、試す価値はあるかもしれません。">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/rpgmaker/2020-12-27-errorandfix2020/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">環境依存系のエラー調査など</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/rpg%E3%83%84%E3%82%AF%E3%83%BC%E3%83%ABmv" style="margin-right:10px;">RPGツクールMV</a>
+                    <time datetime="2020-12-27T00:00:00&#43;00:00" itemprop="datePublished"> 2020/12/27 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <h2 id="概要">概要</h2>
+<p>最近調査したツクールMVのエラーのログです。<br>
+解決できていないので、一応情報として残しておきます。<br>
+稀に発生するのか環境依存なのか、通常発生しないため調査困難なものです。</p>
+<h2 id="ロードできない問題">ロードできない問題</h2>
+<p>セーブしたファイルをロードしようとしてもブザーが鳴り、ロードできないという現象です。<br>
+該当のセーブファイルを確認すると以下のようにデータが壊れていました。<br>
+容量はあるように見えますが、全部0で埋められています。</p>
+<p><img src="zero.png" alt="セーブファイル"></p>
+<p>セーブファイルが壊れているのでロードの問題ではなく、セーブ時の問題なのですが、発生条件はよくわかりませんでした。<br>
+ツクールのセーブは、セーブが実行される直前に.bakファイルが生成されます。<br>
+セーブに失敗した場合、そのbakファイルからセーブを復元するのですが、それも作用してはいないようです。<br>
+セーブファイルが壊れているのでセーブ時にゲームが落ちたとかありえるのかもしれませんが、発生時の状況も不明でこれ以上は無理でした。</p>
+<h2 id="音の再生時のエラー">音の再生時のエラー</h2>
+<p>以下のエラーが発生しました。</p>
+<pre tabindex="0"><code>Uncaught RangeError: Failed to execute &#39;start&#39; on &#39;AudioBufferSouceNode&#39;: The offset provided (-22089.3) is less than the minimum bound (0)
+</code></pre><p>これは音声ファイルの再生位置をマイナスで再生しようとしたときに生じるエラーです。<br>
+例えばコンソールに<code>AudioManager.playBgm({name: &quot;Battle1&quot;, volume : 90, pitch: 100}, -200);</code>のように打つとエラーを起こせます。<br>
+ですが、プロジェクトを見てもマイナス位置で再生しようとするような場面もなく、発生条件不明でした。<br>
+<code>WebAudio.prototype._startPlaying</code>メソッドの引数に<code>offset</code>があり、これがマイナスの場合、0にするような処理を追加すればとりあえずエラーは出なくなるので、一旦これで対処しました。</p>
+<h2 id="起動しない問題">起動しない問題</h2>
+<p>exeファイルをダブルクリックしてもゲームが起動せず、同フォルダ内に<code>debug.log</code>が生成されます。<br>
+ログには以下のように記載されていました。</p>
+<pre tabindex="0"><code>[WARNING:minidump_to_upload_parameters.cc(66)] duplicate annotation name metrics_client_id, discarding value 43cecd601cc84e9e9bbac5991f952aff
+[ERROR:http_transport_win.cc(175)] WinHttpCrackUrl: URL は認識されているプロトコルを使用していません (0x2ee6)
+</code></pre><p>これはSteamで配信されているMV製のゲームやnw.jsを採用しているゲームでも報告があるのですが、明確な解決手段は示されていませんでした。</p>
+<p>nw.jsのバージョンを上げると解決するという話もありましたが、リリース後のゲームにそれを適用するのは厳しいです。<br>
+解決するかどうかもわからず、別の問題が発生した場合、問題の切り分けが難しくなります。<br>
+デプロイの工程も複雑になるのでこの手段は採用しませんでした。</p>
+<p>別の解決方法としてWindows XP (Service Pack 3)互換モードにしたら、起動したというものがありました。<br>
+互換モードの切り替えはexeファイルのプロパティから選択できます。<br>
+掲示板を見るとこの手段で2人解決した報告があるので、興味深いです。<br>
+これで本当に解決するかどうかは手元に再現環境がないので定かではありませんが、試す価値はあるかもしれません。</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">Vectrosityを使ってUGUI上で線や円のアニメーションをする | kido</title>
+<meta property="og:title" content="Vectrosityを使ってUGUI上で線や円のアニメーションをする | kido" />
+<meta name="twitter:title" content="Vectrosityを使ってUGUI上で線や円のアニメーションをする | kido" />
+<meta itemprop="name" content="Vectrosityを使ってUGUI上で線や円のアニメーションをする | kido" />
+<meta name="application-name" content="Vectrosityを使ってUGUI上で線や円のアニメーションをする | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/unity/2018-09-25-vectrosity/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/unity/2018-09-25-vectrosity/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="Vectrosityを使ってUGUI上で線や円のアニメーションをする">
+  <meta property="og:description" content="Vectrosity アセットストアで販売されているVectrosity - Asset Storeを使うと、UGUI上に線や円といった図形を描画することができます。
+今回はVectrosityを使ってアニメーションを作成します。
+例えば、以下のように円の大きさを変えてみたり、
+線の終点を変えてレーダーのような表現といったことができます。
+ちなみにUGUI上に線や円を描くのに「uGUI でプリミティブな図形を描画できる「UIGraphicAPI」紹介」にあるようにGithubで公開されているものもあります。最初これを使っていたのですが、アニメーションしようとするとパフォーマンスがすごい落ちるのでVectrosityに変えました。
+Vectrosityのオブジェクトを作る アセットをインポートしたら、Create-&gt;UI-&gt;VectorLineでオブジェクトを作成できます。
+作成するとCanvasが作られ、中にLineオブジェクトが作られます。Canvasは普通のUGUIのCanvasなのでここで重要なのはLineの方です。
+LineオブジェクトにはVectorObject2Dコンポーネントがついていて、これをいじって線にしたり円にしたりアニメーションしたりします。スクリプト側からいじりますが、線の太さや色などデフォルトで決めておきたい場合は設定しておいても良いです。
+円のアニメーション 小さい円からだんだん大きくなる円をつくります。
+以下のソースコードで示すとおりです。
+using System.Collections.Generic; using UnityEngine; using Vectrosity; public class MakeCircle : MonoBehaviour { VectorObject2D line; void Start() { var points = new List&lt;Vector2&gt;(); //20は円の頂点の数。多くすればよりなめらかになる。 //ここでは位置を考えずに頂点を作成するだけ。 for (var i = 0; i &lt; 20; i&#43;&#43;) { points.Add(Vector2.zero); } line = GetComponent&lt;VectorObject2D&gt;(); //VectorObject2d.vectorLineが線の情報を持つ本体。頂点情報をここで代入 line.vectorLine.points2 = points; } void Update() { //MakeCircleの引数は、原点、半径、頂点数。頂点数は上で作成した数-1を指定する line.vectorLine.MakeCircle(Vector3.zero, Time.time * 10, line.vectorLine.points2.Count - 1); //再描画 line.vectorLine.Draw(); } } 線のアニメーション 線に関しては頂点の位置を自由に変えればいいだけなので、特に書くことはない。
+デフォルトで頂点は2つ作られているので以下のようにすれば線は引ける。
+lLine.vectorLine.points2[0] = new Vector2(0, 0); line.vectorLine.points2[1] = new Vector2(100, 100); line.vectorLine.Draw();">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="unity">
+    <meta property="article:published_time" content="2018-09-25T00:00:00+00:00">
+    <meta property="article:modified_time" content="2018-09-25T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Vectrosityを使ってUGUI上で線や円のアニメーションをする">
+  <meta name="twitter:description" content="Vectrosity アセットストアで販売されているVectrosity - Asset Storeを使うと、UGUI上に線や円といった図形を描画することができます。
+今回はVectrosityを使ってアニメーションを作成します。
+例えば、以下のように円の大きさを変えてみたり、
+線の終点を変えてレーダーのような表現といったことができます。
+ちなみにUGUI上に線や円を描くのに「uGUI でプリミティブな図形を描画できる「UIGraphicAPI」紹介」にあるようにGithubで公開されているものもあります。最初これを使っていたのですが、アニメーションしようとするとパフォーマンスがすごい落ちるのでVectrosityに変えました。
+Vectrosityのオブジェクトを作る アセットをインポートしたら、Create-&gt;UI-&gt;VectorLineでオブジェクトを作成できます。
+作成するとCanvasが作られ、中にLineオブジェクトが作られます。Canvasは普通のUGUIのCanvasなのでここで重要なのはLineの方です。
+LineオブジェクトにはVectorObject2Dコンポーネントがついていて、これをいじって線にしたり円にしたりアニメーションしたりします。スクリプト側からいじりますが、線の太さや色などデフォルトで決めておきたい場合は設定しておいても良いです。
+円のアニメーション 小さい円からだんだん大きくなる円をつくります。
+以下のソースコードで示すとおりです。
+using System.Collections.Generic; using UnityEngine; using Vectrosity; public class MakeCircle : MonoBehaviour { VectorObject2D line; void Start() { var points = new List&lt;Vector2&gt;(); //20は円の頂点の数。多くすればよりなめらかになる。 //ここでは位置を考えずに頂点を作成するだけ。 for (var i = 0; i &lt; 20; i&#43;&#43;) { points.Add(Vector2.zero); } line = GetComponent&lt;VectorObject2D&gt;(); //VectorObject2d.vectorLineが線の情報を持つ本体。頂点情報をここで代入 line.vectorLine.points2 = points; } void Update() { //MakeCircleの引数は、原点、半径、頂点数。頂点数は上で作成した数-1を指定する line.vectorLine.MakeCircle(Vector3.zero, Time.time * 10, line.vectorLine.points2.Count - 1); //再描画 line.vectorLine.Draw(); } } 線のアニメーション 線に関しては頂点の位置を自由に変えればいいだけなので、特に書くことはない。
+デフォルトで頂点は2つ作られているので以下のようにすれば線は引ける。
+lLine.vectorLine.points2[0] = new Vector2(0, 0); line.vectorLine.points2[1] = new Vector2(100, 100); line.vectorLine.Draw();">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/unity/2018-09-25-vectrosity/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">Vectrosityを使ってUGUI上で線や円のアニメーションをする</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/unity" style="margin-right:10px;">Unity</a>
+                    <time datetime="2018-09-25T00:00:00&#43;00:00" itemprop="datePublished"> 2018/09/25 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <h2 id="vectrosity">Vectrosity</h2>
+<p>アセットストアで販売されている<a href="https://assetstore.unity.com/packages/tools/particles-effects/vectrosity-82" class="blankA" target="_blank" rel="noopener noreferrer">Vectrosity - Asset Store</a>を使うと、UGUI上に線や円といった図形を描画することができます。<br>
+今回は<code>Vectrosity</code>を使ってアニメーションを作成します。<br>
+例えば、以下のように円の大きさを変えてみたり、</p>
+<p><img src="sound.gif" alt="Sound"></p>
+<p>線の終点を変えてレーダーのような表現といったことができます。</p>
+<p><img src="minimap-line.gif" alt="レーダー"></p>
+<p>ちなみにUGUI上に線や円を描くのに「<a href="http://baba-s.hatenablog.com/entry/2018/01/04/173700" class="blankA" target="_blank" rel="noopener noreferrer">uGUI でプリミティブな図形を描画できる「UIGraphicAPI」紹介</a>」にあるようにGithubで公開されているものもあります。最初これを使っていたのですが、アニメーションしようとするとパフォーマンスがすごい落ちるので<code>Vectrosity</code>に変えました。</p>
+<h2 id="vectrosityのオブジェクトを作る">Vectrosityのオブジェクトを作る</h2>
+<p>アセットをインポートしたら、<code>Create</code>-&gt;<code>UI</code>-&gt;<code>VectorLine</code>でオブジェクトを作成できます。</p>
+<p><img src="UI-VectorLine.png" alt="UI VectorLine"></p>
+<p>作成すると<code>Canvas</code>が作られ、中に<code>Line</code>オブジェクトが作られます。<code>Canvas</code>は普通のUGUIの<code>Canvas</code>なのでここで重要なのは<code>Line</code>の方です。</p>
+<p><img src="VectorCanvas.png" alt="VectorCanvas"></p>
+<p><code>Line</code>オブジェクトには<code>VectorObject2D</code>コンポーネントがついていて、これをいじって線にしたり円にしたりアニメーションしたりします。スクリプト側からいじりますが、線の太さや色などデフォルトで決めておきたい場合は設定しておいても良いです。</p>
+<p><img src="VectorObject2D.png" alt="VectorObject2D"></p>
+<h2 id="円のアニメーション">円のアニメーション</h2>
+<p>小さい円からだんだん大きくなる円をつくります。<br>
+以下のソースコードで示すとおりです。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">Vectrosity</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">MakeCircle</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">VectorObject2D</span> <span class="n">line</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">void</span> <span class="n">Start</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">var</span> <span class="n">points</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Vector2</span><span class="p">&gt;();</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//20は円の頂点の数。多くすればよりなめらかになる。</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//ここでは位置を考えずに頂点を作成するだけ。</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">var</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="m">20</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">points</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">Vector2</span><span class="p">.</span><span class="n">zero</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">line</span> <span class="p">=</span> <span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">VectorObject2D</span><span class="p">&gt;();</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//VectorObject2d.vectorLineが線の情報を持つ本体。頂点情報をここで代入</span>
+</span></span><span class="line"><span class="cl">    <span class="n">line</span><span class="p">.</span><span class="n">vectorLine</span><span class="p">.</span><span class="n">points2</span> <span class="p">=</span> <span class="n">points</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">void</span> <span class="n">Update</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//MakeCircleの引数は、原点、半径、頂点数。頂点数は上で作成した数-1を指定する</span>
+</span></span><span class="line"><span class="cl">    <span class="n">line</span><span class="p">.</span><span class="n">vectorLine</span><span class="p">.</span><span class="n">MakeCircle</span><span class="p">(</span><span class="n">Vector3</span><span class="p">.</span><span class="n">zero</span><span class="p">,</span> <span class="n">Time</span><span class="p">.</span><span class="n">time</span> <span class="p">*</span> <span class="m">10</span><span class="p">,</span> <span class="n">line</span><span class="p">.</span><span class="n">vectorLine</span><span class="p">.</span><span class="n">points2</span><span class="p">.</span><span class="n">Count</span> <span class="p">-</span> <span class="m">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//再描画</span>
+</span></span><span class="line"><span class="cl">    <span class="n">line</span><span class="p">.</span><span class="n">vectorLine</span><span class="p">.</span><span class="n">Draw</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h2 id="線のアニメーション">線のアニメーション</h2>
+<p>線に関しては頂点の位置を自由に変えればいいだけなので、特に書くことはない。<br>
+デフォルトで頂点は2つ作られているので以下のようにすれば線は引ける。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="n">lLine</span><span class="p">.</span><span class="n">vectorLine</span><span class="p">.</span><span class="n">points2</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector2</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">line</span><span class="p">.</span><span class="n">vectorLine</span><span class="p">.</span><span class="n">points2</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector2</span><span class="p">(</span><span class="m">100</span><span class="p">,</span> <span class="m">100</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">line</span><span class="p">.</span><span class="n">vectorLine</span><span class="p">.</span><span class="n">Draw</span><span class="p">();</span>
+</span></span></code></pre></div>
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

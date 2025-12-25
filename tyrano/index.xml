@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tyranos on kido</title>
+    <link>https://kido0617.github.io/tyrano/</link>
+    <description>Recent content in Tyranos on kido</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <lastBuildDate>Fri, 06 Dec 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://kido0617.github.io/tyrano/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>シーン内のラベルにジャンプするテスト用プラグイン</title>
+      <link>https://kido0617.github.io/tyrano/2019-12-06-label-jumper/</link>
+      <pubDate>Fri, 06 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/tyrano/2019-12-06-label-jumper/</guid>
+      
+      <description>&lt;h2 id=&#34;はじめに&#34;&gt;はじめに&lt;/h2&gt;
+&lt;p&gt;今実行しているシナリオ内のラベルに自由に飛べたらテストするとき便利かと思い、そういうプラグインを作りました。&lt;br&gt;
+下の画像のようにショートカットキーを押すと、今のシーン(ksファイル)のラベルの一覧が表示されます。&lt;br&gt;
+クリックしたらそのラベルの行にジャンプする感じです。&lt;br&gt;
+注意としては途中の処理もすっ飛ばしてジャンプするので、途中で変数の処理とか挟んでいたらそれもスキップしてしまいます。&lt;br&gt;
+jumpタグと同じような挙動です。&lt;br&gt;
+なので、長い会話だけのシーンを飛ばすときや、シーンの最初に戻ってもう一度演出などをチェックしたいときなどに使うと良いかと思います。&lt;br&gt;
+ラベル以外にもシーンの最初と最後にも飛べるようにしてあります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;label-list.png&#34; alt=&#34;ラベルリスト&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ティラノスクリプト バージョン475c&lt;/code&gt;で動作を確認しています。&lt;/p&gt;
+&lt;h2 id=&#34;プラグインダウンロードと設置&#34;&gt;プラグインダウンロードと設置&lt;/h2&gt;
+&lt;p&gt;ダウンロードは&lt;a href=&#34;https://github.com/kido0617/tyrano-plugin/archive/master.zip&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;こちら&lt;/a&gt;&lt;br&gt;
+過去作ったプラグインがいろいろ入っていますが&lt;code&gt;labelJumper&lt;/code&gt;というフォルダが今回のプラグインです。&lt;br&gt;
+そのフォルダをティラノスクリプトの&lt;code&gt;data/others/plugin&lt;/code&gt;フォルダ内に配置します。&lt;/p&gt;
+&lt;p&gt;first.ksファイルの以下の箇所にプラグイン読み込みタグを追加します。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;;ゲームで必ず必要な初期化処理はこのファイルに記述するのがオススメ
+[plugin name=labelJumper]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;プレイ中にQキーを押すと一覧が表示されます。&lt;br&gt;
+また、0から9はショートカットキーになっているので、Qキーを押してウィンドウを開かずとも操作可能です。&lt;/p&gt;
+&lt;p&gt;テスト用のプラグインなので公開するときは外してください。&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>キャラ名を変数に保存するプラグイン</title>
+      <link>https://kido0617.github.io/tyrano/2019-12-02-save-chara-name/</link>
+      <pubDate>Mon, 02 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/tyrano/2019-12-02-save-chara-name/</guid>
+      
+      <description>&lt;h2 id=&#34;はじめに&#34;&gt;はじめに&lt;/h2&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#あかね
+もしかして、ノベルゲームの開発に興味があるの？
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;このように&lt;code&gt;#キャラ名&lt;/code&gt;で会話で表示するキャラを設定しますが、ここで設定したキャラ名を変数として扱いたいという要望がありました。&lt;br&gt;
+ここのキャラ名を変数で扱えれば、その後の画像表示などを共通処理ですっきりできるというニーズです。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ティラノスクリプト バージョン475c&lt;/code&gt;で動作を確認しています。&lt;/p&gt;
+&lt;h2 id=&#34;プラグインダウンロードと設置&#34;&gt;プラグインダウンロードと設置&lt;/h2&gt;
+&lt;p&gt;ダウンロードは&lt;a href=&#34;https://github.com/kido0617/tyrano-plugin/archive/master.zip&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;こちら&lt;/a&gt;&lt;br&gt;
+過去作ったプラグインがいろいろ入っていますが&lt;code&gt;saveCharaName&lt;/code&gt;というフォルダが今回のプラグインです。&lt;br&gt;
+そのフォルダをティラノスクリプトの&lt;code&gt;data/others/plugin&lt;/code&gt;フォルダ内に配置します。&lt;/p&gt;
+&lt;p&gt;first.ksファイルの以下の箇所にプラグイン読み込みタグを追加します。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;;ゲームで必ず必要な初期化処理はこのファイルに記述するのがオススメ
+[plugin name=saveCharaName]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;実際に使う場合はこんな感じです。変数のcharaNameに最後に呼ばれた&lt;code&gt;#キャラ名&lt;/code&gt;の値が入っています。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;テスト-[emb exp=&amp;#34;f.charaName&amp;#34;][p]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;もし、charaNameという変数名が気に入らなかったら、プラグインのフォルダのmain.jsの6行目のcharaNameを好きに替えてください。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;pm&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;kag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;stat&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;charaName&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;pm&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>コンフィグ画面を右クリックで戻るようにするプラグイン</title>
+      <link>https://kido0617.github.io/tyrano/2018-12-29-rightclick-button/</link>
+      <pubDate>Sat, 29 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/tyrano/2018-12-29-rightclick-button/</guid>
+      
+      <description>&lt;h2 id=&#34;はじめに&#34;&gt;はじめに&lt;/h2&gt;
+&lt;p&gt;セーブやロード画面は右クリックで前の画面に戻れるのですが、独自に作ったコンフィグ画面に関してはそうはなりません。&lt;br&gt;
+コンフィグ画面も右クリックで戻れるようにしたいとの要望で作ったプラグインです。&lt;br&gt;
+&lt;code&gt;ティラノスクリプト バージョン471b&lt;/code&gt;で動作を確認しています。&lt;/p&gt;
+&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;コンフィグ画面から右クリックで戻るを実現するには、右クリックを押した時に、画面上の戻るボタンが押されたのと同じ動作をすれば良いです。そのためのプラグインを作りました。&lt;/p&gt;
+&lt;p&gt;ダウンロードは&lt;a href=&#34;https://github.com/kido0617/tyrano-plugin/archive/master.zip&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;こちら&lt;/a&gt;&lt;br&gt;
+いろいろ入っていますが&lt;code&gt;rightClickButton&lt;/code&gt;というフォルダが今回のプラグインです。&lt;/p&gt;
+&lt;p&gt;画面上のボタンのnameに&lt;code&gt;rightClickButton&lt;/code&gt;を設定すると、右クリック時にそのボタンが押されたのと同じ動作になります。&lt;/p&gt;
+&lt;p&gt;設定例&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[button graphic=&amp;#34;back.png&amp;#34; name=&amp;#34;rightClickButton&amp;#34; fix=true target=&amp;#34;backtitle&amp;#34; x=800 y=100]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;すでにname属性を使用している場合は、以下のように&lt;code&gt;,&lt;/code&gt;で区切って指定してください。&lt;br&gt;
+&lt;code&gt;name=&amp;quot;test,rightClickButton&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>最近作ったティラノスクリプトのプラグインとマクロ</title>
+      <link>https://kido0617.github.io/tyrano/2018-10-03-plugin-macro-work1/</link>
+      <pubDate>Wed, 03 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/tyrano/2018-10-03-plugin-macro-work1/</guid>
+      
+      <description>&lt;h2 id=&#34;はじめに&#34;&gt;はじめに&lt;/h2&gt;
+&lt;p&gt;最近頼まれて作ったティラノスクリプトのプラグインとマクロたちをまとめました。&lt;br&gt;
+限定的な用途のものも結構あります。&lt;br&gt;
+&lt;code&gt;ティラノスクリプト バージョン471b&lt;/code&gt;で動作を確認しています。&lt;/p&gt;
+&lt;h2 id=&#34;自動的に喋っているキャラが前面に来るプラグイン&#34;&gt;自動的に喋っているキャラが前面に来るプラグイン&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;chara_config&lt;/code&gt;タグを使うと喋っているキャラの明るさを変えるような演出はできます。&lt;br&gt;
+それに加えて、喋っているキャラを前面にする機能を追加します。&lt;br&gt;
+喋っているキャラの&lt;code&gt;z-index&lt;/code&gt;をキャラ内で最大にします。&lt;/p&gt;
+&lt;p&gt;ダウンロードは&lt;a href=&#34;https://github.com/kido0617/tyrano-plugin/archive/master.zip&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;こちら&lt;/a&gt;&lt;br&gt;
+&lt;code&gt;targetFocusZIndex&lt;/code&gt;というフォルダが自動的に喋っているキャラが前面に来るプラグインです。&lt;/p&gt;
+&lt;p&gt;導入するだけで機能は有効になりますが、On、Offする機能があります。&lt;br&gt;
+・OFFにしたいとき&lt;br&gt;
+&lt;code&gt;[offTargetFocusZIndex]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;・OFFからONにしたいとき&lt;br&gt;
+&lt;code&gt;[onTargetFocusZIndex]&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;アニメーション待ちのカウントを0にしてフリーズを抑止するマクロ&#34;&gt;アニメーション待ちのカウントを0にしてフリーズを抑止するマクロ&lt;/h2&gt;
+&lt;p&gt;前に&lt;a href=&#34;https://kido0617.github.io/tyrano/2018-09-10-wa-freeze/&#34;&gt;アニメーション待ちのwaタグでフリーズするケース&lt;/a&gt;で説明しました。&lt;br&gt;
+&lt;code&gt;wa&lt;/code&gt;タグはアニメーションしている数が0になるまで待つタグですが、そのアニメーションしている数が0にならないケースが存在し、フリーズします。&lt;br&gt;
+そこで、強制的にこの数を0にするのがこのマクロです。&lt;br&gt;
+シーンの遷移時に呼ぶことによって、アニメーションが完了しない不慮の事態を別のシーンに持ち越すことがなくなります。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[macro name=&amp;#34;clearAnimCount&amp;#34;]
+[eval exp=&amp;#34;TYRANO.kag.tmp.num_anim=0&amp;#34;]
+[endmacro]
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;cmだとbuttonが全て消えてしまうので一部だけ消すマクロ&#34;&gt;cmだとbuttonが全て消えてしまうので、一部だけ消すマクロ&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;button&lt;/code&gt;タグはすべてフリーレイヤーに配置され、&lt;code&gt;cm&lt;/code&gt;タグを呼ぶことによって消去されます。&lt;br&gt;
+しかし、一部のボタンだけ消したいケースがあったため、&lt;code&gt;button&lt;/code&gt;タグの&lt;code&gt;name&lt;/code&gt;を指定して&lt;code&gt;button&lt;/code&gt;を消すマクロを用意しました。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[macro name=&amp;#34;cfl&amp;#34;]
+[iscript]
+var fl = TYRANO.kag.layer.getFreeLayer();
+if(mp.include) {
+  fl.find(&amp;#34;.&amp;#34; + mp.include).remove();
+}else if(mp.exclude){
+  fl.find(&amp;#34;:not(.&amp;#34; + mp.exclude + &amp;#34;)&amp;#34;).remove();
+}
+[endscript]
+[endmacro]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;例えば、以下のような&lt;code&gt;button&lt;/code&gt;タグがあったとき、group1のボタンだけ消したい場合は、&lt;br&gt;
+&lt;code&gt;[cfl include=&amp;quot;group1&amp;quot;]&lt;/code&gt; とします。&lt;br&gt;
+逆にgroup1以外を消したい場合は、&lt;br&gt;
+&lt;code&gt;[cfl exclude=&amp;quot;group1&amp;quot;]&lt;/code&gt; とします。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[button graphic=&amp;#34;button1.png&amp;#34; x=&amp;#34;100&amp;#34; y=&amp;#34;100&amp;#34;  target=&amp;#34;t1&amp;#34; name=&amp;#34;btn1,group1&amp;#34;]
+[button graphic=&amp;#34;button1.png&amp;#34; x=&amp;#34;100&amp;#34; y=&amp;#34;200&amp;#34;  target=&amp;#34;t2&amp;#34; name=&amp;#34;btn2,group1&amp;#34;]
+[button graphic=&amp;#34;button1.png&amp;#34; x=&amp;#34;100&amp;#34; y=&amp;#34;300&amp;#34;  target=&amp;#34;t3&amp;#34; name=&amp;#34;btn3,group2&amp;#34;]
+[button graphic=&amp;#34;button1.png&amp;#34; x=&amp;#34;100&amp;#34; y=&amp;#34;400&amp;#34;  target=&amp;#34;t4&amp;#34; name=&amp;#34;btn4,group2&amp;#34;]
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;キャラのz-indexを変えるマクロ&#34;&gt;キャラのz-indexを変えるマクロ&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;chara_show&lt;/code&gt;でキャラを登場時にz-indexを指定することはできますが、途中で変えたいという要望に対応したマクロです。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>アニメーション待ちのwaタグでフリーズするケース</title>
+      <link>https://kido0617.github.io/tyrano/2018-09-10-wa-freeze/</link>
+      <pubDate>Mon, 10 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/tyrano/2018-09-10-wa-freeze/</guid>
+      
+      <description>&lt;h2 id=&#34;はじめに&#34;&gt;はじめに&lt;/h2&gt;
+&lt;p&gt;ティラノスクリプト &lt;code&gt;ver471&lt;/code&gt; の話です。&lt;/p&gt;
+&lt;p&gt;先日、アニメーション中にフリーズすることがあるという話があり、調査しました。&lt;br&gt;
+その結果、アニメーション待ちをする&lt;code&gt;wa&lt;/code&gt;タグでフリーズしていました。&lt;/p&gt;
+&lt;p&gt;ティラノスクリプトの&lt;code&gt;anim&lt;/code&gt;タグの動作は以下のようになっています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;アニメーション開始で  現在アニメーションしている数が +1&lt;/li&gt;
+&lt;li&gt;アニメーション完了で  現在アニメーションしている数が -1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;wa&lt;/code&gt;タグは「現在アニメーションしている数が 0 になるまで待つ」というタグなのですが、アニメーション完了が呼ばれないケースがあり、現在アニメーションしている数が一生 0 にならないことがあります。&lt;/p&gt;
+&lt;p&gt;そのため、&lt;code&gt;wa&lt;/code&gt;タグの待ちがずっと続いてしまい、フリーズしてしまうという現象がおきます。&lt;/p&gt;
+&lt;p&gt;フリーズした場合、ティラノライダーで確認してもwaコマンド移行が実行されていません。&lt;br&gt;
+&lt;img src=&#34;wa.png&#34; alt=&#34;waタグでストップしている&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ケース1&#34;&gt;ケース1&lt;/h2&gt;
+&lt;p&gt;キャラが2人以上表示されており、一人がアニメーションしていなくて、片方がアニメーションしているときに、&lt;code&gt;chara_hide_all&lt;/code&gt;をした場合です。&lt;br&gt;
+例を下に示します。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[chara_show  name=&amp;#34;akane&amp;#34; ]
+[chara_show  name=&amp;#34;yamato&amp;#34; ]
+[anim name=akane left=&amp;#34;-=30&amp;#34; time=1000 effect=jswing]
+[anim name=akane left=&amp;#34;+=30&amp;#34; time=1000 effect=jswing]
+[chara_hide_all time=&amp;#34;0&amp;#34;]
+[wa]
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;ケース2&#34;&gt;ケース2&lt;/h2&gt;
+&lt;p&gt;アニメーション中にfreeimageしても同様にフリーズします。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[chara_show  name=&amp;#34;akane&amp;#34; ]
+[anim name=akane left=&amp;#34;-=30&amp;#34; time=1000 effect=jswing]
+[anim name=akane left=&amp;#34;+=30&amp;#34; time=1000 effect=jswing]
+[freeimage layer=0]
+[wa]
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;簡単な説明&#34;&gt;簡単な説明&lt;/h2&gt;
+&lt;p&gt;簡単に言うと、&lt;code&gt;chara_hide_all&lt;/code&gt;も&lt;code&gt;freeimage&lt;/code&gt;もアニメーション中の対象を削除します。削除するのでアニメーション完了が呼ばれません(&lt;code&gt;chara_hide_all&lt;/code&gt;に関してはもう少し特殊ですが）。&lt;/p&gt;
+&lt;h2 id=&#34;現状とれる対処&#34;&gt;現状とれる対処&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;chara_hide_all&lt;/code&gt;や&lt;code&gt;freeimage&lt;/code&gt;の前で&lt;code&gt;wa&lt;/code&gt;を呼び、アニメーション完了を待ってから消す。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>ティラノスクリプトのプラグインの作り方-タグを追加する</title>
+      <link>https://kido0617.github.io/tyrano/2018-08-02-make-plugin/</link>
+      <pubDate>Thu, 02 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/tyrano/2018-08-02-make-plugin/</guid>
+      
+      <description>&lt;h2 id=&#34;はじめに&#34;&gt;はじめに&lt;/h2&gt;
+&lt;p&gt;ティラノスクリプトのプラグインをjsを書いて作ります。&lt;br&gt;
+公式の&lt;a href=&#34;https://tyrano.jp/usage/advance/plugin&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;プラグインを自作して公開しよう&lt;/a&gt;にはプラグインの作り方が記載されています。フォルダ構造などはここで学べますが、ここに記載されているのはティラノスクリプトのデフォルトのタグを使って作るようなプラグインであって、jsを書いて作るタイプのプラグインの説明はされていません(2018/08/05現在)。&lt;br&gt;
+そこで今回は、jsを書いて新しいタグを作るプラグインの作り方を説明します。&lt;/p&gt;
+&lt;h2 id=&#34;準備&#34;&gt;準備&lt;/h2&gt;
+&lt;p&gt;開発環境として用意するのは最新の&lt;a href=&#34;https://tyrano.jp/dl/&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;スタンダードパッケージ&lt;/a&gt;とデバッグ用の&lt;a href=&#34;https://tyrano.jp/dl/rider&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;ティラノライダー&lt;/a&gt;です。ティラノライダーを使うことにより、いつものデベロッパーツールを開けるのでhtml構造を確認したり、コンソールを見ることができます。&lt;br&gt;
+また、ティラノスクリプトのインタープリタやデフォルトのタグ類はスタンダードパッケージ内の &lt;code&gt;tyrano/plugins/kag&lt;/code&gt; フォルダ内にありますが、minifyされているので、&lt;a href=&#34;https://github.com/ShikemokuMK/tyranoscript&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Githubリポジトリ&lt;/a&gt;からminifyされていないファイルをダウンロードしてくることをおすすめします。&lt;/p&gt;
+&lt;h2 id=&#34;jsをロードするまで&#34;&gt;jsをロードするまで&lt;/h2&gt;
+&lt;p&gt;まず、公式のプラグイン作成のマニュアルどおり、&lt;code&gt;data\others\plugin&lt;/code&gt;フォルダに今回作成するプラグインのフォルダを作ります。&lt;br&gt;
+今回はプラグイン名を&lt;code&gt;myplugin&lt;/code&gt;とし、その名前でフォルダを作りました。&lt;br&gt;
+そして、フォルダ内に&lt;code&gt;init.ks&lt;/code&gt;と&lt;code&gt;main.js&lt;/code&gt;ファイルを作ります。&lt;br&gt;
+&lt;code&gt;init.ks&lt;/code&gt;ファイル内で以下のようにjsファイルをロードすればプラグイン内でjsを扱うことができます。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;@loadjs storage=plugin/myplugin/main.js
+@return
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;最後にゲーム起動時に呼ばれる&lt;code&gt;first.ks&lt;/code&gt;ファイルで以下のプラグインのロードコマンドを追加します。&lt;br&gt;
+&lt;code&gt;[plugin name=myplugin]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;これで準備は整いました。&lt;/p&gt;
+&lt;h2 id=&#34;事前知識&#34;&gt;事前知識&lt;/h2&gt;
+&lt;p&gt;ティラノスクリプトはCanvasなどは使わずにDOMで構成されています。使用されている主なライブラリはjQueryです。&lt;br&gt;
+&lt;code&gt;tyrano/libs&lt;/code&gt;フォルダにライブラリはあるので確認してください。&lt;/p&gt;
+&lt;p&gt;セーブデータは&lt;code&gt;TYRANO.kag.stat&lt;/code&gt;に保存できます。保存時は&lt;code&gt;JSON.stringify&lt;/code&gt;されてテキストとして保存されます。&lt;br&gt;
+&lt;code&gt;TYRANO.kag.tmp&lt;/code&gt;にテンポラリなデータは保存できます。&lt;/p&gt;
+&lt;h2 id=&#34;基本形&#34;&gt;基本形&lt;/h2&gt;
+&lt;p&gt;新しいタグを追加するときの基本的な形は以下のようになります。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;myTag&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;vital&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[],&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;pm&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;start&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;pm&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;テスト&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;c1&#34;&gt;//終わったら次のタグへ
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;      &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;kag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ftag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;nextOrder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;TYRANO&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;kag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ftag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;master_tag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;myTag&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;object&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;myTag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;TYRANO&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;kag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ftag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;master_tag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;myTag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;kag&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;TYRANO&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;kag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;})();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;TYRANO.kag.ftag.master_tag&lt;/code&gt;にタグが管理されているのでそこにタグを作って追加する形になります。&lt;br&gt;
+タグの主な処理は&lt;code&gt;start&lt;/code&gt;メソッド内に記述します。処理が終わったら、最後に&lt;code&gt;kag.ftag.nextOrder()&lt;/code&gt;を呼べば次の処理に移ります。&lt;br&gt;
+このタグの場合、&lt;code&gt;[myTag]&lt;/code&gt;と記述してシナリオファイルから呼ぶと、consoleに&lt;code&gt;テスト&lt;/code&gt;と表示されます。&lt;/p&gt;
+&lt;h2 id=&#34;パラメータの処理&#34;&gt;パラメータの処理&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;vital&lt;/code&gt;と&lt;code&gt;pm&lt;/code&gt;について説明します。&lt;code&gt;vital&lt;/code&gt;は必須パラメータの指定です。&lt;br&gt;
+&lt;code&gt;vital : [&#39;text&#39;]&lt;/code&gt;とすれば、textパラメータが必須となります。必須パラメータ無しでタグを呼ぶと以下のようにエラーが出るようになります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;vital-error.png&#34; alt=&#34;パラメータ不足のエラー&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;pm&lt;/code&gt;はデフォルトパラメータを指定します。例えば、pmを以下のように定義し、タグの呼び出しで&lt;code&gt;[myTag layer=2]&lt;/code&gt;とすると、&lt;br&gt;
+&lt;code&gt;start&lt;/code&gt;メソッドに&lt;code&gt;{layer:2, color: &amp;quot;#000&amp;quot;}&lt;/code&gt;として渡されます。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;pm&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;nx&#34;&gt;layer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;nx&#34;&gt;color&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;#000&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;渡されたパラメータによってエラーを出力したいときは以下のように&lt;code&gt;kag.error&lt;/code&gt;メソッドを呼びます。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;kag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;error&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;エラー！&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;レイヤーについて&#34;&gt;レイヤーについて&lt;/h2&gt;
+&lt;p&gt;画面に要素を追加するにはレイヤーの構造を理解する必要があります。&lt;br&gt;
+レイヤーはdivであり、レイヤー番号と前面、背面を組み合わせたclassで指定したレイヤーを取得できます。&lt;br&gt;
+例えば、レイヤー1の前面を取得したい場合は以下のようにします。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>ニコニコっぽいテキストを表示するティラノスクリプトプラグイン</title>
+      <link>https://kido0617.github.io/tyrano/2018-03-26-nico-text/</link>
+      <pubDate>Mon, 26 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/tyrano/2018-03-26-nico-text/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;現代もののゲームをやるとニコニコ動画的なサイトが登場することがあります。&lt;br&gt;
+ティラノスクリプトでもそういった表現を可能にするプラグインを作成しました。&lt;br&gt;
+プラグインの仕様、雰囲気は下記動画参照です。&lt;/p&gt;
+&lt;p&gt;&lt;video src=&#34;tyrano-nico.mp4&#34; width=&#34;600&#34;  controls&gt;&lt;/video&gt;&lt;/p&gt;
+&lt;h2 id=&#34;プラグインダウンロードと設置&#34;&gt;プラグインダウンロードと設置&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/kido0617/tyrano-plugin/archive/master.zip&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;ダウンロード&lt;/a&gt;して解凍してできた&lt;code&gt;nicoText&lt;/code&gt;フォルダをティラノスクリプトの&lt;code&gt;data/others/plugin&lt;/code&gt;フォルダに配置します。&lt;/p&gt;
+&lt;p&gt;first.ksファイルにプラグイン読み込みタグを追加します。デフォルトのコメントがある行の下辺りに追加すると良いと思います。以下のような感じです。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;;ゲームで必ず必要な初期化処理はこのファイルに記述するのがオススメ
+[plugin name=nicoText]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;フォルダに含まれているsample.ks は記述例です。参考にしてください。&lt;/p&gt;
+&lt;h2 id=&#34;nicosetting初期化&#34;&gt;[nicoSetting]　初期化&lt;/h2&gt;
+&lt;p&gt;表示する領域を設定します。必ずこのタグを一度呼び出す必要があります。&lt;br&gt;
+2度呼び出すと古い方を削除して新しく作り直されます。&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;パラメータ&lt;/th&gt;
+          &lt;th&gt;必須&lt;/th&gt;
+          &lt;th&gt;解説&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;layer&lt;/td&gt;
+          &lt;td&gt;○&lt;/td&gt;
+          &lt;td&gt;表示対象のレイヤを指定します&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;x&lt;/td&gt;
+          &lt;td&gt;○&lt;/td&gt;
+          &lt;td&gt;領域の左端位置を指定します&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;y&lt;/td&gt;
+          &lt;td&gt;○&lt;/td&gt;
+          &lt;td&gt;領域の上端位置を指定します&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;width&lt;/td&gt;
+          &lt;td&gt;○&lt;/td&gt;
+          &lt;td&gt;領域の幅を指定します&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;height&lt;/td&gt;
+          &lt;td&gt;○&lt;/td&gt;
+          &lt;td&gt;領域の高さを指定します&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fontSize&lt;/td&gt;
+          &lt;td&gt;×&lt;/td&gt;
+          &lt;td&gt;流れる文字のフォントサイズを指定します。(デフォルトは24)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;fontFace&lt;/td&gt;
+          &lt;td&gt;×&lt;/td&gt;
+          &lt;td&gt;流れる文字のフォントを指定します。fontタグのfaceパラメータと同じ指定方法&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;displayTime&lt;/td&gt;
+          &lt;td&gt;×&lt;/td&gt;
+          &lt;td&gt;流れる文字の表示時間をミリ秒で指定します。(デフォルトは5000)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;border&lt;/td&gt;
+          &lt;td&gt;×&lt;/td&gt;
+          &lt;td&gt;trueを指定すると領域の外枠を表示します。デバッグ時にわかりやすくなります&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;サンプルコード&#34;&gt;サンプルコード&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;;最低限
+[nicoSetting layer=1 x=100 y=100 width=600 height=300]
+
+;全部指定
+[nicoSetting layer=1 x=100 y=100 width=600 height=300 fontSize=50 fontFace=&amp;#34;メイリオ&amp;#34; displayTime=3000 border=true ]
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&#34;nicotextテキストの表示&#34;&gt;[nicoText]　テキストの表示&lt;/h2&gt;
+&lt;p&gt;テキストを1つ流します。&lt;/p&gt;</description>
+      
+    </item>
+    
+  </channel>
+</rss>

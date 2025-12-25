@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">文字認識　方向線素特徴量 | kido</title>
+<meta property="og:title" content="文字認識　方向線素特徴量 | kido" />
+<meta name="twitter:title" content="文字認識　方向線素特徴量 | kido" />
+<meta itemprop="name" content="文字認識　方向線素特徴量 | kido" />
+<meta name="application-name" content="文字認識　方向線素特徴量 | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/others/2013-01-15-word-recognition/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/others/2013-01-15-word-recognition/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="文字認識　方向線素特徴量">
+  <meta property="og:description" content="方向線素特徴量が文字認識でかなり使われている方法のようで。
+文字認識に使われる特徴量に方向線素特徴量というものがある。これは文字の線が縦，横，斜め上，斜め下の４方向のどの方向であるかを調べる方法である。例えば、下図のように64×64ドットの画像を16×16 ドットのマス目に分けて，それを8 ドットずつずらしながら，その16×16の領域内にある方向線素の数を調べる。この方法で調べると，7×7の領域を調べることになり，その領域で4方向の線素の数を調べるので，7×7×4の196次元の特徴量を抽出することになる。
+補足として、方向線素の数を調べるとは2×2ドットの領域のドットの形から判断する。以下が例。
+４ドットがすべて黒の場合は全ての方向を持つとする（でいいのかな）。この各方向の数をカウントすればよい。
+結果的に特徴量として、領域ごとに以下のような196次元のベクトルが取得できる。
+[ 縦の数 横の数 斜下の数 斜上の数 縦の数 横の数 斜下の数 斜上の数・・・・]">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="others">
+    <meta property="article:published_time" content="2013-01-15T00:00:00+00:00">
+    <meta property="article:modified_time" content="2013-01-15T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="文字認識　方向線素特徴量">
+  <meta name="twitter:description" content="方向線素特徴量が文字認識でかなり使われている方法のようで。
+文字認識に使われる特徴量に方向線素特徴量というものがある。これは文字の線が縦，横，斜め上，斜め下の４方向のどの方向であるかを調べる方法である。例えば、下図のように64×64ドットの画像を16×16 ドットのマス目に分けて，それを8 ドットずつずらしながら，その16×16の領域内にある方向線素の数を調べる。この方法で調べると，7×7の領域を調べることになり，その領域で4方向の線素の数を調べるので，7×7×4の196次元の特徴量を抽出することになる。
+補足として、方向線素の数を調べるとは2×2ドットの領域のドットの形から判断する。以下が例。
+４ドットがすべて黒の場合は全ての方向を持つとする（でいいのかな）。この各方向の数をカウントすればよい。
+結果的に特徴量として、領域ごとに以下のような196次元のベクトルが取得できる。
+[ 縦の数 横の数 斜下の数 斜上の数 縦の数 横の数 斜下の数 斜上の数・・・・]">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/others/2013-01-15-word-recognition/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">文字認識　方向線素特徴量</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/%E3%81%9D%E3%81%AE%E4%BB%96" style="margin-right:10px;">その他</a>
+                    <time datetime="2013-01-15T00:00:00&#43;00:00" itemprop="datePublished"> 2013/01/15 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <p>方向線素特徴量が文字認識でかなり使われている方法のようで。</p>
+<p>文字認識に使われる特徴量に方向線素特徴量というものがある。これは文字の線が縦，横，斜め上，斜め下の４方向のどの方向であるかを調べる方法である。例えば、下図のように64×64ドットの画像を16×16 ドットのマス目に分けて，それを8 ドットずつずらしながら，その16×16の領域内にある方向線素の数を調べる。この方法で調べると，7×7の領域を調べることになり，その領域で4方向の線素の数を調べるので，7×7×4の196次元の特徴量を抽出することになる。</p>
+<p><img src="moji.png" alt="文字例"></p>
+<p>補足として、方向線素の数を調べるとは2×2ドットの領域のドットの形から判断する。以下が例。<br>
+４ドットがすべて黒の場合は全ての方向を持つとする（でいいのかな）。この各方向の数をカウントすればよい。</p>
+<p><img src="senso.png" alt="方向線素"></p>
+<p>結果的に特徴量として、領域ごとに以下のような196次元のベクトルが取得できる。<br>
+[ 縦の数  横の数  斜下の数  斜上の数   縦の数  横の数  斜下の数  斜上の数・・・・]</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

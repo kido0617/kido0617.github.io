@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">細かいTips2 | kido</title>
+<meta property="og:title" content="細かいTips2 | kido" />
+<meta name="twitter:title" content="細かいTips2 | kido" />
+<meta itemprop="name" content="細かいTips2 | kido" />
+<meta name="application-name" content="細かいTips2 | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/spine/2021-02-01-tips2/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/spine/2021-02-01-tips2/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="細かいTips2">
+  <meta property="og:description" content="ボーンの描画順序 ボーンをメッシュに割り当てた後、下図のように曲げたときにメッシュ同士が重なる場合があります。
+この重なった描画順序を変えたい場合、bindしたボーンの順番を変える必要があります。
+例えば、以下のようにbindしたボーンの順番を変えてみます。
+そうすると最初の図のメッシュは以下のようになり、ボーン2にbindされたメッシュは描画順序が上になります。
+コピペと複製 Hierarchy上でCtrl &#43; C、Ctrl &#43; Vを押してコピペしても複製はできません。
+Transformの値（回転とか位置とか）がコピーされるからです。
+同じ座標にオブジェクトを配置するときは便利ですが、複製するにはTreeビュー下部にあるDuplicateボタンを押す必要があります。
+最初、アニメーションを複製したいときにどうやって複製すればいいか迷いました。
+コンストレイントの順序 パスコンストレイントとIKコンストレイントを併用しているときに、IKが効かなくなることがありました。
+これはコンストレイントの順序が影響によるものでした。
+下図のようにパスコンストレイント-&gt;IKコンストレイントの順番ならIKが効くのですが、逆だとIKが効きませんでした。
+順序に関しては公式に記載があります。
+使用バージョン Spine 3.8.99">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="spine">
+    <meta property="article:published_time" content="2021-02-01T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-02-01T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="細かいTips2">
+  <meta name="twitter:description" content="ボーンの描画順序 ボーンをメッシュに割り当てた後、下図のように曲げたときにメッシュ同士が重なる場合があります。
+この重なった描画順序を変えたい場合、bindしたボーンの順番を変える必要があります。
+例えば、以下のようにbindしたボーンの順番を変えてみます。
+そうすると最初の図のメッシュは以下のようになり、ボーン2にbindされたメッシュは描画順序が上になります。
+コピペと複製 Hierarchy上でCtrl &#43; C、Ctrl &#43; Vを押してコピペしても複製はできません。
+Transformの値（回転とか位置とか）がコピーされるからです。
+同じ座標にオブジェクトを配置するときは便利ですが、複製するにはTreeビュー下部にあるDuplicateボタンを押す必要があります。
+最初、アニメーションを複製したいときにどうやって複製すればいいか迷いました。
+コンストレイントの順序 パスコンストレイントとIKコンストレイントを併用しているときに、IKが効かなくなることがありました。
+これはコンストレイントの順序が影響によるものでした。
+下図のようにパスコンストレイント-&gt;IKコンストレイントの順番ならIKが効くのですが、逆だとIKが効きませんでした。
+順序に関しては公式に記載があります。
+使用バージョン Spine 3.8.99">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/spine/2021-02-01-tips2/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">細かいTips2</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/spine" style="margin-right:10px;">Spine</a>
+                    <time datetime="2021-02-01T00:00:00&#43;00:00" itemprop="datePublished"> 2021/02/01 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <h2 id="ボーンの描画順序">ボーンの描画順序</h2>
+<p>ボーンをメッシュに割り当てた後、下図のように曲げたときにメッシュ同士が重なる場合があります。</p>
+<p><img src="bind1.png" alt="メッシュの描画順序"></p>
+<p>この重なった描画順序を変えたい場合、bindしたボーンの順番を変える必要があります。<br>
+例えば、以下のようにbindしたボーンの順番を変えてみます。</p>
+<p><img src="bind-order.png" alt="bindの順番"></p>
+<p>そうすると最初の図のメッシュは以下のようになり、ボーン2にbindされたメッシュは描画順序が上になります。</p>
+<p><img src="bind2.png" alt="メッシュの描画順序2"></p>
+<h2 id="コピペと複製">コピペと複製</h2>
+<p>Hierarchy上で<code>Ctrl + C</code>、<code>Ctrl + V</code>を押してコピペしても複製はできません。<br>
+Transformの値（回転とか位置とか）がコピーされるからです。<br>
+同じ座標にオブジェクトを配置するときは便利ですが、複製するにはTreeビュー下部にあるDuplicateボタンを押す必要があります。<br>
+最初、アニメーションを複製したいときにどうやって複製すればいいか迷いました。</p>
+<p><img src="duplicate.png" alt="複製"></p>
+<h2 id="コンストレイントの順序">コンストレイントの順序</h2>
+<p>パスコンストレイントとIKコンストレイントを併用しているときに、IKが効かなくなることがありました。<br>
+これはコンストレイントの順序が影響によるものでした。<br>
+下図のようにパスコンストレイント-&gt;IKコンストレイントの順番ならIKが効くのですが、逆だとIKが効きませんでした。<br>
+順序に関しては<a href="http://ja.esotericsoftware.com/spine-constraints" class="blankA" target="_blank" rel="noopener noreferrer">公式に記載</a>があります。</p>
+<p><img src="constraint-order.png" alt="constraint-oder"></p>
+<h2 id="使用バージョン">使用バージョン</h2>
+<p>Spine 3.8.99</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

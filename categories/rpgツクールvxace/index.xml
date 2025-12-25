@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>RPGツクールVXAce on kido</title>
+    <link>https://kido0617.github.io/categories/rpg%E3%83%84%E3%82%AF%E3%83%BC%E3%83%ABvxace/</link>
+    <description>Recent content in RPGツクールVXAce on kido</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <lastBuildDate>Sun, 05 Aug 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://kido0617.github.io/categories/rpg%E3%83%84%E3%82%AF%E3%83%BC%E3%83%ABvxace/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>BGSを保存・再開するスクリプト(VXAce版)</title>
+      <link>https://kido0617.github.io/rpgmaker/2018-08-05-save-bgs-vxace/</link>
+      <pubDate>Sun, 05 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2018-08-05-save-bgs-vxace/</guid>
+      
+      <description>&lt;p&gt;この記事はVXAce版です。MV版は&lt;a href=&#34;https://kido0617.github.io/rpgmaker/2018-06-19-save-bgs&#34;&gt;こちら&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;BGMと同様にBGSについても保存と再開を可能にするスクリプトです。&lt;/p&gt;
+&lt;h2 id=&#34;スクリプトコマンド&#34;&gt;スクリプトコマンド&lt;/h2&gt;
+&lt;p&gt;BGSの保存: &lt;code&gt;$game_system.save_bgs&lt;/code&gt;&lt;br&gt;
+BGSの再開: &lt;code&gt;$game_system.replay_bgs&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerVXAce-plugin/master/bgs_save/bgs_save.rb&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;ダウンロード&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>ランダムにアイテムを取得するスクリプト(VXAce版)</title>
+      <link>https://kido0617.github.io/rpgmaker/2018-08-03-random-treasure-vxace/</link>
+      <pubDate>Fri, 03 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2018-08-03-random-treasure-vxace/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;仕様についてはMV版の記事を参照してください&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://kido0617.github.io/rpgmaker/2017-04-17-random-treasure&#34;&gt;ランダムにアイテムを取得するプラグイン(MV版)&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;導入方法&#34;&gt;導入方法&lt;/h2&gt;
+&lt;p&gt;まず、スクリプトが&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerVXAce-plugin/master/random_treasure/random_treasure.rb&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;これ&lt;/a&gt;。&lt;br&gt;
+導入したら、スクリプトコマンドで &lt;code&gt;Random_Treasure::reset&lt;/code&gt; を実行する。&lt;br&gt;
+このコマンド直後のショップ処理で登録したアイテムがランダムに手に入るアイテム群となる。ショップは開かれない。&lt;br&gt;
+アイテムごとの価格の設定がくじの本数となる。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;reset.png&#34; alt=&#34;アイテム群の設定&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;rate.png&#34; alt=&#34;出現確率&#34;&gt;&lt;/p&gt;
+&lt;p&gt;そして、次に宝箱側の設定だ。スクリプトコマンドで &lt;code&gt;Random_Treasure::get&lt;/code&gt; を実行するとランダムに1個手に入る。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;get.png&#34; alt=&#34;ランダムに1個取得&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;入手したアイテムの表示方法&#34;&gt;入手したアイテムの表示方法&lt;/h2&gt;
+&lt;p&gt;アイテム名格納変数とアイテムアイコン番号格納変数を用意した。&lt;br&gt;
+ここに変数番号を入れておくと、その番号の変数にアイテム名とアイコン番号が自動的に入る。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;module&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;RANDOMTREASURE&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;no&#34;&gt;NAME_VAR&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;#取得したアイテム名を格納する変数番号&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;no&#34;&gt;ICON_VAR&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;#取得したアイテムのアイコン番号を格納する変数番号&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;なので、これを使って、メッセージウィンドウに以下のように入力すれば入手したアイテムとアイコンが表示できる。&lt;br&gt;
+(変数番号は上記で指定した値)&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;\I[\V[20]] \V[10]を手に入れた
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;※ 入手インフォメーションスクリプトの &lt;code&gt;インフォメーションfor RGSS3 Ver2.03-β&lt;/code&gt; に対応しています&lt;/p&gt;
+&lt;h2 id=&#34;dl先&#34;&gt;DL先&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerVXAce-plugin/master/random_treasure/random_treasure.rb&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;https://raw.githubusercontent.com/kido0617/rpgmakerVXAce-plugin/master/random_treasure/random_treasure.rb&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>デバッグ画面にショートカットキーを追加するスクリプト(VXAce版)</title>
+      <link>https://kido0617.github.io/rpgmaker/2018-07-05-debug-shortcut-vxace/</link>
+      <pubDate>Thu, 05 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2018-07-05-debug-shortcut-vxace/</guid>
+      
+      <description>&lt;p&gt;この記事はVXAce版です。MV版は&lt;a href=&#34;https://kido0617.github.io/rpgmaker/2018-07-04-debug-shortcut/&#34;&gt;こちら&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;F9で表示するデバッグウィンドウはスイッチと変数の切り替えが面倒なので、ショートカットキーを追加します。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Sキー&lt;/code&gt;  スイッチの先頭に飛ぶ&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Vキー&lt;/code&gt;  変数の先頭に飛ぶ&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;数字キー&lt;/code&gt; 入力した番号に飛ぶ&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;例1: &lt;code&gt;s100&lt;/code&gt; と入力するとスイッチの100番目に飛ぶ&lt;br&gt;
+例2: &lt;code&gt;v12&lt;/code&gt; と入力すると変数の12番目に飛ぶ&lt;/p&gt;
+&lt;p&gt;Backspaceキーも使えます。&lt;/p&gt;
+&lt;p&gt;使用感はこんな感じです。&lt;br&gt;
+&lt;video src=&#34;debug-shortcut.mp4&#34; width=&#34;816&#34; height=&#34;624&#34; controls&gt;&lt;/video&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ダウンロード&#34;&gt;ダウンロード&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://raw.githubusercontent.com/kido0617/rpgmakerVXAce-plugin/master/debug-shortcut/debug-shortcut.rb&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;こちらから&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ライセンス&#34;&gt;ライセンス&lt;/h2&gt;
+&lt;p&gt;Released under the MIT license&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>VX Aceプロジェクトのデータをテキストに変換する</title>
+      <link>https://kido0617.github.io/rpgmaker/2018-07-01-rvpacker/</link>
+      <pubDate>Sun, 01 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/rpgmaker/2018-07-01-rvpacker/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;RPGツクールVX Aceのデータはプロジェクト内のDataフォルダに.rvdata2という形式で保存されています。&lt;br&gt;
+バイナリデータのため簡単に編集などはできないのですが、&lt;a href=&#34;https://github.com/Solistra/rvpacker&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;rvpacker&lt;/a&gt;というツールを使うと、テキストデータ(YAML形式)に変換することができます。もちろん、テキストデータから元のデータに戻すこともできます。&lt;br&gt;
+テキストデータにすることにより、会話やファイル名などの全置換を行うことができます。また、バージョン管理もしやすくなる利点があります。&lt;/p&gt;
+&lt;h2 id=&#34;rubyのインストール&#34;&gt;Rubyのインストール&lt;/h2&gt;
+&lt;p&gt;Windows10下でのインストールを説明します。rvpackerのInstallationも参照してください。&lt;br&gt;
+まず、Rubyをインストールする必要があります。&lt;br&gt;
+(Ruby Installer)[https://rubyinstaller.org/downloads/] からRuby+Devkitをダウンロードします(執筆時バージョンは2.5.1-2でした)&lt;br&gt;
+x64かx86かは環境に合わせてください。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;ruby.png&#34; alt=&#34;Ruby Installer&#34;&gt;&lt;/p&gt;
+&lt;p&gt;ダウンロードしたら普通にインストールします。特に途中の選択肢は変更する必要ありません。&lt;br&gt;
+一緒にMSYS2もインストールする必要があり、最後に以下のようなプロンプトが立ち上がります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;msys2.png&#34; alt=&#34;MSYS2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;ここで、1を押してエンターで、&lt;code&gt; MSYS2 base installation&lt;/code&gt;を選択します。&lt;br&gt;
+これでRubyの準備はできました。&lt;/p&gt;
+&lt;h2 id=&#34;rvpackerのインストール&#34;&gt;rvpackerのインストール&lt;/h2&gt;
+&lt;p&gt;Windowsに標準に付属している&lt;code&gt;PowerShell&lt;/code&gt;を立ち上げます。&lt;br&gt;
+&lt;code&gt;gem install rvpacker&lt;/code&gt; と入力し、エンターするとrvpackerがインストールできます。&lt;/p&gt;
+&lt;h2 id=&#34;テキストデータに変換する&#34;&gt;テキストデータに変換する&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;PowerShell&lt;/code&gt;で変換したいツクールのプロジェクト配下(Game.rvproj2があるフォルダ)まで移動します。&lt;br&gt;
+そこで &lt;code&gt;rvpacker --action unpack --project ./ --project-type ace&lt;/code&gt; とコマンドを実行します。&lt;br&gt;
+すると、フォルダに&lt;code&gt;Scripts&lt;/code&gt;と&lt;code&gt;YAML&lt;/code&gt;フォルダが生成されます。&lt;br&gt;
+&lt;code&gt;Scripts&lt;/code&gt;はRGSSスクリプトがruby形式になって保存されています。&lt;br&gt;
+&lt;code&gt;YAML&lt;/code&gt;フォルダ内に以下のように各rvdata2がYAML形式に変換されて保存されます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;yaml.png&#34; alt=&#34;MSYS2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;中身は例えば、&lt;code&gt;Items.yaml&lt;/code&gt;を見ると以下のようにテキストデータになっています。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nn&#34;&gt;---&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;- &lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;- !&lt;span class=&#34;l&#34;&gt;ruby/object:RPG::Item&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;description&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;マッチ&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;consumable&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;occasion&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;icon_index&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;530&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;price&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;scope&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;animation_id&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;note&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;speed&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;id&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;features&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;effects&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;damage&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;!&lt;span class=&#34;l&#34;&gt;ruby/object:RPG::UsableItem::Damage&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;element_id&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;formula&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;0&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;variance&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;critical&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;success_rate&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;hit_type&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;itype_id&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;repeats&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;tp_gain&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Mapxxx.yamlはそれぞれのマップのイベントなどが記載されています。&lt;br&gt;
+メッセージなどがこのように確認できます。&lt;/p&gt;</description>
+      
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">VX Aceプロジェクトのデータをテキストに変換する | kido</title>
+<meta property="og:title" content="VX Aceプロジェクトのデータをテキストに変換する | kido" />
+<meta name="twitter:title" content="VX Aceプロジェクトのデータをテキストに変換する | kido" />
+<meta itemprop="name" content="VX Aceプロジェクトのデータをテキストに変換する | kido" />
+<meta name="application-name" content="VX Aceプロジェクトのデータをテキストに変換する | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/rpgmaker/2018-07-01-rvpacker/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/rpgmaker/2018-07-01-rvpacker/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="VX Aceプロジェクトのデータをテキストに変換する">
+  <meta property="og:description" content="概要 RPGツクールVX Aceのデータはプロジェクト内のDataフォルダに.rvdata2という形式で保存されています。
+バイナリデータのため簡単に編集などはできないのですが、rvpackerというツールを使うと、テキストデータ(YAML形式)に変換することができます。もちろん、テキストデータから元のデータに戻すこともできます。
+テキストデータにすることにより、会話やファイル名などの全置換を行うことができます。また、バージョン管理もしやすくなる利点があります。
+Rubyのインストール Windows10下でのインストールを説明します。rvpackerのInstallationも参照してください。
+まず、Rubyをインストールする必要があります。
+(Ruby Installer)[https://rubyinstaller.org/downloads/] からRuby&#43;Devkitをダウンロードします(執筆時バージョンは2.5.1-2でした)
+x64かx86かは環境に合わせてください。
+ダウンロードしたら普通にインストールします。特に途中の選択肢は変更する必要ありません。
+一緒にMSYS2もインストールする必要があり、最後に以下のようなプロンプトが立ち上がります。
+ここで、1を押してエンターで、 MSYS2 base installationを選択します。
+これでRubyの準備はできました。
+rvpackerのインストール Windowsに標準に付属しているPowerShellを立ち上げます。
+gem install rvpacker と入力し、エンターするとrvpackerがインストールできます。
+テキストデータに変換する PowerShellで変換したいツクールのプロジェクト配下(Game.rvproj2があるフォルダ)まで移動します。
+そこで rvpacker --action unpack --project ./ --project-type ace とコマンドを実行します。
+すると、フォルダにScriptsとYAMLフォルダが生成されます。
+ScriptsはRGSSスクリプトがruby形式になって保存されています。
+YAMLフォルダ内に以下のように各rvdata2がYAML形式に変換されて保存されます。
+中身は例えば、Items.yamlを見ると以下のようにテキストデータになっています。
+--- - - !ruby/object:RPG::Item description: &#39;&#39; name: マッチ consumable: false occasion: 3 icon_index: 530 price: 0 scope: 0 animation_id: 0 note: &#39;&#39; speed: 0 id: 1 features: [] effects: [] damage: !ruby/object:RPG::UsableItem::Damage type: 0 element_id: 0 formula: &#39;0&#39; variance: 20 critical: false success_rate: 100 hit_type: 0 itype_id: 2 repeats: 1 tp_gain: 0 Mapxxx.yamlはそれぞれのマップのイベントなどが記載されています。
+メッセージなどがこのように確認できます。">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="rpgmaker">
+    <meta property="article:published_time" content="2018-07-01T00:00:00+00:00">
+    <meta property="article:modified_time" content="2018-07-01T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="VX Aceプロジェクトのデータをテキストに変換する">
+  <meta name="twitter:description" content="概要 RPGツクールVX Aceのデータはプロジェクト内のDataフォルダに.rvdata2という形式で保存されています。
+バイナリデータのため簡単に編集などはできないのですが、rvpackerというツールを使うと、テキストデータ(YAML形式)に変換することができます。もちろん、テキストデータから元のデータに戻すこともできます。
+テキストデータにすることにより、会話やファイル名などの全置換を行うことができます。また、バージョン管理もしやすくなる利点があります。
+Rubyのインストール Windows10下でのインストールを説明します。rvpackerのInstallationも参照してください。
+まず、Rubyをインストールする必要があります。
+(Ruby Installer)[https://rubyinstaller.org/downloads/] からRuby&#43;Devkitをダウンロードします(執筆時バージョンは2.5.1-2でした)
+x64かx86かは環境に合わせてください。
+ダウンロードしたら普通にインストールします。特に途中の選択肢は変更する必要ありません。
+一緒にMSYS2もインストールする必要があり、最後に以下のようなプロンプトが立ち上がります。
+ここで、1を押してエンターで、 MSYS2 base installationを選択します。
+これでRubyの準備はできました。
+rvpackerのインストール Windowsに標準に付属しているPowerShellを立ち上げます。
+gem install rvpacker と入力し、エンターするとrvpackerがインストールできます。
+テキストデータに変換する PowerShellで変換したいツクールのプロジェクト配下(Game.rvproj2があるフォルダ)まで移動します。
+そこで rvpacker --action unpack --project ./ --project-type ace とコマンドを実行します。
+すると、フォルダにScriptsとYAMLフォルダが生成されます。
+ScriptsはRGSSスクリプトがruby形式になって保存されています。
+YAMLフォルダ内に以下のように各rvdata2がYAML形式に変換されて保存されます。
+中身は例えば、Items.yamlを見ると以下のようにテキストデータになっています。
+--- - - !ruby/object:RPG::Item description: &#39;&#39; name: マッチ consumable: false occasion: 3 icon_index: 530 price: 0 scope: 0 animation_id: 0 note: &#39;&#39; speed: 0 id: 1 features: [] effects: [] damage: !ruby/object:RPG::UsableItem::Damage type: 0 element_id: 0 formula: &#39;0&#39; variance: 20 critical: false success_rate: 100 hit_type: 0 itype_id: 2 repeats: 1 tp_gain: 0 Mapxxx.yamlはそれぞれのマップのイベントなどが記載されています。
+メッセージなどがこのように確認できます。">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/rpgmaker/2018-07-01-rvpacker/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">VX Aceプロジェクトのデータをテキストに変換する</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/rpg%E3%83%84%E3%82%AF%E3%83%BC%E3%83%ABvxace" style="margin-right:10px;">RPGツクールVXAce</a>
+                    <time datetime="2018-07-01T00:00:00&#43;00:00" itemprop="datePublished"> 2018/07/01 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <h2 id="概要">概要</h2>
+<p>RPGツクールVX Aceのデータはプロジェクト内のDataフォルダに.rvdata2という形式で保存されています。<br>
+バイナリデータのため簡単に編集などはできないのですが、<a href="https://github.com/Solistra/rvpacker" class="blankA" target="_blank" rel="noopener noreferrer">rvpacker</a>というツールを使うと、テキストデータ(YAML形式)に変換することができます。もちろん、テキストデータから元のデータに戻すこともできます。<br>
+テキストデータにすることにより、会話やファイル名などの全置換を行うことができます。また、バージョン管理もしやすくなる利点があります。</p>
+<h2 id="rubyのインストール">Rubyのインストール</h2>
+<p>Windows10下でのインストールを説明します。rvpackerのInstallationも参照してください。<br>
+まず、Rubyをインストールする必要があります。<br>
+(Ruby Installer)[https://rubyinstaller.org/downloads/] からRuby+Devkitをダウンロードします(執筆時バージョンは2.5.1-2でした)<br>
+x64かx86かは環境に合わせてください。</p>
+<p><img src="ruby.png" alt="Ruby Installer"></p>
+<p>ダウンロードしたら普通にインストールします。特に途中の選択肢は変更する必要ありません。<br>
+一緒にMSYS2もインストールする必要があり、最後に以下のようなプロンプトが立ち上がります。</p>
+<p><img src="msys2.png" alt="MSYS2"></p>
+<p>ここで、1を押してエンターで、<code> MSYS2 base installation</code>を選択します。<br>
+これでRubyの準備はできました。</p>
+<h2 id="rvpackerのインストール">rvpackerのインストール</h2>
+<p>Windowsに標準に付属している<code>PowerShell</code>を立ち上げます。<br>
+<code>gem install rvpacker</code> と入力し、エンターするとrvpackerがインストールできます。</p>
+<h2 id="テキストデータに変換する">テキストデータに変換する</h2>
+<p><code>PowerShell</code>で変換したいツクールのプロジェクト配下(Game.rvproj2があるフォルダ)まで移動します。<br>
+そこで <code>rvpacker --action unpack --project ./ --project-type ace</code> とコマンドを実行します。<br>
+すると、フォルダに<code>Scripts</code>と<code>YAML</code>フォルダが生成されます。<br>
+<code>Scripts</code>はRGSSスクリプトがruby形式になって保存されています。<br>
+<code>YAML</code>フォルダ内に以下のように各rvdata2がYAML形式に変換されて保存されます。</p>
+<p><img src="yaml.png" alt="MSYS2"></p>
+<p>中身は例えば、<code>Items.yaml</code>を見ると以下のようにテキストデータになっています。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- !<span class="l">ruby/object:RPG::Item</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">マッチ</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">consumable</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">occasion</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">icon_index</span><span class="p">:</span><span class="w"> </span><span class="m">530</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">price</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">scope</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">animation_id</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">note</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">speed</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">features</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">effects</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">damage</span><span class="p">:</span><span class="w"> </span>!<span class="l">ruby/object:RPG::UsableItem::Damage</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">element_id</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">formula</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">variance</span><span class="p">:</span><span class="w"> </span><span class="m">20</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">critical</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">success_rate</span><span class="p">:</span><span class="w"> </span><span class="m">100</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hit_type</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">itype_id</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">repeats</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">tp_gain</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span></code></pre></div><p>Mapxxx.yamlはそれぞれのマップのイベントなどが記載されています。<br>
+メッセージなどがこのように確認できます。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl">- !<span class="l">ruby/object:RPG::EventCommand {i: 0, c: 505, p: [*2]}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- !<span class="l">ruby/object:RPG::EventCommand {i: 0, c: 101, p: [&#39;&#39;, 0, 0, 2]}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- !<span class="l">ruby/object:RPG::EventCommand {i: 0, c: 401, p: [エルル「なぁに、\|父さん」]}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- !<span class="l">ruby/object:RPG::EventCommand {i: 0, c: 101, p: [&#39;&#39;, 0, 0, 2]}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- !<span class="l">ruby/object:RPG::EventCommand {i: 0, c: 401, p: [父「この間、隣のおばさんに聞いたんだが、\|]}</span><span class="w">
+</span></span></span></code></pre></div><h2 id="テキストから元のデータに戻す">テキストから元のデータに戻す</h2>
+<p>逆にテキストから元のデータに戻す際は以下のようにコマンドを打ちます。</p>
+<p><code>rvpacker --action pack --project ./ --project-type ace</code></p>
+<h2 id="まとめ">まとめ</h2>
+<p>テキストデータにして編集することはできるにせよ、編集に失敗するとデータを壊す元になるのでバックアップをとってから、慎重に使いましょう。</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

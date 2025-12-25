@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">マップのリフレッシュの話 | kido</title>
+<meta property="og:title" content="マップのリフレッシュの話 | kido" />
+<meta name="twitter:title" content="マップのリフレッシュの話 | kido" />
+<meta itemprop="name" content="マップのリフレッシュの話 | kido" />
+<meta name="application-name" content="マップのリフレッシュの話 | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/rpgmaker/2019-12-20-refresh-map/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/rpgmaker/2019-12-20-refresh-map/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="マップのリフレッシュの話">
+  <meta property="og:description" content="マップのリフレッシュとは 変数やスイッチ、セルフスイッチを変更したり、メンバの加入・脱退、アイテムの増減をするとマップのリフレッシュが走ります。
+リフレッシュとはマップ上のイベントの条件とコモンイベントの条件をチェックする処理です。
+変数やスイッチの値が変わったということはイベントの発生条件に影響があるかもしれないので、すべてチェックしなければいけません。
+マップの全イベントの全ページの条件をチェックし、コモンイベントは自動・並列イベントの条件をチェックします。
+この処理は重いのか このリフレッシュが重いと考え、並列コモンで変数・スイッチの変更を避けるという話をよく聞きます。
+それでも代入したいときは、スクリプトを使ってリフレッシュを回避しつつ変数・スイッチを変更するという手段も取られるようです。
+ただ、一般的なプロジェクトではマップ上のイベントとコモンイベントの条件をチェックするぐらいは重い処理ではないと思います。並列コモンで普通に変数に毎フレーム代入しているプロジェクトのパフォーマンス測定をしたこともありますが、それが重さに全くつながってはいませんでした。
+条件の判定を拡張するプラグインなど、リフレッシュ契機で動作するプラグインが毎フレームのリフレッシュの重さに影響を与える可能性もあるので、一概には重くないとは言えないかもしれませんが。
+リフレッシュを回避して変数・スイッチに代入するスクリプト リフレッシュを回避するためにスクリプトを使って変数・スイッチを変更するという手段があります。
+例えば、デフォルトの変数操作は以下のスクリプトで書き換えるというものです。
+たしかにこれだとリフレッシュはされませんが、デメリットが大きくチューニングをするのは非常に難しいので個人的にはおすすめできません。
+以下にデメリットを述べていきます。
+リフレッシュをしないということ リフレッシュをしないということは、各イベントのページが更新されません。
+もしスクリプトで置き換えた変数・スイッチをページの条件に使っていた場合、内容が変わったのにイベントが開始されないということが起きます。
+可読性・記述ミスの問題 上記のツクールデフォの変数操作とスクリプトの操作を見ればわかりますが、スクリプトの方は番号しか表示できず、何の変数なのかわかりません。
+スクリプトを書くときも何番が使いたいものなのか調べなくてはならず、記述をミスる可能性が高いです。
+チューニングの難しさ このリフレッシュですが、変数やスイッチを変更した瞬間に行われません。
+変更した次のフレームにまとめて1回だけ行われます。
+以下は4つ操作していますが、同一フレームなのでリフレッシュは1回です。
+例えば、動作している全並列コモンにある変数操作10個あるうちの9個をスクリプトに置き換えてもリフレッシュを防いだことにはならず、すべての変数・スイッチの操作を把握して置き換えなくてはいけません。
+これは非常に難しいと思います。
+また、もし毎フレームリフレッシュをリクエストするようなプラグインを導入していた場合、この施策は意味のないことになってしまいます。
+終わりに 確認用にリフレッシュしたときにコンソールにフレーム番号とメッセージを出すプラグインを作ったので興味があればどうぞ。
+DLはこちら">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="rpgmaker">
+    <meta property="article:published_time" content="2019-12-20T00:00:00+00:00">
+    <meta property="article:modified_time" content="2019-12-20T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="マップのリフレッシュの話">
+  <meta name="twitter:description" content="マップのリフレッシュとは 変数やスイッチ、セルフスイッチを変更したり、メンバの加入・脱退、アイテムの増減をするとマップのリフレッシュが走ります。
+リフレッシュとはマップ上のイベントの条件とコモンイベントの条件をチェックする処理です。
+変数やスイッチの値が変わったということはイベントの発生条件に影響があるかもしれないので、すべてチェックしなければいけません。
+マップの全イベントの全ページの条件をチェックし、コモンイベントは自動・並列イベントの条件をチェックします。
+この処理は重いのか このリフレッシュが重いと考え、並列コモンで変数・スイッチの変更を避けるという話をよく聞きます。
+それでも代入したいときは、スクリプトを使ってリフレッシュを回避しつつ変数・スイッチを変更するという手段も取られるようです。
+ただ、一般的なプロジェクトではマップ上のイベントとコモンイベントの条件をチェックするぐらいは重い処理ではないと思います。並列コモンで普通に変数に毎フレーム代入しているプロジェクトのパフォーマンス測定をしたこともありますが、それが重さに全くつながってはいませんでした。
+条件の判定を拡張するプラグインなど、リフレッシュ契機で動作するプラグインが毎フレームのリフレッシュの重さに影響を与える可能性もあるので、一概には重くないとは言えないかもしれませんが。
+リフレッシュを回避して変数・スイッチに代入するスクリプト リフレッシュを回避するためにスクリプトを使って変数・スイッチを変更するという手段があります。
+例えば、デフォルトの変数操作は以下のスクリプトで書き換えるというものです。
+たしかにこれだとリフレッシュはされませんが、デメリットが大きくチューニングをするのは非常に難しいので個人的にはおすすめできません。
+以下にデメリットを述べていきます。
+リフレッシュをしないということ リフレッシュをしないということは、各イベントのページが更新されません。
+もしスクリプトで置き換えた変数・スイッチをページの条件に使っていた場合、内容が変わったのにイベントが開始されないということが起きます。
+可読性・記述ミスの問題 上記のツクールデフォの変数操作とスクリプトの操作を見ればわかりますが、スクリプトの方は番号しか表示できず、何の変数なのかわかりません。
+スクリプトを書くときも何番が使いたいものなのか調べなくてはならず、記述をミスる可能性が高いです。
+チューニングの難しさ このリフレッシュですが、変数やスイッチを変更した瞬間に行われません。
+変更した次のフレームにまとめて1回だけ行われます。
+以下は4つ操作していますが、同一フレームなのでリフレッシュは1回です。
+例えば、動作している全並列コモンにある変数操作10個あるうちの9個をスクリプトに置き換えてもリフレッシュを防いだことにはならず、すべての変数・スイッチの操作を把握して置き換えなくてはいけません。
+これは非常に難しいと思います。
+また、もし毎フレームリフレッシュをリクエストするようなプラグインを導入していた場合、この施策は意味のないことになってしまいます。
+終わりに 確認用にリフレッシュしたときにコンソールにフレーム番号とメッセージを出すプラグインを作ったので興味があればどうぞ。
+DLはこちら">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/rpgmaker/2019-12-20-refresh-map/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">マップのリフレッシュの話</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/rpg%E3%83%84%E3%82%AF%E3%83%BC%E3%83%ABmv" style="margin-right:10px;">RPGツクールMV</a>
+                    <time datetime="2019-12-20T00:00:00&#43;00:00" itemprop="datePublished"> 2019/12/20 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <h2 id="マップのリフレッシュとは">マップのリフレッシュとは</h2>
+<p>変数やスイッチ、セルフスイッチを変更したり、メンバの加入・脱退、アイテムの増減をするとマップのリフレッシュが走ります。<br>
+リフレッシュとはマップ上のイベントの条件とコモンイベントの条件をチェックする処理です。<br>
+変数やスイッチの値が変わったということはイベントの発生条件に影響があるかもしれないので、すべてチェックしなければいけません。<br>
+マップの全イベントの全ページの条件をチェックし、コモンイベントは自動・並列イベントの条件をチェックします。</p>
+<h2 id="この処理は重いのか">この処理は重いのか</h2>
+<p>このリフレッシュが重いと考え、並列コモンで変数・スイッチの変更を避けるという話をよく聞きます。<br>
+それでも代入したいときは、スクリプトを使ってリフレッシュを回避しつつ変数・スイッチを変更するという手段も取られるようです。</p>
+<p>ただ、一般的なプロジェクトではマップ上のイベントとコモンイベントの条件をチェックするぐらいは重い処理ではないと思います。並列コモンで普通に変数に毎フレーム代入しているプロジェクトのパフォーマンス測定をしたこともありますが、それが重さに全くつながってはいませんでした。<br>
+条件の判定を拡張するプラグインなど、リフレッシュ契機で動作するプラグインが毎フレームのリフレッシュの重さに影響を与える可能性もあるので、一概には重くないとは言えないかもしれませんが。</p>
+<h2 id="リフレッシュを回避して変数スイッチに代入するスクリプト">リフレッシュを回避して変数・スイッチに代入するスクリプト</h2>
+<p>リフレッシュを回避するためにスクリプトを使って変数・スイッチを変更するという手段があります。<br>
+例えば、デフォルトの変数操作は以下のスクリプトで書き換えるというものです。</p>
+<p><img src="varset-default.png" alt=""></p>
+<p><img src="varset-script.png" alt=""></p>
+<p>たしかにこれだとリフレッシュはされませんが、デメリットが大きくチューニングをするのは非常に難しいので個人的にはおすすめできません。<br>
+以下にデメリットを述べていきます。</p>
+<h3 id="リフレッシュをしないということ">リフレッシュをしないということ</h3>
+<p>リフレッシュをしないということは、各イベントのページが更新されません。<br>
+もしスクリプトで置き換えた変数・スイッチをページの条件に使っていた場合、内容が変わったのにイベントが開始されないということが起きます。</p>
+<h3 id="可読性記述ミスの問題">可読性・記述ミスの問題</h3>
+<p>上記のツクールデフォの変数操作とスクリプトの操作を見ればわかりますが、スクリプトの方は番号しか表示できず、何の変数なのかわかりません。<br>
+スクリプトを書くときも何番が使いたいものなのか調べなくてはならず、記述をミスる可能性が高いです。</p>
+<h3 id="チューニングの難しさ">チューニングの難しさ</h3>
+<p>このリフレッシュですが、変数やスイッチを変更した瞬間に行われません。<br>
+変更した次のフレームにまとめて1回だけ行われます。<br>
+以下は4つ操作していますが、同一フレームなのでリフレッシュは1回です。</p>
+<p><img src="var-switch-frame.png" alt=""></p>
+<p>例えば、動作している全並列コモンにある変数操作10個あるうちの9個をスクリプトに置き換えてもリフレッシュを防いだことにはならず、すべての変数・スイッチの操作を把握して置き換えなくてはいけません。<br>
+これは非常に難しいと思います。<br>
+また、もし毎フレームリフレッシュをリクエストするようなプラグインを導入していた場合、この施策は意味のないことになってしまいます。</p>
+<h2 id="終わりに">終わりに</h2>
+<p>確認用にリフレッシュしたときにコンソールにフレーム番号とメッセージを出すプラグインを作ったので興味があればどうぞ。</p>
+<p>DLは<a href="https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/ShowMapRefresh/ShowMapRefresh.js" class="blankA" target="_blank" rel="noopener noreferrer">こちら</a></p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

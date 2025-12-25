@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">ランダムにアイテムを取得するプラグイン(MV版) | kido</title>
+<meta property="og:title" content="ランダムにアイテムを取得するプラグイン(MV版) | kido" />
+<meta name="twitter:title" content="ランダムにアイテムを取得するプラグイン(MV版) | kido" />
+<meta itemprop="name" content="ランダムにアイテムを取得するプラグイン(MV版) | kido" />
+<meta name="application-name" content="ランダムにアイテムを取得するプラグイン(MV版) | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/rpgmaker/2017-04-17-random-treasure/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/rpgmaker/2017-04-17-random-treasure/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="ランダムにアイテムを取得するプラグイン(MV版)">
+  <meta property="og:description" content="この記事はMV版です。VXAce版はこちら
+らんだむダンジョンがすごい好きで周回要素ないのに50時間ぐらいかかるのを2週プレイした。
+らんだむダンジョンはランダムにアイテムが手に入る宝箱がある。今回はそれを実装した。
+ツクールのデフォルトの機能でも実現できるけど、結構面倒くさいので、簡単にできるプラグインを作る。
+こういう仕様にしたい。
+ランダムに手に入るアイテム群を設定できる（ダンジョンごとに異なるアイテム群を設定できる） アイテムごとに異なる確率を設定できる できるだけ設定しやすく、1と2を実現する ランダムに手に入るアイテム群を設定できる アイテム選択があるコマンドを乗っ取ることにした。ショップコマンドだ。
+ショップコマンドはアイテムをGUIで選択できるので設定しやすくて良い。
+アイテムごとに異なる確率を設定できる レアなアイテムは出にくくしたい。ショップコマンドはアイテムごとに価格を設定できる。
+ちょうどいいので、この価格を確率にしてしまう。
+くじの本数だと考えてほしい。例えば、アイテムが3つあって、アイテム1=10、アイテム2=10、アイテム3=1だったとする。
+こうすれば、くじの本数が1本しかないアイテム3は出にくくなる。
+※くじを引いたら戻す仕様とし、引き続けてもなくならない。
+導入方法 まず、プラグインがこれ。
+導入したら、まずプラグインコマンドで RandomTreasure reset を実行する。
+このコマンド直後のショップ処理で登録したアイテムがランダムに手に入るアイテム群となる。ショップは開かれない。
+そして、次に宝箱側の設定だ。プラグインコマンドで RandomTreasure get を実行するとランダムに1個手に入る。
+入手したアイテムの表示方法 プラグインパラメータにアイテム名格納変数とアイテムアイコン番号格納変数を用意した。
+ここに変数番号を入れておくと、その番号の変数にアイテム名とアイコン番号が自動的に入る。
+なので、これを使って、メッセージウィンドウに以下のように入力すれば入手したアイテムとアイコンが表示できる。
+(変数番号はパラメータで指定した値)
+\I[\V[20]] \V[10]を手に入れた ※ 2017/12/09 入手インフォメーション系プラグイン(TinyGetInfoWnd.jsやGetInformation.js)に対応しました。
+連携する場合は、それらのプラグインの機能をONにして単体で動くことを確認してください。
+(導入しても動かないという報告がありますが、それらのプラグインのパラメータが適切でない場合が多いです)
+レア度に応じた演出 プラグインパラメータにアイテムのくじの本数格納変数を用意した。
+ここに変数番号を入れておくと、その番号に手に入れたアイテムのくじの本数が入る。
+レア度に応じた演出をしたい場合、この変数を分岐にして演出を行えば良い
+手に入れたアイテムの詳細を取得 もし、手に入れたアイテムのDB上の情報を取得したい場合は、スクリプトの処理になりますが以下のようにして取得できます。
+var item = $gameSystem.getLastRandomTreasure(); Ver.1.4前は$gameSystem.lastRandomTreasureで取得可能でしたが、セーブ容量が増えて適切でないため変更しました。
+DL先 https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/RandomTreasure/RandomTreasure.js
+ライセンス Released under the MIT license">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="rpgmaker">
+    <meta property="article:published_time" content="2017-04-17T00:00:00+00:00">
+    <meta property="article:modified_time" content="2017-04-17T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ランダムにアイテムを取得するプラグイン(MV版)">
+  <meta name="twitter:description" content="この記事はMV版です。VXAce版はこちら
+らんだむダンジョンがすごい好きで周回要素ないのに50時間ぐらいかかるのを2週プレイした。
+らんだむダンジョンはランダムにアイテムが手に入る宝箱がある。今回はそれを実装した。
+ツクールのデフォルトの機能でも実現できるけど、結構面倒くさいので、簡単にできるプラグインを作る。
+こういう仕様にしたい。
+ランダムに手に入るアイテム群を設定できる（ダンジョンごとに異なるアイテム群を設定できる） アイテムごとに異なる確率を設定できる できるだけ設定しやすく、1と2を実現する ランダムに手に入るアイテム群を設定できる アイテム選択があるコマンドを乗っ取ることにした。ショップコマンドだ。
+ショップコマンドはアイテムをGUIで選択できるので設定しやすくて良い。
+アイテムごとに異なる確率を設定できる レアなアイテムは出にくくしたい。ショップコマンドはアイテムごとに価格を設定できる。
+ちょうどいいので、この価格を確率にしてしまう。
+くじの本数だと考えてほしい。例えば、アイテムが3つあって、アイテム1=10、アイテム2=10、アイテム3=1だったとする。
+こうすれば、くじの本数が1本しかないアイテム3は出にくくなる。
+※くじを引いたら戻す仕様とし、引き続けてもなくならない。
+導入方法 まず、プラグインがこれ。
+導入したら、まずプラグインコマンドで RandomTreasure reset を実行する。
+このコマンド直後のショップ処理で登録したアイテムがランダムに手に入るアイテム群となる。ショップは開かれない。
+そして、次に宝箱側の設定だ。プラグインコマンドで RandomTreasure get を実行するとランダムに1個手に入る。
+入手したアイテムの表示方法 プラグインパラメータにアイテム名格納変数とアイテムアイコン番号格納変数を用意した。
+ここに変数番号を入れておくと、その番号の変数にアイテム名とアイコン番号が自動的に入る。
+なので、これを使って、メッセージウィンドウに以下のように入力すれば入手したアイテムとアイコンが表示できる。
+(変数番号はパラメータで指定した値)
+\I[\V[20]] \V[10]を手に入れた ※ 2017/12/09 入手インフォメーション系プラグイン(TinyGetInfoWnd.jsやGetInformation.js)に対応しました。
+連携する場合は、それらのプラグインの機能をONにして単体で動くことを確認してください。
+(導入しても動かないという報告がありますが、それらのプラグインのパラメータが適切でない場合が多いです)
+レア度に応じた演出 プラグインパラメータにアイテムのくじの本数格納変数を用意した。
+ここに変数番号を入れておくと、その番号に手に入れたアイテムのくじの本数が入る。
+レア度に応じた演出をしたい場合、この変数を分岐にして演出を行えば良い
+手に入れたアイテムの詳細を取得 もし、手に入れたアイテムのDB上の情報を取得したい場合は、スクリプトの処理になりますが以下のようにして取得できます。
+var item = $gameSystem.getLastRandomTreasure(); Ver.1.4前は$gameSystem.lastRandomTreasureで取得可能でしたが、セーブ容量が増えて適切でないため変更しました。
+DL先 https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/RandomTreasure/RandomTreasure.js
+ライセンス Released under the MIT license">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/rpgmaker/2017-04-17-random-treasure/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">ランダムにアイテムを取得するプラグイン(MV版)</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/rpg%E3%83%84%E3%82%AF%E3%83%BC%E3%83%ABmv" style="margin-right:10px;">RPGツクールMV</a>
+                    <time datetime="2017-04-17T00:00:00&#43;00:00" itemprop="datePublished"> 2017/04/17 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <p>この記事はMV版です。VXAce版は<a href="/rpgmaker/2018-08-03-random-treasure-vxace">こちら</a></p>
+<p>らんだむダンジョンがすごい好きで周回要素ないのに50時間ぐらいかかるのを2週プレイした。<br>
+らんだむダンジョンはランダムにアイテムが手に入る宝箱がある。今回はそれを実装した。<br>
+ツクールのデフォルトの機能でも実現できるけど、結構面倒くさいので、簡単にできるプラグインを作る。</p>
+<p>こういう仕様にしたい。</p>
+<ol>
+<li>ランダムに手に入るアイテム群を設定できる（ダンジョンごとに異なるアイテム群を設定できる）</li>
+<li>アイテムごとに異なる確率を設定できる</li>
+<li>できるだけ設定しやすく、1と2を実現する</li>
+</ol>
+<h2 id="ランダムに手に入るアイテム群を設定できる">ランダムに手に入るアイテム群を設定できる</h2>
+<p>アイテム選択があるコマンドを乗っ取ることにした。ショップコマンドだ。<br>
+ショップコマンドはアイテムをGUIで選択できるので設定しやすくて良い。</p>
+<p><img src="shop.png" alt="ショップコマンド"></p>
+<h2 id="アイテムごとに異なる確率を設定できる">アイテムごとに異なる確率を設定できる</h2>
+<p>レアなアイテムは出にくくしたい。ショップコマンドはアイテムごとに価格を設定できる。<br>
+ちょうどいいので、この価格を確率にしてしまう。<br>
+くじの本数だと考えてほしい。例えば、アイテムが3つあって、アイテム1=10、アイテム2=10、アイテム3=1だったとする。<br>
+こうすれば、くじの本数が1本しかないアイテム3は出にくくなる。<br>
+※くじを引いたら戻す仕様とし、引き続けてもなくならない。</p>
+<p><img src="rate.png" alt="確率"></p>
+<p><img src="ratelist.png" alt="確率一覧"></p>
+<h2 id="導入方法">導入方法</h2>
+<p>まず、プラグインが<a href="https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/RandomTreasure/RandomTreasure.js" class="blankA" target="_blank" rel="noopener noreferrer">これ</a>。<br>
+導入したら、まずプラグインコマンドで <code>RandomTreasure reset</code> を実行する。<br>
+このコマンド直後のショップ処理で登録したアイテムがランダムに手に入るアイテム群となる。ショップは開かれない。</p>
+<p><img src="plugin-command1.png" alt="設定プラグインコマンド"></p>
+<p>そして、次に宝箱側の設定だ。プラグインコマンドで <code>RandomTreasure get</code> を実行するとランダムに1個手に入る。</p>
+<h2 id="入手したアイテムの表示方法">入手したアイテムの表示方法</h2>
+<p>プラグインパラメータにアイテム名格納変数とアイテムアイコン番号格納変数を用意した。<br>
+ここに変数番号を入れておくと、その番号の変数にアイテム名とアイコン番号が自動的に入る。<br>
+<img src="param.png" alt="パラメータ"><br>
+なので、これを使って、メッセージウィンドウに以下のように入力すれば入手したアイテムとアイコンが表示できる。<br>
+(変数番号はパラメータで指定した値)</p>
+<pre tabindex="0"><code>\I[\V[20]] \V[10]を手に入れた
+</code></pre><p><img src="get.png" alt="ランダムに取得"></p>
+<p>※ 2017/12/09 入手インフォメーション系プラグイン(TinyGetInfoWnd.jsやGetInformation.js)に対応しました。<br>
+連携する場合は、それらのプラグインの機能をONにして単体で動くことを確認してください。<br>
+(導入しても動かないという報告がありますが、それらのプラグインのパラメータが適切でない場合が多いです)</p>
+<h2 id="レア度に応じた演出">レア度に応じた演出</h2>
+<p>プラグインパラメータにアイテムのくじの本数格納変数を用意した。<br>
+ここに変数番号を入れておくと、その番号に手に入れたアイテムのくじの本数が入る。<br>
+レア度に応じた演出をしたい場合、この変数を分岐にして演出を行えば良い</p>
+<h2 id="手に入れたアイテムの詳細を取得">手に入れたアイテムの詳細を取得</h2>
+<p>もし、手に入れたアイテムのDB上の情報を取得したい場合は、スクリプトの処理になりますが以下のようにして取得できます。</p>
+<pre tabindex="0"><code>var item = $gameSystem.getLastRandomTreasure();
+</code></pre><p>Ver.1.4前は<code>$gameSystem.lastRandomTreasure</code>で取得可能でしたが、セーブ容量が増えて適切でないため変更しました。</p>
+<h2 id="dl先">DL先</h2>
+<p><a href="https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/RandomTreasure/RandomTreasure.js" class="blankA" target="_blank" rel="noopener noreferrer">https://raw.githubusercontent.com/kido0617/rpgmakerMV-plugin/master/RandomTreasure/RandomTreasure.js</a></p>
+<h2 id="ライセンス">ライセンス</h2>
+<p>Released under the MIT license</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

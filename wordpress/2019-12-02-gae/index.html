@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">GAEのサブディレクトリでWordPressを動かす | kido</title>
+<meta property="og:title" content="GAEのサブディレクトリでWordPressを動かす | kido" />
+<meta name="twitter:title" content="GAEのサブディレクトリでWordPressを動かす | kido" />
+<meta itemprop="name" content="GAEのサブディレクトリでWordPressを動かす | kido" />
+<meta name="application-name" content="GAEのサブディレクトリでWordPressを動かす | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/wordpress/2019-12-02-gae/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/wordpress/2019-12-02-gae/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="GAEのサブディレクトリでWordPressを動かす">
+  <meta property="og:description" content="GAE Standard の PHP7環境の話です。
+サービスの分割 GAEでLaravelを動かしていますが、そこにブログの機能を追加したい要望が出ました。
+その際、/blogのサブディレクトリで動かすことが条件でした。
+Laravelのpublicフォルダ下にWordPressを設置することもできますが、メンテナンスも考えて今回は分離して運用します。
+GAEはサービスという単位でディレクトリごとに復数のプロダクトを動かすことができます。
+以下のドキュメントが詳しいです。
+dispatch.yaml 構成ファイル | App Engine スタンダード環境での PHP 7.2 に関するドキュメント
+ドキュメントに従い、dispatch.yamlを以下のように記述し、デプロイしました。
+これで、wpというservice名でblog配下を配信できる準備ができました。
+dispatch: - url: &#34;*/blog*&#34; service: wp WordPressプロジェクトのダウンロード 以下のドキュメントに従い、ダウンロード、インストールしていきます。手順通り実行すれば、GAEで動作するように設定されたWordPressがダウンロードされます。
+このドキュメントはルート直下にインストールすることを前提にしているのでダウンロード後に設定を変えます。
+Run WordPress on Google App Engine standard environment
+wp-config.phpの修正 まず、wp-config.phpです。サイトのURLとホームを/blogありにします。
+//元々 define(&#39;WP_SITEURL&#39;, $protocol_to_use . HTTP_HOST); define(&#39;WP_HOME&#39;, $protocol_to_use . HTTP_HOST); ↓ // /blog/を追加 define(&#39;WP_SITEURL&#39;, $protocol_to_use . HTTP_HOST. &#39;/blog/&#39;); define(&#39;WP_HOME&#39;, $protocol_to_use . HTTP_HOST. &#39;/blog/&#39;); gae-app.phpの修正 次にgae-app.phpを修正します。GAEで動かした際にまずこのファイルにアクセスが割り振られます。
+このWordPressはURL的には/blog配下ですが、サービス的にはルート直下にインストールされるので、その差を修正します。
+//元々 $file = get_real_file_to_load($_SERVER[&#39;REQUEST_URI&#39;]); ↓ // リクエストは /blogつきでくるが、サーバ上のファイルは/blogはないので、消す $uri = preg_replace(&#39;/\/blog/&#39;, &#39;&#39;, $_SERVER[&#39;REQUEST_URI&#39;], 1); $file = get_real_file_to_load($uri); app.yamlの修正 最後にapp.yamlを以下のように修正します。
+# App Engine runtime configuration runtime: php72 #デプロイ先の指定 service: wp entrypoint: serve gae-app.php #それぞれのurlに/blogを追加します handlers: - url: /blog/(.*\.(htm|html|css|js)) static_files: \1 upload: .*\.(htm|html|css|js)$ - url: /blog/wp-content/(.*\.(ico|jpg|jpeg|png|gif|woff|ttf|otf|eot|svg)) static_files: wp-content/\1 upload: wp-content/.*\.(ico|jpg|jpeg|png|gif|woff|ttf|otf|eot|svg)$ - url: /blog/(.*\.(ico|jpg|jpeg|png|gif|woff|ttf|otf|eot|svg)) static_files: \1 upload: .*\.(ico|jpg|jpeg|png|gif|woff|ttf|otf|eot|svg)$ - url: /blog/wp-includes/images/media/(.*\.(ico|jpg|jpeg|png|gif|woff|ttf|otf|eot|svg)) static_files: wp-includes/images/media/\1 upload: wp-includes/images/media/.*\.(ico|jpg|jpeg|png|gif|woff|ttf|otf|eot|svg)$ デプロイ あとはドキュメントどおり、 gcloud app deploy app.yaml cron.yaml　すればOKでした。">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="wordpress">
+    <meta property="article:published_time" content="2019-12-02T00:00:00+00:00">
+    <meta property="article:modified_time" content="2019-12-02T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="GAEのサブディレクトリでWordPressを動かす">
+  <meta name="twitter:description" content="GAE Standard の PHP7環境の話です。
+サービスの分割 GAEでLaravelを動かしていますが、そこにブログの機能を追加したい要望が出ました。
+その際、/blogのサブディレクトリで動かすことが条件でした。
+Laravelのpublicフォルダ下にWordPressを設置することもできますが、メンテナンスも考えて今回は分離して運用します。
+GAEはサービスという単位でディレクトリごとに復数のプロダクトを動かすことができます。
+以下のドキュメントが詳しいです。
+dispatch.yaml 構成ファイル | App Engine スタンダード環境での PHP 7.2 に関するドキュメント
+ドキュメントに従い、dispatch.yamlを以下のように記述し、デプロイしました。
+これで、wpというservice名でblog配下を配信できる準備ができました。
+dispatch: - url: &#34;*/blog*&#34; service: wp WordPressプロジェクトのダウンロード 以下のドキュメントに従い、ダウンロード、インストールしていきます。手順通り実行すれば、GAEで動作するように設定されたWordPressがダウンロードされます。
+このドキュメントはルート直下にインストールすることを前提にしているのでダウンロード後に設定を変えます。
+Run WordPress on Google App Engine standard environment
+wp-config.phpの修正 まず、wp-config.phpです。サイトのURLとホームを/blogありにします。
+//元々 define(&#39;WP_SITEURL&#39;, $protocol_to_use . HTTP_HOST); define(&#39;WP_HOME&#39;, $protocol_to_use . HTTP_HOST); ↓ // /blog/を追加 define(&#39;WP_SITEURL&#39;, $protocol_to_use . HTTP_HOST. &#39;/blog/&#39;); define(&#39;WP_HOME&#39;, $protocol_to_use . HTTP_HOST. &#39;/blog/&#39;); gae-app.phpの修正 次にgae-app.phpを修正します。GAEで動かした際にまずこのファイルにアクセスが割り振られます。
+このWordPressはURL的には/blog配下ですが、サービス的にはルート直下にインストールされるので、その差を修正します。
+//元々 $file = get_real_file_to_load($_SERVER[&#39;REQUEST_URI&#39;]); ↓ // リクエストは /blogつきでくるが、サーバ上のファイルは/blogはないので、消す $uri = preg_replace(&#39;/\/blog/&#39;, &#39;&#39;, $_SERVER[&#39;REQUEST_URI&#39;], 1); $file = get_real_file_to_load($uri); app.yamlの修正 最後にapp.yamlを以下のように修正します。
+# App Engine runtime configuration runtime: php72 #デプロイ先の指定 service: wp entrypoint: serve gae-app.php #それぞれのurlに/blogを追加します handlers: - url: /blog/(.*\.(htm|html|css|js)) static_files: \1 upload: .*\.(htm|html|css|js)$ - url: /blog/wp-content/(.*\.(ico|jpg|jpeg|png|gif|woff|ttf|otf|eot|svg)) static_files: wp-content/\1 upload: wp-content/.*\.(ico|jpg|jpeg|png|gif|woff|ttf|otf|eot|svg)$ - url: /blog/(.*\.(ico|jpg|jpeg|png|gif|woff|ttf|otf|eot|svg)) static_files: \1 upload: .*\.(ico|jpg|jpeg|png|gif|woff|ttf|otf|eot|svg)$ - url: /blog/wp-includes/images/media/(.*\.(ico|jpg|jpeg|png|gif|woff|ttf|otf|eot|svg)) static_files: wp-includes/images/media/\1 upload: wp-includes/images/media/.*\.(ico|jpg|jpeg|png|gif|woff|ttf|otf|eot|svg)$ デプロイ あとはドキュメントどおり、 gcloud app deploy app.yaml cron.yaml　すればOKでした。">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/wordpress/2019-12-02-gae/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">GAEのサブディレクトリでWordPressを動かす</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/wordpress" style="margin-right:10px;">WordPress</a>
+                    <time datetime="2019-12-02T00:00:00&#43;00:00" itemprop="datePublished"> 2019/12/02 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <p>GAE Standard の PHP7環境の話です。</p>
+<h2 id="サービスの分割">サービスの分割</h2>
+<p>GAEでLaravelを動かしていますが、そこにブログの機能を追加したい要望が出ました。<br>
+その際、<code>/blog</code>のサブディレクトリで動かすことが条件でした。<br>
+Laravelのpublicフォルダ下にWordPressを設置することもできますが、メンテナンスも考えて今回は分離して運用します。<br>
+GAEはサービスという単位でディレクトリごとに復数のプロダクトを動かすことができます。<br>
+以下のドキュメントが詳しいです。<br>
+<a href="https://cloud.google.com/appengine/docs/standard/php7/reference/dispatch-yaml?hl=ja" class="blankA" target="_blank" rel="noopener noreferrer">dispatch.yaml 構成ファイル | App Engine スタンダード環境での PHP 7.2 に関するドキュメント</a><br>
+ドキュメントに従い、dispatch.yamlを以下のように記述し、デプロイしました。<br>
+これで、wpというservice名でblog配下を配信できる準備ができました。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">dispatch</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;*/blog*&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="l">wp</span><span class="w">
+</span></span></span></code></pre></div><h2 id="wordpressプロジェクトのダウンロード">WordPressプロジェクトのダウンロード</h2>
+<p>以下のドキュメントに従い、ダウンロード、インストールしていきます。手順通り実行すれば、GAEで動作するように設定されたWordPressがダウンロードされます。<br>
+このドキュメントはルート直下にインストールすることを前提にしているのでダウンロード後に設定を変えます。<br>
+　</p>
+<p><a href="https://cloud.google.com/community/tutorials/run-wordpress-on-appengine-standard?hl=ja" class="blankA" target="_blank" rel="noopener noreferrer">Run WordPress on Google App Engine standard environment</a></p>
+<h2 id="wp-configphpの修正">wp-config.phpの修正</h2>
+<p>まず、<code>wp-config.php</code>です。サイトのURLとホームを<code>/blog</code>ありにします。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">//元々
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;WP_SITEURL&#39;</span><span class="p">,</span> <span class="nv">$protocol_to_use</span> <span class="o">.</span> <span class="nx">HTTP_HOST</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;WP_HOME&#39;</span><span class="p">,</span> <span class="nv">$protocol_to_use</span> <span class="o">.</span> <span class="nx">HTTP_HOST</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">↓</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// /blog/を追加
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;WP_SITEURL&#39;</span><span class="p">,</span> <span class="nv">$protocol_to_use</span> <span class="o">.</span> <span class="nx">HTTP_HOST</span><span class="o">.</span> <span class="s1">&#39;/blog/&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;WP_HOME&#39;</span><span class="p">,</span> <span class="nv">$protocol_to_use</span> <span class="o">.</span> <span class="nx">HTTP_HOST</span><span class="o">.</span> <span class="s1">&#39;/blog/&#39;</span><span class="p">);</span>
+</span></span></code></pre></div><h2 id="gae-appphpの修正">gae-app.phpの修正</h2>
+<p>次に<code>gae-app.php</code>を修正します。GAEで動かした際にまずこのファイルにアクセスが割り振られます。<br>
+このWordPressはURL的には<code>/blog</code>配下ですが、サービス的にはルート直下にインストールされるので、その差を修正します。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">//元々
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nv">$file</span> <span class="o">=</span> <span class="nx">get_real_file_to_load</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;REQUEST_URI&#39;</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">↓</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// リクエストは /blogつきでくるが、サーバ上のファイルは/blogはないので、消す
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nv">$uri</span> <span class="o">=</span> <span class="nx">preg_replace</span><span class="p">(</span><span class="s1">&#39;/\/blog/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;REQUEST_URI&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$file</span> <span class="o">=</span> <span class="nx">get_real_file_to_load</span><span class="p">(</span><span class="nv">$uri</span><span class="p">);</span>
+</span></span></code></pre></div><h2 id="appyamlの修正">app.yamlの修正</h2>
+<p>最後に<code>app.yaml</code>を以下のように修正します。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># App Engine runtime configuration</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">runtime</span><span class="p">:</span><span class="w"> </span><span class="l">php72</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#デプロイ先の指定</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="l">wp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">entrypoint</span><span class="p">:</span><span class="w"> </span><span class="l">serve gae-app.php</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#それぞれのurlに/blogを追加します</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">handlers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l">/blog/(.*\.(htm|html|css|js))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">static_files</span><span class="p">:</span><span class="w"> </span><span class="l">\1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">upload</span><span class="p">:</span><span class="w"> </span><span class="l">.*\.(htm|html|css|js)$</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l">/blog/wp-content/(.*\.(ico|jpg|jpeg|png|gif|woff|ttf|otf|eot|svg))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">static_files</span><span class="p">:</span><span class="w"> </span><span class="l">wp-content/\1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">upload</span><span class="p">:</span><span class="w"> </span><span class="l">wp-content/.*\.(ico|jpg|jpeg|png|gif|woff|ttf|otf|eot|svg)$</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l">/blog/(.*\.(ico|jpg|jpeg|png|gif|woff|ttf|otf|eot|svg))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">static_files</span><span class="p">:</span><span class="w"> </span><span class="l">\1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">upload</span><span class="p">:</span><span class="w"> </span><span class="l">.*\.(ico|jpg|jpeg|png|gif|woff|ttf|otf|eot|svg)$</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l">/blog/wp-includes/images/media/(.*\.(ico|jpg|jpeg|png|gif|woff|ttf|otf|eot|svg))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">static_files</span><span class="p">:</span><span class="w"> </span><span class="l">wp-includes/images/media/\1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">upload</span><span class="p">:</span><span class="w"> </span><span class="l">wp-includes/images/media/.*\.(ico|jpg|jpeg|png|gif|woff|ttf|otf|eot|svg)$</span><span class="w">
+</span></span></span></code></pre></div><h2 id="デプロイ">デプロイ</h2>
+<p>あとはドキュメントどおり、 <code>gcloud app deploy app.yaml cron.yaml</code>　すればOKでした。</p>
+<p>余談ですが、Laravel側でWordPressの記事を表示したいとの要望があり、その連携はAPIを作って、連携しています。</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

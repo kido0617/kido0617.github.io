@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Phps on kido</title>
+    <link>https://kido0617.github.io/php/</link>
+    <description>Recent content in Phps on kido</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <lastBuildDate>Thu, 17 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://kido0617.github.io/php/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Laravel sitemap.xmlを作る</title>
+      <link>https://kido0617.github.io/php/2021-06-17-laravel-sitemap/</link>
+      <pubDate>Thu, 17 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/php/2021-06-17-laravel-sitemap/</guid>
+      
+      <description>&lt;h2 id=&#34;大規模なsitemapxmlを作る&#34;&gt;大規模なsitemap.xmlを作る&lt;/h2&gt;
+&lt;p&gt;sitemap.xmlは1つのファイルに5万件という制約があります。&lt;br&gt;
+その件数を超えるようなサイトはsitemap.xmlを分割する必要があり、今回その対応が必要でした。&lt;br&gt;
+Laravelでsitemap.xmlを作るのには&lt;a href=&#34;https://github.com/Laravelium/laravel-sitemap&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;laravelium/sitemap&lt;/a&gt;を使うのが便利です。&lt;br&gt;
+Laravelのバージョンごとに使うバージョンが異なるので正しいバージョンをインストールします。&lt;/p&gt;
+&lt;h2 id=&#34;sitemap-index&#34;&gt;sitemap index&lt;/h2&gt;
+&lt;p&gt;sitemap indexファイルを作り、sitemap.xmlを分割します。&lt;br&gt;
+&lt;a href=&#34;https://github.com/Laravelium/laravel-sitemap/wiki/Sitemap-index&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;公式ドキュメント&lt;/a&gt;にサンプルがあるので合わせて参考にしてください。&lt;/p&gt;
+&lt;p&gt;下記のようにルーティングを設定します。&lt;br&gt;
+別にURLに.xmlが必要なわけではないので、&lt;code&gt;/sitemap&lt;/code&gt;をindexファイルとし、&lt;code&gt;/sitemap/xxx&lt;/code&gt;をタイプ別にsitemapを生成するように分割します。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;Route&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;get&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;sitemap/{type?}&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;SitemapController@index&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;以下にControllerを載せています。&lt;br&gt;
+$typeがnullのときはインデックスを表示し、$typeが指定されたときは、タイプ別のsitemapを表示するようにすれば適切に分割できます。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;SitemapController&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;extends&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Controller&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;index&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$type&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nv&#34;&gt;$sitemap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;App&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;make&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;sitemap&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;switch&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$type&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;k&#34;&gt;case&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;c1&#34;&gt;//インデックス
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;                &lt;span class=&#34;nv&#34;&gt;$sitemap&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;model&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;setSitemaps&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;loc&amp;#39;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;url&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;sitemap/type1&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;lastmod&amp;#39;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nv&#34;&gt;$sitemap&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;model&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;setSitemaps&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;loc&amp;#39;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;url&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;sitemap/type2&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;lastmod&amp;#39;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nv&#34;&gt;$sitemap&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;model&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;setSitemaps&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;loc&amp;#39;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;url&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;sitemap/type3&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;lastmod&amp;#39;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;k&#34;&gt;case&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;type1&amp;#39;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nv&#34;&gt;$sitemap&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;URL&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;to&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;/&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;1.0&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;daily&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;c1&#34;&gt;//適当にURLをaddしていく
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;                &lt;span class=&#34;k&#34;&gt;break&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;k&#34;&gt;case&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;type2&amp;#39;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;c1&#34;&gt;//type1と同様にsitemapに5万件を超えないようにaddする
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;                &lt;span class=&#34;k&#34;&gt;break&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;k&#34;&gt;case&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;type3&amp;#39;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;               &lt;span class=&#34;c1&#34;&gt;//type1と同様にsitemapに5万件を超えないようにaddする
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;                &lt;span class=&#34;k&#34;&gt;break&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;//描画
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$sitemap&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;render&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;xml&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>Laravel-リリースしたサービスの構成</title>
+      <link>https://kido0617.github.io/php/2019-12-17-service-env/</link>
+      <pubDate>Tue, 17 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/php/2019-12-17-service-env/</guid>
+      
+      <description>&lt;h2 id=&#34;基本構成&#34;&gt;基本構成&lt;/h2&gt;
+&lt;p&gt;最近、仕事でLaravelを初めて使ってサービスをリリースしました。&lt;br&gt;
+その構成を載せておきたいと思います。&lt;br&gt;
+できるだけ費用を抑えたいのですべて、usリージョンです。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;サーバー&lt;br&gt;
+GCPのGAEスタンダードのPHP7&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;DB&lt;br&gt;
+GCPのCloud SQL(MySQL5.7)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;フレームワーク&lt;br&gt;
+Laravel5.8&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;エラーレポート&lt;br&gt;
+GCPのStackdriver&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;セッション・キャッシュ&lt;br&gt;
+DB&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ここまでは以下のドキュメントに沿ってデプロイしています。&lt;br&gt;
+&lt;a href=&#34;https://cloud.google.com/community/tutorials/run-laravel-on-appengine-standard?hl=ja&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Run Laravel on Google App Engine standard environment&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;GAEにはMemcacheの機能があり、キャッシュはそれを使えば良いと思っていたのですが、PHP7の構成には対応しておらず断念。&lt;br&gt;
+月額が少々するMemorystoreを使用するか、無料枠があるRedis Labsが公式に勧められていますが、一旦DB使用で保留。&lt;/p&gt;
+&lt;h2 id=&#34;dns&#34;&gt;DNS&lt;/h2&gt;
+&lt;p&gt;ムームーで取ったらしいドメインをCloud DNSに向けて、管理&lt;/p&gt;
+&lt;h2 id=&#34;ストレージ&#34;&gt;ストレージ&lt;/h2&gt;
+&lt;p&gt;Cloud Storageを使用しています。Laravelで使用するには以下のライブラリを使用しました。&lt;br&gt;
+&lt;a href=&#34;https://github.com/Superbalist/laravel-google-cloud-storage&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;superbalist/laravel-google-cloud-storage&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ブログ機能&#34;&gt;ブログ機能&lt;/h2&gt;
+&lt;p&gt;要件にブログ機能があったので、サブディレクトリでWordPressを動かしています。&lt;br&gt;
+&lt;a href=&#34;wordpress/2019-12-02-gae-wordpress/&#34;&gt;GAEのサブディレクトリでWordPressを動かす&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;basic認証&#34;&gt;Basic認証&lt;/h2&gt;
+&lt;p&gt;開発サーバにアクセス来ると困るということで、ベーシック認証を以下のライブラリでかけています。&lt;br&gt;
+&lt;a href=&#34;https://github.com/olssonm/l5-very-basic-auth&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;olssonm/l5-very-basic-auth&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;sitemapxml&#34;&gt;Sitemap.xml&lt;/h2&gt;
+&lt;p&gt;サイトマップ作成は以下を使用しました。&lt;br&gt;
+&lt;a href=&#34;https://gitlab.com/Laravelium/Sitemap&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;laravelium/sitemap&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;画像加工&#34;&gt;画像加工&lt;/h2&gt;
+&lt;p&gt;情報が多いので以下を使用しました。&lt;br&gt;
+&lt;a href=&#34;http://image.intervention.io/&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;intervention/image&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ユーザの画像アップロード&#34;&gt;ユーザの画像アップロード&lt;/h2&gt;
+&lt;p&gt;以下の問題が発生したので、Firebaseを使用しました。&lt;br&gt;
+&lt;a href=&#34;https://kido0617.github.io/server/2019-12-16-gae-image-upload-slow/&#34;&gt;GAEに画像をアップロードするのが遅い&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;デプロイ&#34;&gt;デプロイ&lt;/h2&gt;
+&lt;p&gt;また、デプロイ後以下のエラーが発生したので、app.yamlにはそれぞれのキャッシュファイルの保存場所を指定しています。&lt;br&gt;
+&lt;a href=&#34;https://stackoverflow.com/questions/56921310/laravel-on-app-engine-standard-the-srv-bootstrap-cache-directory-must-be-prese&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Laravel on App Engine Standard: The /srv/bootstrap/cache directory must be present and writable&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;APP_SERVICES_CACHE&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;/tmp/services.php&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;APP_PACKAGES_CACHE&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;/tmp/packages.php&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;APP_CONFIG_CACHE&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;/tmp/config.php&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;APP_ROUTES_CACHE&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;/tmp/routes.php&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;開発用&#34;&gt;開発用&lt;/h2&gt;
+&lt;p&gt;Homesteadで開発。&lt;br&gt;
+重いクエリとか見るのに以下のデバッグバーが必須。&lt;br&gt;
+&lt;a href=&#34;https://github.com/barryvdh/laravel-debugbar&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;barryvdh/laravel-debugbar&lt;/a&gt;&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>Laravel-テスト時にviewに渡されたパラメータをチェックする</title>
+      <link>https://kido0617.github.io/php/2019-12-09-laravel-test-view/</link>
+      <pubDate>Mon, 09 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/php/2019-12-09-laravel-test-view/</guid>
+      
+      <description>&lt;p&gt;&lt;code&gt;Laravel5.8&lt;/code&gt;でコントローラからビューに渡しているパラメータをテストでチェックしたかったのでその方法です。&lt;br&gt;
+例えば、viewに$commentsを渡します。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;return view(&amp;#39;top&amp;#39;, [&amp;#39;comments&amp;#39; =&amp;gt; $comments]);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;以下のようにテストのhttpリクエストの結果に対して、&lt;code&gt;getOriginalContent()-&amp;gt;getData()&lt;/code&gt;すればパラメータを取得できるようです。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$response = $this-&amp;gt;get(&amp;#39;/&amp;#39;);
+$response-&amp;gt;assertStatus(200);
+$data = $response-&amp;gt;getOriginalContent()-&amp;gt;getData();
+$this-&amp;gt;assertEquals(5, count($data[&amp;#39;comments&amp;#39;]));
+&lt;/code&gt;&lt;/pre&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>Intervention Imageで復数解像度の画像を出力する</title>
+      <link>https://kido0617.github.io/php/2019-12-08-intervention-image-variation/</link>
+      <pubDate>Sun, 08 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/php/2019-12-08-intervention-image-variation/</guid>
+      
+      <description>&lt;p&gt;&lt;code&gt;Intervention Image&lt;/code&gt;で画像を加工しているのですが、いろんな解像度の画像を出力する必要がありました。&lt;br&gt;
+一度、resizeやfitなどすると読み込んでいる画像を書き換えてしまうので、連続して出力できません。&lt;br&gt;
+読み込み直すのも微妙だと思っていたのですが、&lt;code&gt;backup&lt;/code&gt;と&lt;code&gt;restore&lt;/code&gt;をすれば加工前に戻ることができるようです。&lt;br&gt;
+サンプルソースも含めて、以下のドキュメントに記載ありました。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://image.intervention.io/api/reset&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Intervention Image - Reset&lt;/a&gt;&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>Laravel-Cacheファイル生成時のエラー</title>
+      <link>https://kido0617.github.io/php/2019-12-08-laravel-route-cache-error/</link>
+      <pubDate>Sun, 08 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/php/2019-12-08-laravel-route-cache-error/</guid>
+      
+      <description>&lt;h2 id=&#34;デプロイ時のcacheファイル生成&#34;&gt;デプロイ時のCacheファイル生成&lt;/h2&gt;
+&lt;p&gt;以下の公式のデプロイドキュメントに沿って作業したところ、キャッシュファイル生成でエラーが出たのでその話です。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://readouble.com/laravel/5.8/ja/deployment.html&#34; class=&#34;blankA&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;デプロイ 5.8 Laravel&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;configのcache&#34;&gt;ConfigのCache&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;php artisan config:cache&lt;/code&gt;を実行したところ、以下のエラーが発生しました。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Configuration cache cleared!
+
+   LogicException  : Your configuration files are not serializable.
+
+  at /home/vagrant/code/vendor/laravel/framework/src/Illuminate/Foundation/Console/ConfigCacheCommand.php:71
+    67|             require $configPath;
+    68|         } catch (Throwable $e) {
+    69|             $this-&amp;gt;files-&amp;gt;delete($configPath);
+    70|
+  &amp;gt; 71|             throw new LogicException(&amp;#39;Your configuration files are not serializable.&amp;#39;, 0, $e);
+    72|         }
+    73|
+    74|         $this-&amp;gt;info(&amp;#39;Configuration cached successfully!&amp;#39;);
+    75|     }
+
+  Exception trace:
+
+  1   Error::(&amp;#34;Call to undefined method Illuminate\Validation\Rules\In::__set_state()&amp;#34;)
+      /home/vagrant/code/bootstrap/cache/config.php:225
+
+  2   require()
+      /home/vagrant/code/vendor/laravel/framework/src/Illuminate/Foundation/Console/ConfigCacheCommand.php:67
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;configファイルでarrayを返す以外のことをしていると発生するようです。&lt;br&gt;
+私はconfig配下にconsts.phpを作って定数などを管理していたのですが、validationの定義なども共通にしようと管理していたのが間違いでした。&lt;br&gt;
+以下のような記述はNG。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>Laravelでのマルチ認証実装時のRedirectIfAuthenticated</title>
+      <link>https://kido0617.github.io/php/2019-12-03-laravel-redirectifauthenticated/</link>
+      <pubDate>Tue, 03 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/php/2019-12-03-laravel-redirectifauthenticated/</guid>
+      
+      <description>&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;Laravel5.8&lt;/code&gt;でuserとadminを分けるマルチ認証を実装しました。&lt;br&gt;
+その際、adminで認証済みのユーザがログインページに遷移した時に、認証済みであるにも関わらず、ログインページが表示されていました。&lt;br&gt;
+本来、認証済みであるならばログインページに遷移せず、ログイン後のページに遷移するのが正しいです。&lt;/p&gt;
+&lt;p&gt;この処理は&lt;code&gt;app/Http/Middleware/RedirectIfAuthenticated.php&lt;/code&gt;に記載されていますが、調査すると引数の&lt;code&gt;$guest&lt;/code&gt;がnullであることがわかりました。&lt;br&gt;
+nullだと&lt;code&gt;config/auth.php&lt;/code&gt;で定義されたdefaultsのguardをチェックするので、正しいチェックになりません。&lt;/p&gt;
+&lt;h2 id=&#34;解決&#34;&gt;解決&lt;/h2&gt;
+&lt;p&gt;ログインページはroute定義でmiddlewareにguestを定義していますが、その際、パラメータでadminを渡していなかったことが原因でした。&lt;br&gt;
+以下のようにして解決。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;Route&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;group&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;prefix&amp;#39;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;admin&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;middleware&amp;#39;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;guest:admin&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;Route&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;get&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;login&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;Admin\AdminLoginController@showLoginForm&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;admin.login&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;Route&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;post&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;login&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;Admin\AdminLoginController@login&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>ファイルを更新日付順でソートする</title>
+      <link>https://kido0617.github.io/php/2013-01-06-file-sort-by-created/</link>
+      <pubDate>Sun, 06 Jan 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://kido0617.github.io/php/2013-01-06-file-sort-by-created/</guid>
+      
+      <description>&lt;p&gt;PHPでファイル取得して更新日付順でソートしたい。&lt;br&gt;
+手順としては、ディレクトリ内のファイルを取得する際にそのファイルの日付も一緒に取得しておき、配列に保存したファイルを、日付順でソートする流れとなる。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;$dir_name&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;/img/&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;            
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;$dir&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;opendir&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$dir_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;$file_list&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;array&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;             &lt;span class=&#34;c1&#34;&gt;//ファイル名を保存する配列
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$time_list&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;array&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;           &lt;span class=&#34;c1&#34;&gt;//ファイルの日付を保存する配列
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;while&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;false&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!==&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$file&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;readdir&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$dir&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))){&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;//ディレクトリ走査
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;c1&#34;&gt;//先頭文字が&amp;#34;.&amp;#34; のファイルを除外
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$file&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;.&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nv&#34;&gt;$time_list&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;filemtime&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$dir_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$file&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;    &lt;span class=&#34;c1&#34;&gt;//ソート用にファイル時刻を取得
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;nv&#34;&gt;$file_list&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$file&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;//ファイル名を取得
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;closedir&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$dir&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;array_multisort&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$time_list&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;SORT_DESC&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$file_list&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;         &lt;span class=&#34;c1&#34;&gt;//時刻でソート
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;array_multisort　で配列を別の配列でソートできるのでこれを使う。&lt;/p&gt;</description>
+      
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">リリース時のチェック項目 | kido</title>
+<meta property="og:title" content="リリース時のチェック項目 | kido" />
+<meta name="twitter:title" content="リリース時のチェック項目 | kido" />
+<meta itemprop="name" content="リリース時のチェック項目 | kido" />
+<meta name="application-name" content="リリース時のチェック項目 | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/rpgmaker/2021-07-16-deploy-check/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/rpgmaker/2021-07-16-deploy-check/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="リリース時のチェック項目">
+  <meta property="og:description" content="ゲームが完成し、リリースするときにチェックした方が良い項目をまとめました。
+ツクールMVを基準に書いていますが、MZでも大体同じです。
+windowsでexeファイルのリリースを対象としています。
+チェックリスト 不適切なファイルが含まれていないか
+デプロイ後のwwwフォルダを開き、この中に意図していないファイルがないか確認します。
+ライセンス的に問題があるもの、コピーした仮ファイル、制作メモ、不要なファイル（psdファイルなど）がないかチェックします。
+未使用ファイルの削除
+デプロイ時に「未使用ファイルを含まない」をチェックすると、ツクールのエディタ上で使われていない画像やサウンドファイルを削除してくれます。
+しかし、プラグインで使用している画像も削除されてしまうので、このオプションの使用は少々難しいです。
+なので、このオプションを使用せずデプロイすることをオススメします。
+一度、このオプションを使用してデプロイし、削除されたファイルとの差分を見つつ、未使用ファイルをプロジェクトから手動で消すのが無難なのではと思います。
+(プラグインで使用している画像が削除されるのは、ツクールのエディタ側からはどんなプラグインがどう画像を扱うか把握のしようがないため）
+容量のチェック
+可能ならばツールなどを使用し、容量が大きいファイルをリストアップすると良いです。
+明らかに容量が大きい異常なファイルはしばしば見受けられます（未圧縮、不要なほど解像度が大きいなど）。
+Canvasモードでデプロイしていないか
+デプロイ後のexeを起動し、F2キーを押します。画面左上に表示が出ますが、これがWebGL modeであることを確認します。
+もし、Canvas modeだった場合、描画処理が重く、また一部のプラグインは機能しない可能性があります。
+ツクールMV側のバグらしく、MVを再インストールしてデプロイし直すと直ることがあるようです。
+Steam版使っている人は大丈夫っぽい？
+デプロイ時の暗号化キーをメモしておく
+この暗号化キーは画像やサウンドファイルの暗号化に使われます。
+暗号化キーをメモしておくと公開後にバグ修正などでデータの一部だけ修正ファイルを公開したいときに役立ちます。
+デプロイ時の暗号化キーが同じならば、dataフォルダだけの差し替えでバージョンアップが可能のため、柔軟な対応ができます。
+（販売サイトによっては差し替えに1日かかる場合があるので、自身のサイトで修正ファイルを公開するなど）
+テスト用のイベントが残っていないか
+よく拠点などにデバッグ用の便利イベントなどを設置したまま忘れてリリースしてしまうことがあります。
+ニューゲームの初期位置が正しいか
+テストで初期位置を別の場所へしたままにしていないか。
+Readmeを同梱したか
+Readmeや説明ファイルなどがある場合、同梱するのを忘れないようにします。
+バージョンアップ時に入れ忘れることもあるので注意。
+起動に時間がかからないか
+通常のデプロイなら問題ありません。Enigma Virtual boxなどでexeをまとめた場合、起動に時間がかかります。
+許容範囲か確認します。
+ちなみにEnigma Virtual boxを使用した場合、起動するとWindows Defenderにブロックされることがあります。
+ブロックされても無視して起動はできますが、ユーザに知らせることも必要かもしれません。
+テスト用のプラグインパラメータにしていないか
+プラグインパラメータをテストのときのままにしている場合があります。
+また、テスト用のプラグインがある場合、OFFにします。
+体験版の範囲で止まらないか
+体験版と製品版がある場合、製品版なのに体験版の範囲しかプレイできないことがないか確認します。
+セーブファイルを同梱していないか
+普通にデプロイしたらセーブファイルは含まれません。
+デプロイ後に自分でテストしてセーブして、それをそのままアップロードしない限り。
+データを閲覧されても大丈夫か
+ツクールの性質上、データを閲覧されるのを防ぐことはできません。
+コンプライアンスに関わるテキストなどデータベースに残さないようにします。
+（昔、ユーザに見えないエディタ上にしか出ないテキストで販売サイトの審査落ちるみたいなこともありました。）">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="rpgmaker">
+    <meta property="article:published_time" content="2021-07-16T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-07-16T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="リリース時のチェック項目">
+  <meta name="twitter:description" content="ゲームが完成し、リリースするときにチェックした方が良い項目をまとめました。
+ツクールMVを基準に書いていますが、MZでも大体同じです。
+windowsでexeファイルのリリースを対象としています。
+チェックリスト 不適切なファイルが含まれていないか
+デプロイ後のwwwフォルダを開き、この中に意図していないファイルがないか確認します。
+ライセンス的に問題があるもの、コピーした仮ファイル、制作メモ、不要なファイル（psdファイルなど）がないかチェックします。
+未使用ファイルの削除
+デプロイ時に「未使用ファイルを含まない」をチェックすると、ツクールのエディタ上で使われていない画像やサウンドファイルを削除してくれます。
+しかし、プラグインで使用している画像も削除されてしまうので、このオプションの使用は少々難しいです。
+なので、このオプションを使用せずデプロイすることをオススメします。
+一度、このオプションを使用してデプロイし、削除されたファイルとの差分を見つつ、未使用ファイルをプロジェクトから手動で消すのが無難なのではと思います。
+(プラグインで使用している画像が削除されるのは、ツクールのエディタ側からはどんなプラグインがどう画像を扱うか把握のしようがないため）
+容量のチェック
+可能ならばツールなどを使用し、容量が大きいファイルをリストアップすると良いです。
+明らかに容量が大きい異常なファイルはしばしば見受けられます（未圧縮、不要なほど解像度が大きいなど）。
+Canvasモードでデプロイしていないか
+デプロイ後のexeを起動し、F2キーを押します。画面左上に表示が出ますが、これがWebGL modeであることを確認します。
+もし、Canvas modeだった場合、描画処理が重く、また一部のプラグインは機能しない可能性があります。
+ツクールMV側のバグらしく、MVを再インストールしてデプロイし直すと直ることがあるようです。
+Steam版使っている人は大丈夫っぽい？
+デプロイ時の暗号化キーをメモしておく
+この暗号化キーは画像やサウンドファイルの暗号化に使われます。
+暗号化キーをメモしておくと公開後にバグ修正などでデータの一部だけ修正ファイルを公開したいときに役立ちます。
+デプロイ時の暗号化キーが同じならば、dataフォルダだけの差し替えでバージョンアップが可能のため、柔軟な対応ができます。
+（販売サイトによっては差し替えに1日かかる場合があるので、自身のサイトで修正ファイルを公開するなど）
+テスト用のイベントが残っていないか
+よく拠点などにデバッグ用の便利イベントなどを設置したまま忘れてリリースしてしまうことがあります。
+ニューゲームの初期位置が正しいか
+テストで初期位置を別の場所へしたままにしていないか。
+Readmeを同梱したか
+Readmeや説明ファイルなどがある場合、同梱するのを忘れないようにします。
+バージョンアップ時に入れ忘れることもあるので注意。
+起動に時間がかからないか
+通常のデプロイなら問題ありません。Enigma Virtual boxなどでexeをまとめた場合、起動に時間がかかります。
+許容範囲か確認します。
+ちなみにEnigma Virtual boxを使用した場合、起動するとWindows Defenderにブロックされることがあります。
+ブロックされても無視して起動はできますが、ユーザに知らせることも必要かもしれません。
+テスト用のプラグインパラメータにしていないか
+プラグインパラメータをテストのときのままにしている場合があります。
+また、テスト用のプラグインがある場合、OFFにします。
+体験版の範囲で止まらないか
+体験版と製品版がある場合、製品版なのに体験版の範囲しかプレイできないことがないか確認します。
+セーブファイルを同梱していないか
+普通にデプロイしたらセーブファイルは含まれません。
+デプロイ後に自分でテストしてセーブして、それをそのままアップロードしない限り。
+データを閲覧されても大丈夫か
+ツクールの性質上、データを閲覧されるのを防ぐことはできません。
+コンプライアンスに関わるテキストなどデータベースに残さないようにします。
+（昔、ユーザに見えないエディタ上にしか出ないテキストで販売サイトの審査落ちるみたいなこともありました。）">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/rpgmaker/2021-07-16-deploy-check/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">リリース時のチェック項目</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/rpg%E3%83%84%E3%82%AF%E3%83%BC%E3%83%ABmv" style="margin-right:10px;">RPGツクールMV</a>
+                    <time datetime="2021-07-16T00:00:00&#43;00:00" itemprop="datePublished"> 2021/07/16 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <p>ゲームが完成し、リリースするときにチェックした方が良い項目をまとめました。<br>
+ツクールMVを基準に書いていますが、MZでも大体同じです。<br>
+windowsでexeファイルのリリースを対象としています。</p>
+<h2 id="チェックリスト">チェックリスト</h2>
+<ol>
+<li>
+<p>不適切なファイルが含まれていないか<br>
+デプロイ後のwwwフォルダを開き、この中に意図していないファイルがないか確認します。<br>
+ライセンス的に問題があるもの、コピーした仮ファイル、制作メモ、不要なファイル（psdファイルなど）がないかチェックします。</p>
+</li>
+<li>
+<p>未使用ファイルの削除<br>
+デプロイ時に「未使用ファイルを含まない」をチェックすると、ツクールのエディタ上で使われていない画像やサウンドファイルを削除してくれます。<br>
+しかし、プラグインで使用している画像も削除されてしまうので、このオプションの使用は少々難しいです。<br>
+なので、このオプションを使用せずデプロイすることをオススメします。<br>
+一度、このオプションを使用してデプロイし、削除されたファイルとの差分を見つつ、未使用ファイルをプロジェクトから手動で消すのが無難なのではと思います。<br>
+(プラグインで使用している画像が削除されるのは、ツクールのエディタ側からはどんなプラグインがどう画像を扱うか把握のしようがないため）</p>
+</li>
+<li>
+<p>容量のチェック<br>
+可能ならばツールなどを使用し、容量が大きいファイルをリストアップすると良いです。<br>
+明らかに容量が大きい異常なファイルはしばしば見受けられます（未圧縮、不要なほど解像度が大きいなど）。</p>
+</li>
+<li>
+<p>Canvasモードでデプロイしていないか<br>
+デプロイ後のexeを起動し、F2キーを押します。画面左上に表示が出ますが、これがWebGL modeであることを確認します。<br>
+もし、Canvas modeだった場合、描画処理が重く、また一部のプラグインは機能しない可能性があります。<br>
+ツクールMV側のバグらしく、MVを再インストールしてデプロイし直すと直ることがあるようです。<br>
+Steam版使っている人は大丈夫っぽい？</p>
+</li>
+<li>
+<p>デプロイ時の暗号化キーをメモしておく<br>
+この暗号化キーは画像やサウンドファイルの暗号化に使われます。<br>
+暗号化キーをメモしておくと公開後にバグ修正などでデータの一部だけ修正ファイルを公開したいときに役立ちます。<br>
+デプロイ時の暗号化キーが同じならば、dataフォルダだけの差し替えでバージョンアップが可能のため、柔軟な対応ができます。<br>
+（販売サイトによっては差し替えに1日かかる場合があるので、自身のサイトで修正ファイルを公開するなど）</p>
+</li>
+<li>
+<p>テスト用のイベントが残っていないか<br>
+よく拠点などにデバッグ用の便利イベントなどを設置したまま忘れてリリースしてしまうことがあります。</p>
+</li>
+<li>
+<p>ニューゲームの初期位置が正しいか<br>
+テストで初期位置を別の場所へしたままにしていないか。</p>
+</li>
+<li>
+<p>Readmeを同梱したか<br>
+Readmeや説明ファイルなどがある場合、同梱するのを忘れないようにします。<br>
+バージョンアップ時に入れ忘れることもあるので注意。</p>
+</li>
+<li>
+<p>起動に時間がかからないか<br>
+通常のデプロイなら問題ありません。Enigma Virtual boxなどでexeをまとめた場合、起動に時間がかかります。<br>
+許容範囲か確認します。<br>
+ちなみにEnigma Virtual boxを使用した場合、起動するとWindows Defenderにブロックされることがあります。<br>
+ブロックされても無視して起動はできますが、ユーザに知らせることも必要かもしれません。</p>
+</li>
+<li>
+<p>テスト用のプラグインパラメータにしていないか<br>
+プラグインパラメータをテストのときのままにしている場合があります。<br>
+また、テスト用のプラグインがある場合、OFFにします。</p>
+</li>
+<li>
+<p>体験版の範囲で止まらないか<br>
+体験版と製品版がある場合、製品版なのに体験版の範囲しかプレイできないことがないか確認します。</p>
+</li>
+<li>
+<p>セーブファイルを同梱していないか<br>
+普通にデプロイしたらセーブファイルは含まれません。<br>
+デプロイ後に自分でテストしてセーブして、それをそのままアップロードしない限り。</p>
+</li>
+<li>
+<p>データを閲覧されても大丈夫か<br>
+ツクールの性質上、データを閲覧されるのを防ぐことはできません。<br>
+コンプライアンスに関わるテキストなどデータベースに残さないようにします。<br>
+（昔、ユーザに見えないエディタ上にしか出ないテキストで販売サイトの審査落ちるみたいなこともありました。）</p>
+</li>
+</ol>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

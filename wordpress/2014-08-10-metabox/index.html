@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">metaboxをドラッグしたり折りたためなくする方法 | kido</title>
+<meta property="og:title" content="metaboxをドラッグしたり折りたためなくする方法 | kido" />
+<meta name="twitter:title" content="metaboxをドラッグしたり折りたためなくする方法 | kido" />
+<meta itemprop="name" content="metaboxをドラッグしたり折りたためなくする方法 | kido" />
+<meta name="application-name" content="metaboxをドラッグしたり折りたためなくする方法 | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/wordpress/2014-08-10-metabox/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/wordpress/2014-08-10-metabox/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="metaboxをドラッグしたり折りたためなくする方法">
+  <meta property="og:description" content="はじめに wordpressの投稿画面の各メタボックス(公開とかフォーマットとかカテゴリとか）はドラッグで移動可能だし、クリックすると折りたたむことができる。
+今回はそれを無効化したい。
+ネットで調べると、以下のようにpostboxスクリプトをwp_deregister_script しているコードが見受けられる。しかし、これだと、公開状態を変える際のjs処理も除外されてしまい、まともに動かなくなってしまった。
+function remove_postbox() { wp_deregister_script(&#39;postbox&#39;); } add_action( &#39;admin_init&#39;, &#39;remove_postbox&#39; ); JavaScript と CSS で無効化 仕方ないので、JavaScriptとCSSでこの機能をなくすことを目指す。
+とりあえず、管理画面でbodyの終わりにjsファイルを読むのようにしてjsファイルをbodyタグ終わりで読み込む。
+そして、以下のようにして無効化する。
+jQuery(function($){ //metaboxのドラッグを無効にする $(&#39;.meta-box-sortables&#39;).sortable({ disabled: true }); //metaboxのクリックで折りたたむのを無効にする $(&#39;.postbox h3&#39;).unbind(&#39;click.postboxes&#39;); }); 見た目の修正 最後に、このままだとポインターを合わせた時にカーソルが変わってしまうので、それを元に戻す。あと折りたたみの▲ボタンも消す。
+これはcssから行うので、管理画面のいらないものを消すのようにしてcssファイルを読めるようにして、そちらに記述する。
+/*metaboxのカーソルをデフォルトに戻す*/ .js .postbox .hndle, .js .postbox h3{ cursor:default; } /*▼の表示を消す*/ .js .postbox .handlediv { display: none; }">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="wordpress">
+    <meta property="article:published_time" content="2014-08-10T00:00:00+00:00">
+    <meta property="article:modified_time" content="2014-08-10T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="metaboxをドラッグしたり折りたためなくする方法">
+  <meta name="twitter:description" content="はじめに wordpressの投稿画面の各メタボックス(公開とかフォーマットとかカテゴリとか）はドラッグで移動可能だし、クリックすると折りたたむことができる。
+今回はそれを無効化したい。
+ネットで調べると、以下のようにpostboxスクリプトをwp_deregister_script しているコードが見受けられる。しかし、これだと、公開状態を変える際のjs処理も除外されてしまい、まともに動かなくなってしまった。
+function remove_postbox() { wp_deregister_script(&#39;postbox&#39;); } add_action( &#39;admin_init&#39;, &#39;remove_postbox&#39; ); JavaScript と CSS で無効化 仕方ないので、JavaScriptとCSSでこの機能をなくすことを目指す。
+とりあえず、管理画面でbodyの終わりにjsファイルを読むのようにしてjsファイルをbodyタグ終わりで読み込む。
+そして、以下のようにして無効化する。
+jQuery(function($){ //metaboxのドラッグを無効にする $(&#39;.meta-box-sortables&#39;).sortable({ disabled: true }); //metaboxのクリックで折りたたむのを無効にする $(&#39;.postbox h3&#39;).unbind(&#39;click.postboxes&#39;); }); 見た目の修正 最後に、このままだとポインターを合わせた時にカーソルが変わってしまうので、それを元に戻す。あと折りたたみの▲ボタンも消す。
+これはcssから行うので、管理画面のいらないものを消すのようにしてcssファイルを読めるようにして、そちらに記述する。
+/*metaboxのカーソルをデフォルトに戻す*/ .js .postbox .hndle, .js .postbox h3{ cursor:default; } /*▼の表示を消す*/ .js .postbox .handlediv { display: none; }">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/wordpress/2014-08-10-metabox/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">metaboxをドラッグしたり折りたためなくする方法</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/wordpress" style="margin-right:10px;">WordPress</a>
+                    <time datetime="2014-08-10T00:00:00&#43;00:00" itemprop="datePublished"> 2014/08/10 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <h2 id="はじめに">はじめに</h2>
+<p>wordpressの投稿画面の各メタボックス(公開とかフォーマットとかカテゴリとか）はドラッグで移動可能だし、クリックすると折りたたむことができる。<br>
+今回はそれを無効化したい。</p>
+<p>ネットで調べると、以下のようにpostboxスクリプトをwp_deregister_script しているコードが見受けられる。しかし、これだと、公開状態を変える際のjs処理も除外されてしまい、まともに動かなくなってしまった。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">remove_postbox</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">wp_deregister_script</span><span class="p">(</span><span class="s1">&#39;postbox&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nx">add_action</span><span class="p">(</span> <span class="s1">&#39;admin_init&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_postbox&#39;</span> <span class="p">);</span>
+</span></span></code></pre></div><h2 id="javascript-と-css-で無効化">JavaScript と CSS で無効化</h2>
+<p>仕方ないので、JavaScriptとCSSでこの機能をなくすことを目指す。<br>
+とりあえず、<a href="/wordpress/2014-08-06-js-load">管理画面でbodyの終わりにjsファイルを読む</a>のようにしてjsファイルをbodyタグ終わりで読み込む。</p>
+<p>そして、以下のようにして無効化する。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="nx">jQuery</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">//metaboxのドラッグを無効にする
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.meta-box-sortables&#39;</span><span class="p">).</span><span class="nx">sortable</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">disabled</span><span class="o">:</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">  <span class="p">});</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">//metaboxのクリックで折りたたむのを無効にする
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.postbox h3&#39;</span><span class="p">).</span><span class="nx">unbind</span><span class="p">(</span><span class="s1">&#39;click.postboxes&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></div><h2 id="見た目の修正">見た目の修正</h2>
+<p>最後に、このままだとポインターを合わせた時にカーソルが変わってしまうので、それを元に戻す。あと折りたたみの▲ボタンも消す。<br>
+これはcssから行うので、<a href="/wordpress/2014-03-09-hidden">管理画面のいらないものを消す</a>のようにしてcssファイルを読めるようにして、そちらに記述する。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-css" data-lang="css"><span class="line"><span class="cl"><span class="c">/*metaboxのカーソルをデフォルトに戻す*/</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="nc">js</span> <span class="p">.</span><span class="nc">postbox</span> <span class="p">.</span><span class="nc">hndle</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="nc">js</span> <span class="p">.</span><span class="nc">postbox</span> <span class="nt">h3</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">cursor</span><span class="p">:</span><span class="kc">default</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c">/*▼の表示を消す*/</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="nc">js</span> <span class="p">.</span><span class="nc">postbox</span> <span class="p">.</span><span class="nc">handlediv</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">display</span><span class="p">:</span> <span class="kc">none</span><span class="p">;</span>  
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

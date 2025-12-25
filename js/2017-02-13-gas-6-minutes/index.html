@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">Google Apps Script で6分以上の処理をする | kido</title>
+<meta property="og:title" content="Google Apps Script で6分以上の処理をする | kido" />
+<meta name="twitter:title" content="Google Apps Script で6分以上の処理をする | kido" />
+<meta itemprop="name" content="Google Apps Script で6分以上の処理をする | kido" />
+<meta name="application-name" content="Google Apps Script で6分以上の処理をする | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/js/2017-02-13-gas-6-minutes/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/js/2017-02-13-gas-6-minutes/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="Google Apps Script で6分以上の処理をする">
+  <meta property="og:description" content="複数のスプレッドシートを集計したりするのにGoogle Apps Script（GAS)を使うことはよくあります。
+ですが、GASは6分という制限時間があり、度々それに悩まされます。
+６分を超えると「起動時間の最大値を超えました」とエラーが吐かれ、途中で処理が終了してしまいます。
+これを解決する方法として、処理を途中で止め、どこまで処理したかを保存し、１分後に再度実行するようにトリガーを発行するという方法があります。
+どこまで処理したかを保存できるような作りでないといけないという制約はあります。
+例えば、行毎に処理しているならば、何行まで処理したかを保存しておけば良いということです。
+どこに保存するかというと、PropertiesServiceというところにKey-Valueで保存できます。
+トリガーは発行すると以下の図のようにずっとトリガー一覧に残ってしまいます。残っていても害はないのですが、邪魔なので削除する処理も入れます。
+function func() { var startTime = new Date(); //タイマーで起動するのでgetActiveSheet()などは使えない var sheet = SpreadsheetApp.openById(&#34;1W3lfUaF_9msFJ2oRETpKMTvbF_xxxxxxxxxxxxx&#34;).getSheetByName(&#34;シート1&#34;); var properties = PropertiesService.getScriptProperties(); //途中経過保存用 var startRowKey = &#34;startRow&#34;; //何行目まで処理したかを保存するときに使用するkey var triggerKey = &#34;trigger&#34;; //トリガーIDを保存するときに使用するkey //途中から実行した場合、ここに何行目まで実行したかが入る var startRow = parseInt(properties.getProperty(startRowKey)); if(!startRow){ //初めて実行する場合はこっち startRow = 1; } var rows = sheet.getDataRange().getValues(); for(var i = startRow; i &lt; rows.length; i&#43;&#43;){ var diff = parseInt((new Date() - startTime) / (1000 * 60)); if(diff &gt;= 5){ //5分経過していたら処理を中断 properties.setProperty(startRowKey, i); //何行まで処理したかを保存 setTrigger(triggerKey, &#34;func&#34;); //トリガーを発行 return; } /* ここでメイン処理 */ } //全て実行終えたらトリガーと何行目まで実行したかを削除する deleteTrigger(triggerKey); properties.deleteProperty(startRowKey); } //指定したkeyに保存されているトリガーIDを使って、トリガーを削除する function deleteTrigger(triggerKey) { var triggerId = PropertiesService.getScriptProperties().getProperty(triggerKey); if(!triggerId) return; ScriptApp.getProjectTriggers().filter(function(trigger){ return trigger.getUniqueId() == triggerId; }) .forEach(function(trigger) { ScriptApp.deleteTrigger(trigger); }); PropertiesService.getScriptProperties().deleteProperty(triggerKey); } //トリガーを発行 function setTrigger(triggerKey, funcName){ deleteTrigger(triggerKey); //保存しているトリガーがあったら削除 var dt = new Date(); dt.setMinutes(dt.getMinutes() &#43; 1); //１分後に再実行 var triggerId = ScriptApp.newTrigger(funcName).timeBased().at(dt).create().getUniqueId(); //あとでトリガーを削除するためにトリガーIDを保存しておく PropertiesService.getScriptProperties().setProperty(triggerKey, triggerId); } ちなみにですが、https://developers.google.com/apps-script/guides/services/quotasによると、Early Accessだと実行時間は30分になります。
+条件満たしていたので会社で申請したら、2週間ぐらい経って、通って30分になりました。">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="js">
+    <meta property="article:published_time" content="2017-02-13T00:00:00+00:00">
+    <meta property="article:modified_time" content="2017-02-13T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Google Apps Script で6分以上の処理をする">
+  <meta name="twitter:description" content="複数のスプレッドシートを集計したりするのにGoogle Apps Script（GAS)を使うことはよくあります。
+ですが、GASは6分という制限時間があり、度々それに悩まされます。
+６分を超えると「起動時間の最大値を超えました」とエラーが吐かれ、途中で処理が終了してしまいます。
+これを解決する方法として、処理を途中で止め、どこまで処理したかを保存し、１分後に再度実行するようにトリガーを発行するという方法があります。
+どこまで処理したかを保存できるような作りでないといけないという制約はあります。
+例えば、行毎に処理しているならば、何行まで処理したかを保存しておけば良いということです。
+どこに保存するかというと、PropertiesServiceというところにKey-Valueで保存できます。
+トリガーは発行すると以下の図のようにずっとトリガー一覧に残ってしまいます。残っていても害はないのですが、邪魔なので削除する処理も入れます。
+function func() { var startTime = new Date(); //タイマーで起動するのでgetActiveSheet()などは使えない var sheet = SpreadsheetApp.openById(&#34;1W3lfUaF_9msFJ2oRETpKMTvbF_xxxxxxxxxxxxx&#34;).getSheetByName(&#34;シート1&#34;); var properties = PropertiesService.getScriptProperties(); //途中経過保存用 var startRowKey = &#34;startRow&#34;; //何行目まで処理したかを保存するときに使用するkey var triggerKey = &#34;trigger&#34;; //トリガーIDを保存するときに使用するkey //途中から実行した場合、ここに何行目まで実行したかが入る var startRow = parseInt(properties.getProperty(startRowKey)); if(!startRow){ //初めて実行する場合はこっち startRow = 1; } var rows = sheet.getDataRange().getValues(); for(var i = startRow; i &lt; rows.length; i&#43;&#43;){ var diff = parseInt((new Date() - startTime) / (1000 * 60)); if(diff &gt;= 5){ //5分経過していたら処理を中断 properties.setProperty(startRowKey, i); //何行まで処理したかを保存 setTrigger(triggerKey, &#34;func&#34;); //トリガーを発行 return; } /* ここでメイン処理 */ } //全て実行終えたらトリガーと何行目まで実行したかを削除する deleteTrigger(triggerKey); properties.deleteProperty(startRowKey); } //指定したkeyに保存されているトリガーIDを使って、トリガーを削除する function deleteTrigger(triggerKey) { var triggerId = PropertiesService.getScriptProperties().getProperty(triggerKey); if(!triggerId) return; ScriptApp.getProjectTriggers().filter(function(trigger){ return trigger.getUniqueId() == triggerId; }) .forEach(function(trigger) { ScriptApp.deleteTrigger(trigger); }); PropertiesService.getScriptProperties().deleteProperty(triggerKey); } //トリガーを発行 function setTrigger(triggerKey, funcName){ deleteTrigger(triggerKey); //保存しているトリガーがあったら削除 var dt = new Date(); dt.setMinutes(dt.getMinutes() &#43; 1); //１分後に再実行 var triggerId = ScriptApp.newTrigger(funcName).timeBased().at(dt).create().getUniqueId(); //あとでトリガーを削除するためにトリガーIDを保存しておく PropertiesService.getScriptProperties().setProperty(triggerKey, triggerId); } ちなみにですが、https://developers.google.com/apps-script/guides/services/quotasによると、Early Accessだと実行時間は30分になります。
+条件満たしていたので会社で申請したら、2週間ぐらい経って、通って30分になりました。">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/js/2017-02-13-gas-6-minutes/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">Google Apps Script で6分以上の処理をする</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/javascript" style="margin-right:10px;">JavaScript</a>
+                    <time datetime="2017-02-13T00:00:00&#43;00:00" itemprop="datePublished"> 2017/02/13 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <p>複数のスプレッドシートを集計したりするのにGoogle Apps Script（GAS)を使うことはよくあります。<br>
+ですが、GASは6分という制限時間があり、度々それに悩まされます。<br>
+６分を超えると「起動時間の最大値を超えました」とエラーが吐かれ、途中で処理が終了してしまいます。<br>
+これを解決する方法として、処理を途中で止め、どこまで処理したかを保存し、１分後に再度実行するようにトリガーを発行するという方法があります。<br>
+どこまで処理したかを保存できるような作りでないといけないという制約はあります。<br>
+例えば、行毎に処理しているならば、何行まで処理したかを保存しておけば良いということです。<br>
+どこに保存するかというと、PropertiesServiceというところにKey-Valueで保存できます。<br>
+トリガーは発行すると以下の図のようにずっとトリガー一覧に残ってしまいます。残っていても害はないのですが、邪魔なので削除する処理も入れます。</p>
+<p><img src="gas-trigger.png" alt="トリガー"></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">startTime</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">//タイマーで起動するのでgetActiveSheet()などは使えない
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kd">var</span> <span class="nx">sheet</span> <span class="o">=</span> <span class="nx">SpreadsheetApp</span><span class="p">.</span><span class="nx">openById</span><span class="p">(</span><span class="s2">&#34;1W3lfUaF_9msFJ2oRETpKMTvbF_xxxxxxxxxxxxx&#34;</span><span class="p">).</span><span class="nx">getSheetByName</span><span class="p">(</span><span class="s2">&#34;シート1&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">properties</span> <span class="o">=</span> <span class="nx">PropertiesService</span><span class="p">.</span><span class="nx">getScriptProperties</span><span class="p">();</span>  <span class="c1">//途中経過保存用
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kd">var</span> <span class="nx">startRowKey</span> <span class="o">=</span> <span class="s2">&#34;startRow&#34;</span><span class="p">;</span>  <span class="c1">//何行目まで処理したかを保存するときに使用するkey
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kd">var</span> <span class="nx">triggerKey</span> <span class="o">=</span> <span class="s2">&#34;trigger&#34;</span><span class="p">;</span>    <span class="c1">//トリガーIDを保存するときに使用するkey
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  
+</span></span><span class="line"><span class="cl">  <span class="c1">//途中から実行した場合、ここに何行目まで実行したかが入る
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kd">var</span> <span class="nx">startRow</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">properties</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="nx">startRowKey</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">startRow</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//初めて実行する場合はこっち
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">startRow</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">rows</span> <span class="o">=</span> <span class="nx">sheet</span><span class="p">.</span><span class="nx">getDataRange</span><span class="p">().</span><span class="nx">getValues</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">startRow</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">rows</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nx">diff</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">((</span><span class="k">new</span> <span class="nb">Date</span><span class="p">()</span> <span class="o">-</span> <span class="nx">startTime</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="nx">diff</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">//5分経過していたら処理を中断
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nx">properties</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="nx">startRowKey</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>  <span class="c1">//何行まで処理したかを保存
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nx">setTrigger</span><span class="p">(</span><span class="nx">triggerKey</span><span class="p">,</span> <span class="s2">&#34;func&#34;</span><span class="p">);</span>          <span class="c1">//トリガーを発行
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* ここでメイン処理 */</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>  
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">//全て実行終えたらトリガーと何行目まで実行したかを削除する
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">deleteTrigger</span><span class="p">(</span><span class="nx">triggerKey</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">properties</span><span class="p">.</span><span class="nx">deleteProperty</span><span class="p">(</span><span class="nx">startRowKey</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//指定したkeyに保存されているトリガーIDを使って、トリガーを削除する
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">function</span> <span class="nx">deleteTrigger</span><span class="p">(</span><span class="nx">triggerKey</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">triggerId</span> <span class="o">=</span> <span class="nx">PropertiesService</span><span class="p">.</span><span class="nx">getScriptProperties</span><span class="p">().</span><span class="nx">getProperty</span><span class="p">(</span><span class="nx">triggerKey</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">triggerId</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="nx">ScriptApp</span><span class="p">.</span><span class="nx">getProjectTriggers</span><span class="p">().</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">trigger</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">trigger</span><span class="p">.</span><span class="nx">getUniqueId</span><span class="p">()</span> <span class="o">==</span> <span class="nx">triggerId</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">})</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">trigger</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">ScriptApp</span><span class="p">.</span><span class="nx">deleteTrigger</span><span class="p">(</span><span class="nx">trigger</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">});</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">PropertiesService</span><span class="p">.</span><span class="nx">getScriptProperties</span><span class="p">().</span><span class="nx">deleteProperty</span><span class="p">(</span><span class="nx">triggerKey</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="c1">//トリガーを発行
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">function</span> <span class="nx">setTrigger</span><span class="p">(</span><span class="nx">triggerKey</span><span class="p">,</span> <span class="nx">funcName</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">deleteTrigger</span><span class="p">(</span><span class="nx">triggerKey</span><span class="p">);</span>   <span class="c1">//保存しているトリガーがあったら削除
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kd">var</span> <span class="nx">dt</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">dt</span><span class="p">.</span><span class="nx">setMinutes</span><span class="p">(</span><span class="nx">dt</span><span class="p">.</span><span class="nx">getMinutes</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>  <span class="c1">//１分後に再実行
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kd">var</span> <span class="nx">triggerId</span> <span class="o">=</span> <span class="nx">ScriptApp</span><span class="p">.</span><span class="nx">newTrigger</span><span class="p">(</span><span class="nx">funcName</span><span class="p">).</span><span class="nx">timeBased</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">dt</span><span class="p">).</span><span class="nx">create</span><span class="p">().</span><span class="nx">getUniqueId</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">//あとでトリガーを削除するためにトリガーIDを保存しておく
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">PropertiesService</span><span class="p">.</span><span class="nx">getScriptProperties</span><span class="p">().</span><span class="nx">setProperty</span><span class="p">(</span><span class="nx">triggerKey</span><span class="p">,</span> <span class="nx">triggerId</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>ちなみにですが、<a href="https://developers.google.com/apps-script/guides/services/quotas" class="blankA" target="_blank" rel="noopener noreferrer">https://developers.google.com/apps-script/guides/services/quotas</a>によると、Early Accessだと実行時間は30分になります。<br>
+条件満たしていたので会社で申請したら、2週間ぐらい経って、通って30分になりました。</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

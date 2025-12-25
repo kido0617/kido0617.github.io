@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">Go言語でoauth2パッケージを使う | kido</title>
+<meta property="og:title" content="Go言語でoauth2パッケージを使う | kido" />
+<meta name="twitter:title" content="Go言語でoauth2パッケージを使う | kido" />
+<meta itemprop="name" content="Go言語でoauth2パッケージを使う | kido" />
+<meta name="application-name" content="Go言語でoauth2パッケージを使う | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/go/2016-07-18-oauth2/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/go/2016-07-18-oauth2/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="Go言語でoauth2パッケージを使う">
+  <meta property="og:description" content="oauth2パッケージ Go言語でoauth2を扱うのに便利なoauth2パッケージがあります。
+今回は、これを使ってみたいと思います。
+例として、Googleフォト(Picasa)のAPIを扱います。
+ソースは下記を参照。
+import ( &#34;bufio&#34; &#34;fmt&#34; &#34;io/ioutil&#34; &#34;log&#34; &#34;os&#34; &#34;golang.org/x/oauth2&#34; &#34;golang.org/x/oauth2/google&#34; ) func main() { //ClientIDやClientSecretはGoogle API Console からコピーしてきます。 //Endpointはgoogle、github、facebookなどがoauth2配下のパッケージに用意されています。 config := oauth2.Config{ ClientID: &#34;xxxxxxxxxxx&#34;, ClientSecret: &#34;yyyyyyyyyyyy&#34;, Endpoint: google.Endpoint, RedirectURL: &#34;urn:ietf:wg:oauth:2.0:oob&#34;, //今回はリダイレクトしないためこれ Scopes: []string{&#34;https://picasaweb.google.com/data/&#34;}, //必要なスコープを追加 } //認証のURLを取得。AuthCodeURLには文字列を渡す。CSRF攻撃の回避のため、本当はリダイレクトのコールバックで検証する。 url := config.AuthCodeURL(&#34;test&#34;) fmt.Println(url) //認証のURLを表示。ブラウザにコピペする //リダイレクト先がないため、ブラウザで認証後に表示されるコードを入力 var s string var sc = bufio.NewScanner(os.Stdin) if sc.Scan() { s = sc.Text() } //アクセストークンを取得 token, err := config.Exchange(oauth2.NoContext, s) if err != nil { log.Fatalf(&#34;exchange error&#34;) } client := config.Client(oauth2.NoContext, token) //httpクライアントを取得 //取得したclientでGetする resp, err := client.Get(&#34;https://picasaweb.google.com/data/feed/api/user/default?start-index=1&#34;) if err != nil { log.Fatalf(&#34;client get error&#34;) } //レスポンスを表示 defer resp.Body.Close() byteArray, _ := ioutil.ReadAll(resp.Body) fmt.Println(string(byteArray)) } どこでoauth2のアクセストークンを扱っているか 上記のソースではトークンを取得した後、config.Client()でhttp Clientを取得してそれを使うだけで、oauth2の通信が行えています。
+どこで、アクセストークンをセットし、トークンの期限が切れていたらリフレッシュトークンを使うなどの処理をしているか気になります。
+ソースコードを見ていくと、config.Client()の先、NewClient()でhttp.Clientを作成しているのが見えます。
+ここで、http.ClientのTransportに独自のTransportを設定しているのがそれっぽいです。">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="go">
+    <meta property="article:published_time" content="2016-07-18T00:00:00+00:00">
+    <meta property="article:modified_time" content="2016-07-18T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Go言語でoauth2パッケージを使う">
+  <meta name="twitter:description" content="oauth2パッケージ Go言語でoauth2を扱うのに便利なoauth2パッケージがあります。
+今回は、これを使ってみたいと思います。
+例として、Googleフォト(Picasa)のAPIを扱います。
+ソースは下記を参照。
+import ( &#34;bufio&#34; &#34;fmt&#34; &#34;io/ioutil&#34; &#34;log&#34; &#34;os&#34; &#34;golang.org/x/oauth2&#34; &#34;golang.org/x/oauth2/google&#34; ) func main() { //ClientIDやClientSecretはGoogle API Console からコピーしてきます。 //Endpointはgoogle、github、facebookなどがoauth2配下のパッケージに用意されています。 config := oauth2.Config{ ClientID: &#34;xxxxxxxxxxx&#34;, ClientSecret: &#34;yyyyyyyyyyyy&#34;, Endpoint: google.Endpoint, RedirectURL: &#34;urn:ietf:wg:oauth:2.0:oob&#34;, //今回はリダイレクトしないためこれ Scopes: []string{&#34;https://picasaweb.google.com/data/&#34;}, //必要なスコープを追加 } //認証のURLを取得。AuthCodeURLには文字列を渡す。CSRF攻撃の回避のため、本当はリダイレクトのコールバックで検証する。 url := config.AuthCodeURL(&#34;test&#34;) fmt.Println(url) //認証のURLを表示。ブラウザにコピペする //リダイレクト先がないため、ブラウザで認証後に表示されるコードを入力 var s string var sc = bufio.NewScanner(os.Stdin) if sc.Scan() { s = sc.Text() } //アクセストークンを取得 token, err := config.Exchange(oauth2.NoContext, s) if err != nil { log.Fatalf(&#34;exchange error&#34;) } client := config.Client(oauth2.NoContext, token) //httpクライアントを取得 //取得したclientでGetする resp, err := client.Get(&#34;https://picasaweb.google.com/data/feed/api/user/default?start-index=1&#34;) if err != nil { log.Fatalf(&#34;client get error&#34;) } //レスポンスを表示 defer resp.Body.Close() byteArray, _ := ioutil.ReadAll(resp.Body) fmt.Println(string(byteArray)) } どこでoauth2のアクセストークンを扱っているか 上記のソースではトークンを取得した後、config.Client()でhttp Clientを取得してそれを使うだけで、oauth2の通信が行えています。
+どこで、アクセストークンをセットし、トークンの期限が切れていたらリフレッシュトークンを使うなどの処理をしているか気になります。
+ソースコードを見ていくと、config.Client()の先、NewClient()でhttp.Clientを作成しているのが見えます。
+ここで、http.ClientのTransportに独自のTransportを設定しているのがそれっぽいです。">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/go/2016-07-18-oauth2/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">Go言語でoauth2パッケージを使う</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/golang" style="margin-right:10px;">Golang</a>
+                    <time datetime="2016-07-18T00:00:00&#43;00:00" itemprop="datePublished"> 2016/07/18 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <h2 id="oauth2パッケージ">oauth2パッケージ</h2>
+<p>Go言語でoauth2を扱うのに便利な<a href="https://github.com/golang/oauth2" class="blankA" target="_blank" rel="noopener noreferrer">oauth2</a>パッケージがあります。<br>
+今回は、これを使ってみたいと思います。<br>
+例として、Googleフォト(Picasa)のAPIを扱います。<br>
+ソースは下記を参照。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;bufio&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;fmt&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;io/ioutil&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;log&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;os&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;golang.org/x/oauth2&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;golang.org/x/oauth2/google&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">//ClientIDやClientSecretはGoogle API Console からコピーしてきます。</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">//Endpointはgoogle、github、facebookなどがoauth2配下のパッケージに用意されています。</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">config</span> <span class="o">:=</span> <span class="nx">oauth2</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">ClientID</span><span class="p">:</span>     <span class="s">&#34;xxxxxxxxxxx&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">ClientSecret</span><span class="p">:</span> <span class="s">&#34;yyyyyyyyyyyy&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Endpoint</span><span class="p">:</span>     <span class="nx">google</span><span class="p">.</span><span class="nx">Endpoint</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">RedirectURL</span><span class="p">:</span>  <span class="s">&#34;urn:ietf:wg:oauth:2.0:oob&#34;</span><span class="p">,</span> <span class="c1">//今回はリダイレクトしないためこれ</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Scopes</span><span class="p">:</span>       <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;https://picasaweb.google.com/data/&#34;</span><span class="p">},</span> <span class="c1">//必要なスコープを追加</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">//認証のURLを取得。AuthCodeURLには文字列を渡す。CSRF攻撃の回避のため、本当はリダイレクトのコールバックで検証する。</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">url</span> <span class="o">:=</span> <span class="nx">config</span><span class="p">.</span><span class="nf">AuthCodeURL</span><span class="p">(</span><span class="s">&#34;test&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span> <span class="c1">//認証のURLを表示。ブラウザにコピペする</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">//リダイレクト先がないため、ブラウザで認証後に表示されるコードを入力</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">s</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">sc</span> <span class="p">=</span> <span class="nx">bufio</span><span class="p">.</span><span class="nf">NewScanner</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdin</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="nx">sc</span><span class="p">.</span><span class="nf">Scan</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">s</span> <span class="p">=</span> <span class="nx">sc</span><span class="p">.</span><span class="nf">Text</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">//アクセストークンを取得</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">token</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">config</span><span class="p">.</span><span class="nf">Exchange</span><span class="p">(</span><span class="nx">oauth2</span><span class="p">.</span><span class="nx">NoContext</span><span class="p">,</span> <span class="nx">s</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">log</span><span class="p">.</span><span class="nf">Fatalf</span><span class="p">(</span><span class="s">&#34;exchange error&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">client</span> <span class="o">:=</span> <span class="nx">config</span><span class="p">.</span><span class="nf">Client</span><span class="p">(</span><span class="nx">oauth2</span><span class="p">.</span><span class="nx">NoContext</span><span class="p">,</span> <span class="nx">token</span><span class="p">)</span> <span class="c1">//httpクライアントを取得</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">//取得したclientでGetする</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;https://picasaweb.google.com/data/feed/api/user/default?start-index=1&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">log</span><span class="p">.</span><span class="nf">Fatalf</span><span class="p">(</span><span class="s">&#34;client get error&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">//レスポンスを表示</span>
+</span></span><span class="line"><span class="cl">  <span class="k">defer</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">byteArray</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nb">string</span><span class="p">(</span><span class="nx">byteArray</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h2 id="どこでoauth2のアクセストークンを扱っているか">どこでoauth2のアクセストークンを扱っているか</h2>
+<p>上記のソースではトークンを取得した後、config.Client()でhttp Clientを取得してそれを使うだけで、oauth2の通信が行えています。<br>
+どこで、アクセストークンをセットし、トークンの期限が切れていたらリフレッシュトークンを使うなどの処理をしているか気になります。<br>
+ソースコードを見ていくと、config.Client()の先、NewClient()でhttp.Clientを作成しているのが見えます。<br>
+ここで、http.ClientのTransportに独自のTransportを設定しているのがそれっぽいです。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">NewClient</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">src</span> <span class="nx">TokenSource</span><span class="p">)</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">//省略</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Transport</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">Transport</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Base</span><span class="p">:</span>   <span class="nx">internal</span><span class="p">.</span><span class="nf">ContextTransport</span><span class="p">(</span><span class="nx">ctx</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Source</span><span class="p">:</span> <span class="nf">ReuseTokenSource</span><span class="p">(</span><span class="kc">nil</span><span class="p">,</span> <span class="nx">src</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>このTransportですが、RoundTripというメソッドを持っています。この辺について詳しくは以下のページを参照。<br>
+<a href="http://qiita.com/tutuming/items/6006e1d8cf94bc40f8e8" class="blankA" target="_blank" rel="noopener noreferrer">Go http.RoundTripper 実装ガイド</a><br>
+RoundTrip内を見ると、トークンが切れていたらリフレッシュしたり、Authorizationヘッダにアクセストークンをつけているのが追えます。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">Transport</span><span class="p">)</span> <span class="nf">RoundTrip</span><span class="p">(</span><span class="nx">req</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Source</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;oauth2: Transport&#39;s Source is nil&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">token</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Source</span><span class="p">.</span><span class="nf">Token</span><span class="p">()</span>  <span class="c1">//アクセストークンが切れていたらリフレッシュする</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">req2</span> <span class="o">:=</span> <span class="nf">cloneRequest</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl">  <span class="nx">token</span><span class="p">.</span><span class="nf">SetAuthHeader</span><span class="p">(</span><span class="nx">req2</span><span class="p">)</span>      <span class="c1">//アクセストークンをAuthorizationヘッダに設定</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">t</span><span class="p">.</span><span class="nf">setModReq</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">req2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">res</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">t</span><span class="p">.</span><span class="nf">base</span><span class="p">().</span><span class="nf">RoundTrip</span><span class="p">(</span><span class="nx">req2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">t</span><span class="p">.</span><span class="nf">setModReq</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">res</span><span class="p">.</span><span class="nx">Body</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">onEOFReader</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">rc</span><span class="p">:</span> <span class="nx">res</span><span class="p">.</span><span class="nx">Body</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">fn</span><span class="p">:</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span> <span class="nx">t</span><span class="p">.</span><span class="nf">setModReq</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nx">res</span><span class="p">,</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

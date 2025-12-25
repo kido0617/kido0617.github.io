@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">ツクールでSpine導入したときのメモ | kido</title>
+<meta property="og:title" content="ツクールでSpine導入したときのメモ | kido" />
+<meta name="twitter:title" content="ツクールでSpine導入したときのメモ | kido" />
+<meta itemprop="name" content="ツクールでSpine導入したときのメモ | kido" />
+<meta name="application-name" content="ツクールでSpine導入したときのメモ | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/rpgmaker/2023-10-05-spine/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/rpgmaker/2023-10-05-spine/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="ツクールでSpine導入したときのメモ">
+  <meta property="og:description" content="ツクールのSpine実装の勉強会をする予定で作った資料を上げる。
+ほぼ自分用のメモ書きなので、細かいところは詳細を省く。
+基本 pixi-spine.jsというPixi.jsコミュニティが作っているspine用のライブラリを使う。
+PictureSpine.jsはそれをツクール用に使えるようにしたもの。
+ツクールのピクチャのようにSpineを使える。
+Spineのバージョン MVはPixi.js4系なのでSpineは3.8限定
+MZはPixi.js5系なのでSpineは3.8~4.1まで使用可能
+PictureSpine.jsはSpine3.8基準。多分みんな3.8で作っているので安定を取るなら3.8。
+Spine4以上を使いたい場合、pixi-spine.jsは最新のビルドをする必要ある。普通にDLできずNode.js入れてnpm install しないといけない。
+こちらで試した限りでは細かいところは未検証だが、4系もとりあえず動いた。
+Spineの3.8と4以上の差は、グラフエディタや細かな便利機能が追加されている差がある。
+基本的な機能は3.8時点で完成されているが、最新使えるなら使いたい。
+Spineのエクスポート json形式でエクスポートすれば良い。
+4系使っているとオプションで3.8系式のjsonで出力できるが、原因の切り分けが難しくなるので推奨しない。 テクスチャパックのオプションは基本いじる項目はないが、scaleだけいじることはある。
+イラストを大きいサイズで作って出力するときscaleを0.5とかにすれば出力するテクスチャの解像度を減らせる。
+トラックの重ねの話 トラック(アニメーション)を重ねることができる。
+私は待機アニメーションの上にまばたきアニメーションを重ねるなどする。
+例:
+トラック0 : 待機アニメーション
+トラック1 : まばたき
+まばたきと待機の周期が違うし、まばたきを共通で使いまわしたいからこのような重ねる。
+PictureSpine.jsはトラックの削除がないので、削除する場合は何もないアニメーションで上書きすればトラックを無効化できるのでそれで対応する。
+あるいは自分でpixi-spine.jsにあるsetEmptyAnimationの実装すれば良い。
+トラックごとのアルファ値を設定する機能があるが、ここでいうアルファは透明度ではない。
+どのくらいの影響度で重ねるか。ダメージ食らって足を引きずるのを徐々に強くするみたいなときに使うらしいが、私は使ったこと無い。
+ミックス ミックスはアニメーション間の補完の話。
+何も設定しないと瞬時にアニメーション切り替わって、シームレスじゃないので適当に設定しておく。
+Spine側のエディタではデフォで0.2。
+私はデフォで適当に設定して、個別に必要なところは設定している。
+透明度 setColor(1, 1, 1, 0.1)などとすれば、全体を透明にできる。
+Scale Spineで出力時にscaleを変えてもテクスチャの解像度が変わるだけで、モデルのサイズが変わるわけではない。
+ツクール側でscaleを変えないといけない。
+モザイク 元ファイルもモザイク処理をする必要ありますが、モザイクしているパーツをメッシュ変形すると違和感がすごい。
+だから元ファイルをモザイク処理した上で用意されているモザイク機能を上からかけるのが良いのではないか。
+シーン切り替え アニメーション状態を保存しているので、メニューを開いたり、場所移動しても前のアニメーションを継続できる
+イベント Spine側で設定したオーディオをツクール側で再生したり、スイッチ操作する機能がある。
+Spine側で設定したオーディオは別にエクスポートしたファイルに含まれるわけではない。ファイル名を参照したいだけ。
+スイッチ操作はイベントに直で設定するのではなく、タイムライン上で設定しないといけない。微妙にハマった。">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="rpgmaker">
+    <meta property="article:published_time" content="2023-10-05T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-10-05T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ツクールでSpine導入したときのメモ">
+  <meta name="twitter:description" content="ツクールのSpine実装の勉強会をする予定で作った資料を上げる。
+ほぼ自分用のメモ書きなので、細かいところは詳細を省く。
+基本 pixi-spine.jsというPixi.jsコミュニティが作っているspine用のライブラリを使う。
+PictureSpine.jsはそれをツクール用に使えるようにしたもの。
+ツクールのピクチャのようにSpineを使える。
+Spineのバージョン MVはPixi.js4系なのでSpineは3.8限定
+MZはPixi.js5系なのでSpineは3.8~4.1まで使用可能
+PictureSpine.jsはSpine3.8基準。多分みんな3.8で作っているので安定を取るなら3.8。
+Spine4以上を使いたい場合、pixi-spine.jsは最新のビルドをする必要ある。普通にDLできずNode.js入れてnpm install しないといけない。
+こちらで試した限りでは細かいところは未検証だが、4系もとりあえず動いた。
+Spineの3.8と4以上の差は、グラフエディタや細かな便利機能が追加されている差がある。
+基本的な機能は3.8時点で完成されているが、最新使えるなら使いたい。
+Spineのエクスポート json形式でエクスポートすれば良い。
+4系使っているとオプションで3.8系式のjsonで出力できるが、原因の切り分けが難しくなるので推奨しない。 テクスチャパックのオプションは基本いじる項目はないが、scaleだけいじることはある。
+イラストを大きいサイズで作って出力するときscaleを0.5とかにすれば出力するテクスチャの解像度を減らせる。
+トラックの重ねの話 トラック(アニメーション)を重ねることができる。
+私は待機アニメーションの上にまばたきアニメーションを重ねるなどする。
+例:
+トラック0 : 待機アニメーション
+トラック1 : まばたき
+まばたきと待機の周期が違うし、まばたきを共通で使いまわしたいからこのような重ねる。
+PictureSpine.jsはトラックの削除がないので、削除する場合は何もないアニメーションで上書きすればトラックを無効化できるのでそれで対応する。
+あるいは自分でpixi-spine.jsにあるsetEmptyAnimationの実装すれば良い。
+トラックごとのアルファ値を設定する機能があるが、ここでいうアルファは透明度ではない。
+どのくらいの影響度で重ねるか。ダメージ食らって足を引きずるのを徐々に強くするみたいなときに使うらしいが、私は使ったこと無い。
+ミックス ミックスはアニメーション間の補完の話。
+何も設定しないと瞬時にアニメーション切り替わって、シームレスじゃないので適当に設定しておく。
+Spine側のエディタではデフォで0.2。
+私はデフォで適当に設定して、個別に必要なところは設定している。
+透明度 setColor(1, 1, 1, 0.1)などとすれば、全体を透明にできる。
+Scale Spineで出力時にscaleを変えてもテクスチャの解像度が変わるだけで、モデルのサイズが変わるわけではない。
+ツクール側でscaleを変えないといけない。
+モザイク 元ファイルもモザイク処理をする必要ありますが、モザイクしているパーツをメッシュ変形すると違和感がすごい。
+だから元ファイルをモザイク処理した上で用意されているモザイク機能を上からかけるのが良いのではないか。
+シーン切り替え アニメーション状態を保存しているので、メニューを開いたり、場所移動しても前のアニメーションを継続できる
+イベント Spine側で設定したオーディオをツクール側で再生したり、スイッチ操作する機能がある。
+Spine側で設定したオーディオは別にエクスポートしたファイルに含まれるわけではない。ファイル名を参照したいだけ。
+スイッチ操作はイベントに直で設定するのではなく、タイムライン上で設定しないといけない。微妙にハマった。">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/rpgmaker/2023-10-05-spine/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">ツクールでSpine導入したときのメモ</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/rpg%E3%83%84%E3%82%AF%E3%83%BC%E3%83%ABmz" style="margin-right:10px;">RPGツクールMZ</a>
+                    <time datetime="2023-10-05T00:00:00&#43;00:00" itemprop="datePublished"> 2023/10/05 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <p>ツクールのSpine実装の勉強会をする予定で作った資料を上げる。<br>
+ほぼ自分用のメモ書きなので、細かいところは詳細を省く。</p>
+<h1 id="基本">基本</h1>
+<p>pixi-spine.jsというPixi.jsコミュニティが作っているspine用のライブラリを使う。<br>
+<a href="https://makonet.sakura.ne.jp/rpg_tkool/MVMZ/PictureSpine/document.html" class="blankA" target="_blank" rel="noopener noreferrer">PictureSpine.js</a>はそれをツクール用に使えるようにしたもの。<br>
+ツクールのピクチャのようにSpineを使える。</p>
+<h1 id="spineのバージョン">Spineのバージョン</h1>
+<p>MVはPixi.js4系なのでSpineは3.8限定<br>
+MZはPixi.js5系なのでSpineは3.8~4.1まで使用可能<br>
+PictureSpine.jsはSpine3.8基準。多分みんな3.8で作っているので安定を取るなら3.8。<br>
+Spine4以上を使いたい場合、pixi-spine.jsは最新のビルドをする必要ある。普通にDLできずNode.js入れてnpm install しないといけない。<br>
+こちらで試した限りでは細かいところは未検証だが、4系もとりあえず動いた。</p>
+<p>Spineの3.8と4以上の差は、グラフエディタや細かな便利機能が追加されている差がある。<br>
+基本的な機能は3.8時点で完成されているが、最新使えるなら使いたい。</p>
+<h1 id="spineのエクスポート">Spineのエクスポート</h1>
+<p>json形式でエクスポートすれば良い。<br>
+4系使っているとオプションで3.8系式のjsonで出力できるが、原因の切り分けが難しくなるので推奨しない。 <br>
+テクスチャパックのオプションは基本いじる項目はないが、scaleだけいじることはある。<br>
+イラストを大きいサイズで作って出力するときscaleを0.5とかにすれば出力するテクスチャの解像度を減らせる。</p>
+<h1 id="トラックの重ねの話">トラックの重ねの話</h1>
+<p>トラック(アニメーション)を重ねることができる。<br>
+私は待機アニメーションの上にまばたきアニメーションを重ねるなどする。</p>
+<p>例:<br>
+トラック0 : 待機アニメーション<br>
+トラック1 : まばたき</p>
+<p>まばたきと待機の周期が違うし、まばたきを共通で使いまわしたいからこのような重ねる。<br>
+PictureSpine.jsはトラックの削除がないので、削除する場合は何もないアニメーションで上書きすればトラックを無効化できるのでそれで対応する。<br>
+あるいは自分でpixi-spine.jsにある<code>setEmptyAnimation</code>の実装すれば良い。</p>
+<p>トラックごとのアルファ値を設定する機能があるが、ここでいうアルファは透明度ではない。<br>
+どのくらいの影響度で重ねるか。ダメージ食らって足を引きずるのを徐々に強くするみたいなときに使うらしいが、私は使ったこと無い。</p>
+<h1 id="ミックス">ミックス</h1>
+<p>ミックスはアニメーション間の補完の話。<br>
+何も設定しないと瞬時にアニメーション切り替わって、シームレスじゃないので適当に設定しておく。<br>
+Spine側のエディタではデフォで0.2。<br>
+私はデフォで適当に設定して、個別に必要なところは設定している。</p>
+<h1 id="透明度">透明度</h1>
+<p>setColor(1, 1, 1, 0.1)などとすれば、全体を透明にできる。</p>
+<h1 id="scale">Scale</h1>
+<p>Spineで出力時にscaleを変えてもテクスチャの解像度が変わるだけで、モデルのサイズが変わるわけではない。<br>
+ツクール側でscaleを変えないといけない。</p>
+<h1 id="モザイク">モザイク</h1>
+<p>元ファイルもモザイク処理をする必要ありますが、モザイクしているパーツをメッシュ変形すると違和感がすごい。<br>
+だから元ファイルをモザイク処理した上で用意されているモザイク機能を上からかけるのが良いのではないか。</p>
+<h1 id="シーン切り替え">シーン切り替え</h1>
+<p>アニメーション状態を保存しているので、メニューを開いたり、場所移動しても前のアニメーションを継続できる</p>
+<h1 id="イベント">イベント</h1>
+<p>Spine側で設定したオーディオをツクール側で再生したり、スイッチ操作する機能がある。<br>
+Spine側で設定したオーディオは別にエクスポートしたファイルに含まれるわけではない。ファイル名を参照したいだけ。<br>
+スイッチ操作はイベントに直で設定するのではなく、タイムライン上で設定しないといけない。微妙にハマった。</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

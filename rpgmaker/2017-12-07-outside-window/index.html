@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">ゲーム画面外演出を考える | kido</title>
+<meta property="og:title" content="ゲーム画面外演出を考える | kido" />
+<meta name="twitter:title" content="ゲーム画面外演出を考える | kido" />
+<meta itemprop="name" content="ゲーム画面外演出を考える | kido" />
+<meta name="application-name" content="ゲーム画面外演出を考える | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/rpgmaker/2017-12-07-outside-window/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/rpgmaker/2017-12-07-outside-window/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="ゲーム画面外演出を考える">
+  <meta property="og:description" content="この記事はRPGツクールMV Advent Calendar7日目の記事です。
+この記事に書かれている内容はツクール1.5.1でのみ動作します。それ以降には対応していません。1.6以上ではnw.jsのバージョンが変わるため動作しません。
+概要 ゲーム画面（ウィンドウ）の外にピクチャを表示したりして、ゲーム画面外で演出をする方法を考えます。
+結論から言うと、かなり面倒くさくてつらく、内容は開発者向けです。少なくともhtmlの知識は必要です。
+とりあえず、Windows/Mac 向けを考えます。ブラウザ版では別の考え方をします（後述）。
+最後に完成版のプロジェクトファイルを用意するので必要であれば参照してみてください。
+ゲーム画面外にキャラが表示されると何割か増しでかわいく見える気がする。
+※今回はデュアルディスプレイ環境は考慮しません
+フルスクリーンを無効化する 少しずつ実装していきましょう。
+まず、ゲーム画面外に出すということは、フルスクリーン時には効果ありません。なのでフルスクリーンにする機能をOFFにします。
+ツクールの機能にあるF4キーでフルスクリーンにする機能はプラグインでOFFにできるのですが、ウィンドウの端っこにカーソルを持っていったときに表示されるリサイズや右上の最大化ボタンをプラグインからOFFにすることができません。
+これを無効化するにはデプロイ後にpackage.jsonというファイルの中身を書き換える必要があります
+packages.jsonの中身のwindowの箇所に &#34;resizable&#34;: false, を以下のように追加します。
+&#34;window&#34;: { &#34;resizable&#34;: false, &#34;title&#34;: &#34;&#34;, &#34;toolbar&#34;: false, &#34;width&#34;: 816, &#34;height&#34;: 624, &#34;icon&#34;: &#34;www/icon/icon.png&#34; } これでフルスクリーンをOFFにできます。しかし、これはデプロイする度に該当箇所を書き換えないといけないので、かなりつらいです。
+とりあえず表示してみる ゲーム画面外に影響させるにはもう1個別のウィンドウを作るしかありません。
+nw.js の機能を使って実装していきます。
+nw.jsのWindowには openというURLやhtmlファイルを開く機能があり、それを使います。
+つまり、imgタグを記述したhtmlファイルを用意すれば、画像が表示されるウィンドウが用意できますね。
+MVのプロジェクト直下にsubWindowフォルダを作り、そこにwindow.htmlとして以下のようなhtmlを用意しておきます。
+&lt;!DOCTYPE html&gt; &lt;html&gt; &lt;head&gt; &lt;meta charset=&#34;UTF-8&#34;&gt; &lt;title&gt;Project1&lt;/title&gt; &lt;/head&gt; &lt;body style=&#34;background-color:rgba(0,0,0,0);&#34;&gt; &lt;img src=&#34;../img/pictures/p-stella01.png&#34;&gt; &lt;/body&gt; &lt;/html&gt; そしてツクール側からスクリプトコマンドで以下のようにすると、ウィンドウが表示されます
+var gui = window.require(&#39;nw.gui&#39;); gui.Window.open(&#34;subWindow/window.html&#34;); いらないウィンドウの装飾とか透明じゃないとかあるけど、とりあえず表示できました。
+これでわかるように、htmlならなんでもいいのです。ブラウザデプロイしたMV製のゲームでも……。
+ウィンドウの表示をちゃんとする Window.openの引数にマニフェストを渡せるのでこれで制御できます。
+var gui = window.require(&#39;nw.gui&#39;); gui.Window.open(&#34;subWindow/window.html&#34;,{ resizable: false, //最大化、リサイズ不可 toolbar: false, //ツールバー非表示 frame: false, //フレーム非表示 show_in_taskbar: false, // タスクバーに表示しない（注意：開発時はtrueにしておいたほうがいい。タスクバーに表示されないとウィンドウが迷子になる） transparent: true //透明化 }); ちなみに透明化ですが、Vista以降でclassic themeでないことが条件です。">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="rpgmaker">
+    <meta property="article:published_time" content="2017-12-07T00:00:00+00:00">
+    <meta property="article:modified_time" content="2017-12-07T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ゲーム画面外演出を考える">
+  <meta name="twitter:description" content="この記事はRPGツクールMV Advent Calendar7日目の記事です。
+この記事に書かれている内容はツクール1.5.1でのみ動作します。それ以降には対応していません。1.6以上ではnw.jsのバージョンが変わるため動作しません。
+概要 ゲーム画面（ウィンドウ）の外にピクチャを表示したりして、ゲーム画面外で演出をする方法を考えます。
+結論から言うと、かなり面倒くさくてつらく、内容は開発者向けです。少なくともhtmlの知識は必要です。
+とりあえず、Windows/Mac 向けを考えます。ブラウザ版では別の考え方をします（後述）。
+最後に完成版のプロジェクトファイルを用意するので必要であれば参照してみてください。
+ゲーム画面外にキャラが表示されると何割か増しでかわいく見える気がする。
+※今回はデュアルディスプレイ環境は考慮しません
+フルスクリーンを無効化する 少しずつ実装していきましょう。
+まず、ゲーム画面外に出すということは、フルスクリーン時には効果ありません。なのでフルスクリーンにする機能をOFFにします。
+ツクールの機能にあるF4キーでフルスクリーンにする機能はプラグインでOFFにできるのですが、ウィンドウの端っこにカーソルを持っていったときに表示されるリサイズや右上の最大化ボタンをプラグインからOFFにすることができません。
+これを無効化するにはデプロイ後にpackage.jsonというファイルの中身を書き換える必要があります
+packages.jsonの中身のwindowの箇所に &#34;resizable&#34;: false, を以下のように追加します。
+&#34;window&#34;: { &#34;resizable&#34;: false, &#34;title&#34;: &#34;&#34;, &#34;toolbar&#34;: false, &#34;width&#34;: 816, &#34;height&#34;: 624, &#34;icon&#34;: &#34;www/icon/icon.png&#34; } これでフルスクリーンをOFFにできます。しかし、これはデプロイする度に該当箇所を書き換えないといけないので、かなりつらいです。
+とりあえず表示してみる ゲーム画面外に影響させるにはもう1個別のウィンドウを作るしかありません。
+nw.js の機能を使って実装していきます。
+nw.jsのWindowには openというURLやhtmlファイルを開く機能があり、それを使います。
+つまり、imgタグを記述したhtmlファイルを用意すれば、画像が表示されるウィンドウが用意できますね。
+MVのプロジェクト直下にsubWindowフォルダを作り、そこにwindow.htmlとして以下のようなhtmlを用意しておきます。
+&lt;!DOCTYPE html&gt; &lt;html&gt; &lt;head&gt; &lt;meta charset=&#34;UTF-8&#34;&gt; &lt;title&gt;Project1&lt;/title&gt; &lt;/head&gt; &lt;body style=&#34;background-color:rgba(0,0,0,0);&#34;&gt; &lt;img src=&#34;../img/pictures/p-stella01.png&#34;&gt; &lt;/body&gt; &lt;/html&gt; そしてツクール側からスクリプトコマンドで以下のようにすると、ウィンドウが表示されます
+var gui = window.require(&#39;nw.gui&#39;); gui.Window.open(&#34;subWindow/window.html&#34;); いらないウィンドウの装飾とか透明じゃないとかあるけど、とりあえず表示できました。
+これでわかるように、htmlならなんでもいいのです。ブラウザデプロイしたMV製のゲームでも……。
+ウィンドウの表示をちゃんとする Window.openの引数にマニフェストを渡せるのでこれで制御できます。
+var gui = window.require(&#39;nw.gui&#39;); gui.Window.open(&#34;subWindow/window.html&#34;,{ resizable: false, //最大化、リサイズ不可 toolbar: false, //ツールバー非表示 frame: false, //フレーム非表示 show_in_taskbar: false, // タスクバーに表示しない（注意：開発時はtrueにしておいたほうがいい。タスクバーに表示されないとウィンドウが迷子になる） transparent: true //透明化 }); ちなみに透明化ですが、Vista以降でclassic themeでないことが条件です。">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/rpgmaker/2017-12-07-outside-window/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">ゲーム画面外演出を考える</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/rpg%E3%83%84%E3%82%AF%E3%83%BC%E3%83%ABmv" style="margin-right:10px;">RPGツクールMV</a>
+                    <time datetime="2017-12-07T00:00:00&#43;00:00" itemprop="datePublished"> 2017/12/07 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <p>この記事は<a href="https://adventar.org/calendars/2288" class="blankA" target="_blank" rel="noopener noreferrer">RPGツクールMV Advent Calendar</a>7日目の記事です。</p>
+<p><span style="color:red;">この記事に書かれている内容はツクール1.5.1でのみ動作します。それ以降には対応していません。1.6以上ではnw.jsのバージョンが変わるため動作しません。</span></p>
+<h2 id="概要">概要</h2>
+<p>ゲーム画面（ウィンドウ）の外にピクチャを表示したりして、ゲーム画面外で演出をする方法を考えます。<br>
+結論から言うと、かなり面倒くさくてつらく、内容は開発者向けです。少なくともhtmlの知識は必要です。<br>
+とりあえず、Windows/Mac 向けを考えます。ブラウザ版では別の考え方をします（後述）。<br>
+最後に完成版のプロジェクトファイルを用意するので必要であれば参照してみてください。</p>
+<p>ゲーム画面外にキャラが表示されると何割か増しでかわいく見える気がする。<br>
+<video src="outside-picture.mp4" width="816" height="624" controls></video></p>
+<p>※今回はデュアルディスプレイ環境は考慮しません</p>
+<h2 id="フルスクリーンを無効化する">フルスクリーンを無効化する</h2>
+<p>少しずつ実装していきましょう。<br>
+まず、ゲーム画面外に出すということは、フルスクリーン時には効果ありません。なのでフルスクリーンにする機能をOFFにします。<br>
+ツクールの機能にあるF4キーでフルスクリーンにする機能はプラグインでOFFにできるのですが、ウィンドウの端っこにカーソルを持っていったときに表示されるリサイズや右上の最大化ボタンをプラグインからOFFにすることができません。<br>
+これを無効化するにはデプロイ後にpackage.jsonというファイルの中身を書き換える必要があります<br>
+<img src="packagejson.png" alt="package.json"></p>
+<p>packages.jsonの中身のwindowの箇所に <code>&quot;resizable&quot;: false,</code>  を以下のように追加します。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="s2">&#34;window&#34;</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;resizable&#34;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;title&#34;</span><span class="o">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;toolbar&#34;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;width&#34;</span><span class="o">:</span> <span class="mi">816</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;height&#34;</span><span class="o">:</span> <span class="mi">624</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;icon&#34;</span><span class="o">:</span> <span class="s2">&#34;www/icon/icon.png&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span></code></pre></div><p>これでフルスクリーンをOFFにできます。しかし、これはデプロイする度に該当箇所を書き換えないといけないので、かなりつらいです。</p>
+<h2 id="とりあえず表示してみる">とりあえず表示してみる</h2>
+<p>ゲーム画面外に影響させるにはもう1個別のウィンドウを作るしかありません。<br>
+<a href="http://docs.nwjs.io/en/latest/" class="blankA" target="_blank" rel="noopener noreferrer">nw.js</a> の機能を使って実装していきます。<br>
+nw.jsのWindowには <a href="http://docs.nwjs.io/en/latest/References/Window/#windowopenurl-options-callback" class="blankA" target="_blank" rel="noopener noreferrer">open</a>というURLやhtmlファイルを開く機能があり、それを使います。<br>
+つまり、imgタグを記述したhtmlファイルを用意すれば、画像が表示されるウィンドウが用意できますね。<br>
+MVのプロジェクト直下にsubWindowフォルダを作り、そこにwindow.htmlとして以下のようなhtmlを用意しておきます。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&#34;UTF-8&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Project1<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">body</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;background-color:rgba(0,0,0,0);&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;../img/pictures/p-stella01.png&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>そしてツクール側からスクリプトコマンドで以下のようにすると、ウィンドウが表示されます</p>
+<pre tabindex="0"><code>var gui = window.require(&#39;nw.gui&#39;);
+gui.Window.open(&#34;subWindow/window.html&#34;);
+</code></pre><p><img src="windowopen.png" alt="window open"></p>
+<p>いらないウィンドウの装飾とか透明じゃないとかあるけど、とりあえず表示できました。<br>
+これでわかるように、htmlならなんでもいいのです。ブラウザデプロイしたMV製のゲームでも……。</p>
+<h2 id="ウィンドウの表示をちゃんとする">ウィンドウの表示をちゃんとする</h2>
+<p>Window.openの引数に<a href="http://docs.nwjs.io/en/latest/References/Manifest%20Format/" class="blankA" target="_blank" rel="noopener noreferrer">マニフェスト</a>を渡せるのでこれで制御できます。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> <span class="kd">var</span> <span class="nx">gui</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;nw.gui&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"> <span class="nx">gui</span><span class="p">.</span><span class="nx">Window</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">&#34;subWindow/window.html&#34;</span><span class="p">,{</span>
+</span></span><span class="line"><span class="cl">   <span class="nx">resizable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>      <span class="c1">//最大化、リサイズ不可
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   <span class="nx">toolbar</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>        <span class="c1">//ツールバー非表示
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   <span class="nx">frame</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>          <span class="c1">//フレーム非表示
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   <span class="nx">show_in_taskbar</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">// タスクバーに表示しない（注意：開発時はtrueにしておいたほうがいい。タスクバーに表示されないとウィンドウが迷子になる）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   <span class="nx">transparent</span><span class="o">:</span> <span class="kc">true</span>       <span class="c1">//透明化
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">});</span>
+</span></span></code></pre></div><p>ちなみに透明化ですが、Vista以降でclassic themeでないことが条件です。</p>
+<h2 id="ゲーム画面とサブウィンドウを関連付ける">ゲーム画面とサブウィンドウを関連付ける</h2>
+<p>ゲーム画面を動かしたらそれに追従してサブウィンドウも移動してほしいですし、ゲーム画面を閉じたらサブウィンドウも閉じるべきです。<br>
+まずは、閉じる同期をします。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">gui</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;nw.gui&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">win</span> <span class="o">=</span> <span class="nx">gui</span><span class="p">.</span><span class="nx">Window</span><span class="p">.</span><span class="nx">get</span><span class="p">();</span>      <span class="c1">//ゲーム画面側のウィンドウを取る
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">var</span> <span class="nx">subWin</span> <span class="o">=</span> <span class="nx">gui</span><span class="p">.</span><span class="nx">Window</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">&#34;subWindow/window.html&#34;</span><span class="p">,{</span>    
+</span></span><span class="line"><span class="cl">   <span class="c1">//省略
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//ゲーム画面の閉じるイベント時にサブウィンドウも閉じるようにフック
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">win</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;closed&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">subWin</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></div><p>次にウィンドウ移動の追従です。上記ソースコードの流れで</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">win</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&#34;move&#34;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">subWin</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">+</span> <span class="nx">win</span><span class="p">.</span><span class="nx">width</span><span class="p">;</span>   <span class="c1">//例えば、ゲーム画面の右側に貼り付ける
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">subWin</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="nx">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></div><p>大雑把に断片ごとに書きましたがこんな感じです。</p>
+<h2 id="画像をアニメーションさせる">画像をアニメーションさせる</h2>
+<p>ゲーム画面外の画像をモニタ左端からゲーム画面に近づくというアニメーションを考えます。<br>
+恐らく２つ方法があります。</p>
+<ol>
+<li>サブウィンドウのx座標をモニタ左端からゲーム画面まで動かしていく</li>
+<li>サブウィンドウを大きめに取り、サブウィンドウ内のimgタグを左端からゲーム画面まで動かしていく</li>
+</ol>
+<p>1は失敗でした。ウィンドウのx座標を動かすとすごいカクカクするのです。アニメーションするのに耐えられないです。<br>
+2で攻めるしかないです。2はツクールとは関係なく、html、css、js使ってアニメーションを実装すればいいので、ここでは割愛。</p>
+<p>こんな感じですね。<br>
+<video src="animation.mp4" width=800 controls></video></p>
+<h2 id="ブラウザ版を考える">ブラウザ版を考える</h2>
+<p>ブラウザ版はnw.js のウィンドウに出力していたものをそのままiframeに出力すれば良いですね。<br>
+これで同じスクリプトコマンドで両方対応できます。</p>
+<h2 id="技術的な補足">技術的な補足</h2>
+<p>nw.jsのWindowには<code>setResizable</code>というメソッドがあり、これでフルスクリーンをOn/Offできそうなのですが、効きませんでした。</p>
+<p>manifestで <code>show: false</code> とするとウィンドウを非表示状態でopenできます。<br>
+これを利用してwindowがloadされたあと、showすれば描画前のちらつきをなくせる気がするのですが、なぜかtransparentが効いたwindowでやるとちゃんと描画されなかったのであきらめました。</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

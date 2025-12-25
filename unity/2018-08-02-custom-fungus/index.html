@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">ビジュアルノベルアセットFungusにコマンドを追加してカスタマイズする | kido</title>
+<meta property="og:title" content="ビジュアルノベルアセットFungusにコマンドを追加してカスタマイズする | kido" />
+<meta name="twitter:title" content="ビジュアルノベルアセットFungusにコマンドを追加してカスタマイズする | kido" />
+<meta itemprop="name" content="ビジュアルノベルアセットFungusにコマンドを追加してカスタマイズする | kido" />
+<meta name="application-name" content="ビジュアルノベルアセットFungusにコマンドを追加してカスタマイズする | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/unity/2018-08-02-custom-fungus/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/unity/2018-08-02-custom-fungus/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="ビジュアルノベルアセットFungusにコマンドを追加してカスタマイズする">
+  <meta property="og:description" content="この記事はUnity アセット真夏のアドベントカレンダー 2018 Summer!の2日目の記事です。
+Fungusについて Fungus はフリーのビジュアルノベルアセットで、高機能・高評価のアセットです。
+簡単な概要についてはフリーのビジュアルノベルアセットのFungusが便利で紹介しています。
+また、応用として、フリーのビジュアルノベルアセットFungusを使ってRPGのイベントを作る でも紹介しています。
+概要 Fungusはビジュアルノベルアセットですが、RPGの会話機能に使ったり、フローチャートの機能を使ってイベントを制御したりすることができます。
+Fungusのコマンドは以下のようにたくさん用意されていますが、独自のコマンドを追加することにより、プロジェクトに適した使い方ができます。
+コマンドの追加方法 コマンドのソースはFungus/Scripts/Commandsに配置されています。
+例えば、音楽を再生するPlay Musicコマンドを抜粋すると以下のようになっています。
+[CommandInfo(&#34;Audio&#34;, &#34;Play Music&#34;, &#34;Plays looping game music. If any game music is already playing, it is stopped. Game music will continue playing across scene loads.&#34;)] [AddComponentMenu(&#34;&#34;)] public class PlayMusic : Command { [SerializeField] protected AudioClip musicClip; [SerializeField] protected float atTime; [SerializeField] protected bool loop = true; [SerializeField] protected float fadeDuration = 1f; public override void OnEnter(){ var musicManager = FungusManager.Instance.MusicManager; float startTime = Mathf.Max(0, atTime); musicManager.PlayMusic(musicClip, loop, fadeDuration, startTime); Continue(); } public override string GetSummary(){ if (musicClip == null){ return &#34;Error: No music clip selected&#34;; } return musicClip.name; } このソースからわかるようにCommandクラスを継承したクラスを作成し、CommandInfoを追加することによって、コマンドとして認識されるようです。
+CommandInfoの第一引数がカテゴリ、第二引数が表示名、第三引数がヘルプのテキストです。
+クラスのメンバにSerializeFieldを追加した変数はInspectorから設定できるようになります。">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="unity">
+    <meta property="article:published_time" content="2018-08-02T00:00:00+00:00">
+    <meta property="article:modified_time" content="2018-08-02T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ビジュアルノベルアセットFungusにコマンドを追加してカスタマイズする">
+  <meta name="twitter:description" content="この記事はUnity アセット真夏のアドベントカレンダー 2018 Summer!の2日目の記事です。
+Fungusについて Fungus はフリーのビジュアルノベルアセットで、高機能・高評価のアセットです。
+簡単な概要についてはフリーのビジュアルノベルアセットのFungusが便利で紹介しています。
+また、応用として、フリーのビジュアルノベルアセットFungusを使ってRPGのイベントを作る でも紹介しています。
+概要 Fungusはビジュアルノベルアセットですが、RPGの会話機能に使ったり、フローチャートの機能を使ってイベントを制御したりすることができます。
+Fungusのコマンドは以下のようにたくさん用意されていますが、独自のコマンドを追加することにより、プロジェクトに適した使い方ができます。
+コマンドの追加方法 コマンドのソースはFungus/Scripts/Commandsに配置されています。
+例えば、音楽を再生するPlay Musicコマンドを抜粋すると以下のようになっています。
+[CommandInfo(&#34;Audio&#34;, &#34;Play Music&#34;, &#34;Plays looping game music. If any game music is already playing, it is stopped. Game music will continue playing across scene loads.&#34;)] [AddComponentMenu(&#34;&#34;)] public class PlayMusic : Command { [SerializeField] protected AudioClip musicClip; [SerializeField] protected float atTime; [SerializeField] protected bool loop = true; [SerializeField] protected float fadeDuration = 1f; public override void OnEnter(){ var musicManager = FungusManager.Instance.MusicManager; float startTime = Mathf.Max(0, atTime); musicManager.PlayMusic(musicClip, loop, fadeDuration, startTime); Continue(); } public override string GetSummary(){ if (musicClip == null){ return &#34;Error: No music clip selected&#34;; } return musicClip.name; } このソースからわかるようにCommandクラスを継承したクラスを作成し、CommandInfoを追加することによって、コマンドとして認識されるようです。
+CommandInfoの第一引数がカテゴリ、第二引数が表示名、第三引数がヘルプのテキストです。
+クラスのメンバにSerializeFieldを追加した変数はInspectorから設定できるようになります。">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/unity/2018-08-02-custom-fungus/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">ビジュアルノベルアセットFungusにコマンドを追加してカスタマイズする</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/unity" style="margin-right:10px;">Unity</a>
+                    <time datetime="2018-08-02T00:00:00&#43;00:00" itemprop="datePublished"> 2018/08/02 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <p>この記事は<a href="http://assetstore.info/eventandcontest/adventcalendar/asset-adventcalendar2018summer/" class="blankA" target="_blank" rel="noopener noreferrer">Unity アセット真夏のアドベントカレンダー 2018 Summer!</a>の2日目の記事です。</p>
+<h2 id="fungusについて">Fungusについて</h2>
+<p><a href="https://www.assetstore.unity3d.com/jp/#!/content/34184" class="blankA" target="_blank" rel="noopener noreferrer">Fungus</a> はフリーのビジュアルノベルアセットで、高機能・高評価のアセットです。<br>
+簡単な概要については<a href="/unity/2017-08-22-fungus/">フリーのビジュアルノベルアセットのFungusが便利</a>で紹介しています。<br>
+また、応用として、<a href="/unity/2017-12-13-fungus-rpg/">フリーのビジュアルノベルアセットFungusを使ってRPGのイベントを作る </a>でも紹介しています。</p>
+<h2 id="概要">概要</h2>
+<p>Fungusはビジュアルノベルアセットですが、RPGの会話機能に使ったり、フローチャートの機能を使ってイベントを制御したりすることができます。</p>
+<p><img src="../2017-08-22-fungus/flowchart.png" alt="Fungusのフローチャート"></p>
+<p>Fungusのコマンドは以下のようにたくさん用意されていますが、独自のコマンドを追加することにより、プロジェクトに適した使い方ができます。</p>
+<p><img src="commands.png" alt="Fungusのコマンド群"></p>
+<h2 id="コマンドの追加方法">コマンドの追加方法</h2>
+<p>コマンドのソースは<code>Fungus/Scripts/Commands</code>に配置されています。<br>
+例えば、音楽を再生するPlay Musicコマンドを抜粋すると以下のようになっています。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="na">[CommandInfo(&#34;Audio&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="na">              &#34;Play Music&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="na">              &#34;Plays looping game music. If any game music is already playing, it is stopped. Game music will continue playing across scene loads.&#34;)]</span>
+</span></span><span class="line"><span class="cl"><span class="na">[AddComponentMenu(&#34;&#34;)]</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">PlayMusic</span> <span class="p">:</span> <span class="n">Command</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="na">    [SerializeField]</span> <span class="kd">protected</span> <span class="n">AudioClip</span> <span class="n">musicClip</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="na">    [SerializeField]</span> <span class="kd">protected</span> <span class="kt">float</span> <span class="n">atTime</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="na">    [SerializeField]</span> <span class="kd">protected</span> <span class="kt">bool</span> <span class="n">loop</span> <span class="p">=</span> <span class="kc">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="na">    [SerializeField]</span> <span class="kd">protected</span> <span class="kt">float</span> <span class="n">fadeDuration</span> <span class="p">=</span> <span class="m">1f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">override</span> <span class="k">void</span> <span class="n">OnEnter</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">var</span> <span class="n">musicManager</span> <span class="p">=</span> <span class="n">FungusManager</span><span class="p">.</span><span class="n">Instance</span><span class="p">.</span><span class="n">MusicManager</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">float</span> <span class="n">startTime</span> <span class="p">=</span> <span class="n">Mathf</span><span class="p">.</span><span class="n">Max</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">atTime</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">musicManager</span><span class="p">.</span><span class="n">PlayMusic</span><span class="p">(</span><span class="n">musicClip</span><span class="p">,</span> <span class="n">loop</span><span class="p">,</span> <span class="n">fadeDuration</span><span class="p">,</span> <span class="n">startTime</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Continue</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">override</span> <span class="kt">string</span> <span class="n">GetSummary</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="n">musicClip</span> <span class="p">==</span> <span class="kc">null</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s">&#34;Error: No music clip selected&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="n">musicClip</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span></code></pre></div><p>このソースからわかるように<code>Command</code>クラスを継承したクラスを作成し、<code>CommandInfo</code>を追加することによって、コマンドとして認識されるようです。<br>
+<code>CommandInfo</code>の第一引数がカテゴリ、第二引数が表示名、第三引数がヘルプのテキストです。<br>
+クラスのメンバに<code>SerializeField</code>を追加した変数はInspectorから設定できるようになります。</p>
+<p><code>OnEnter</code>メソッドが実際にコマンドとして実行されるメソッドです。最後に<code>Continue()</code>を呼ぶことにより、次のコマンドに遷移します。</p>
+<p><code>GetSummary</code>メソッドを実装するとコマンドリストに表示されるサマリを変更できます。Play Musicに関してはAudio Clipがあればその音楽ファイル名を表示しています。</p>
+<p>もし、プロジェクトで独自のSoundManagerクラスなどを実装している場合、この<code>Play Music</code>や<code>Play SE</code>を参考に作り直すと良いです。<br>
+ちなみにFungusはデフォルトだと音楽再生などをするとFungusManagerというDontDestroyOnloadされたマネージャが生成されます。</p>
+<p><img src="play-music.png" alt="Play Musicコマンド"></p>
+<h2 id="if-コマンドを追加する">if コマンドを追加する</h2>
+<p>コマンドの中でもifは特殊なコマンドです。<br>
+ここでは仮に<code>DEBUG_HOGE</code>がdefineされていたらifが成立するようなデバッグ用のif コマンドを作ってみます。<br>
+<code>Command</code>クラスではなく<code>Condition</code>を継承し、<code>bool EvaluateCondition()</code>と <code>bool HasNeededProperties()</code>を実装すればif コマンドが作れます。<br>
+できたのが以下です。<code>EvaluateCondition()</code>の返り値が<code>true</code>だとif内に入ります。<br>
+<code>HasNeededProperties()</code>についてはこれが<code>false</code>を返すと条件に関係なくifの中に入ってしまうので、ここでは常に<code>true</code>を返しておきます。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="k">namespace</span> <span class="nn">Fungus</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="cs">/// &lt;summary&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="cs">/// If the test expression is true, execute the following command block.</span>
+</span></span><span class="line"><span class="cl">  <span class="cs">/// &lt;/summary&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="na">  [CommandInfo(&#34;Flow&#34;, &#34;DebugIf&#34;, &#34;If define DEBUG_HOGE&#34;)]</span>
+</span></span><span class="line"><span class="cl"><span class="na">  [AddComponentMenu(&#34;&#34;)]</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">public</span> <span class="k">class</span> <span class="nc">DebugIf</span> <span class="p">:</span> <span class="n">Condition</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">protected</span> <span class="kd">override</span> <span class="kt">bool</span> <span class="n">EvaluateCondition</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#if</span> <span class="n">DEBUG_HOGE</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#else</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">protected</span> <span class="kd">override</span> <span class="kt">bool</span> <span class="n">HasNeededProperties</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p><img src="debugif.png" alt="DEBUGIfコマンド"></p>
+<h2 id="まとめ">まとめ</h2>
+<p>Fungusはオープンソースでもあるのでソースコードが見やすく、他の人が拡張しやすいように設計されています。<br>
+そのため、今回のようにコマンドを追加したりして、自身のプロジェクトに合うようにカスタマイズするととても便利になります。<br>
+ただ、あまり本体のコードを書き換えるとバージョンアップに対応できないので注意が必要です。<br>
+私は2017年9月からVer.3.6を使用していますが、今回の検証のためVer.3.9.1をダウンロードしたところ、コマンドが増えていたりとバージョンアップは頻繁に行われているようです。</p>
+<h2 id="使用したバージョン">使用したバージョン</h2>
+<ul>
+<li>Unity 2018.2.0f2</li>
+<li>Fungus 3.9.1</li>
+</ul>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">ShaderでSpriteの色相をシフトする | kido</title>
+<meta property="og:title" content="ShaderでSpriteの色相をシフトする | kido" />
+<meta name="twitter:title" content="ShaderでSpriteの色相をシフトする | kido" />
+<meta itemprop="name" content="ShaderでSpriteの色相をシフトする | kido" />
+<meta name="application-name" content="ShaderでSpriteの色相をシフトする | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/unity/2015-01-03-shader-hue-shift/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/unity/2015-01-03-shader-hue-shift/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="ShaderでSpriteの色相をシフトする">
+  <meta property="og:description" content="はじめに 前回、Sprite、Texture の 色相をシフトするで、SpriteからTexture2Dを取得して、SetPixelを使って色相をシフトすることをした。
+今回はシェーダーを使って色相をシフトして、下図のように画像の色を変える。
+用意 Unity のダウンロードから ビルトインシェーダーをダウンロードする。インストーラーじゃなくて、右端にあるビルトインシェーダ。この記事は現在最新の4.6.1をダウンロードして記述する。
+解凍したら、DefaultResources　にある Sprites-Default.shaderを元に作成する。これはSpriteを生成するとデフォルトで使われるシェーダーだ。
+適当に名前を Sprites-HSV-Default.shader などにしてUnityのProjectに突っ込んで開始。
+シェーダー名の変更 Shader “Sprites/Default” の箇所を Shader “Sprites/HSV Default” に変更。これで、MaterialのShaderのドロップダウンから Sprites -&gt; HSV Default を選択できるようになる。
+Propertiesの追加 まずはインスペクター上から設定できる項目を増やす。 色相(H)、彩度(S)、明度(V) の 3つを追加したいので、Propertiesを以下のように修正。
+Properties { [PerRendererData] _MainTex (&#34;Sprite Texture&#34;, 2D) = &#34;white&#34; {} _Color (&#34;Tint&#34;, Color) = (1,1,1,1) _Hue (&#34;Hue&#34;, Float) = 0 //色相 _Sat (&#34;Saturation&#34;, Float) = 1 //彩度 _Val (&#34;Value&#34;, Float) = 1 //明度 [MaterialToggle] PixelSnap (&#34;Pixel snap&#34;, Float) = 0 } このシェーダーをマテリアルに設定すると、下図のように Hue、Saturation、Value の値がインスペクターから設定できるようになる。
+frag の修正 テクスチャーの各ピクセルの色に対して色相をシフトするので、fragの処理を修正する。
+ここで、RGBからHSVに変換して計算するのだが、その処理は以下を参照した。
+Problem with getting hue shift shader right.
+追記、修正したコードは以下。
+fixed3 shift_col(fixed3 RGB, half3 shift) { fixed3 RESULT = fixed3(RGB); float VSU = shift.z*shift.y*cos(shift.x*3.14159265/180); float VSW = shift.z*shift.y*sin(shift.x*3.14159265/180); RESULT.x = (.299*shift.z&#43;.701*VSU&#43;.168*VSW)*RGB.x &#43; (.587*shift.z-.587*VSU&#43;.330*VSW)*RGB.y &#43; (.114*shift.z-.114*VSU-.497*VSW)*RGB.z; RESULT.y = (.299*shift.z-.299*VSU-.328*VSW)*RGB.x &#43; (.587*shift.z&#43;.413*VSU&#43;.035*VSW)*RGB.y &#43; (.114*shift.z-.114*VSU&#43;.292*VSW)*RGB.z; RESULT.z = (.299*shift.z-.3*VSU&#43;1.25*VSW)*RGB.x &#43; (.587*shift.z-.588*VSU-1.05*VSW)*RGB.y &#43; (.114*shift.z&#43;.886*VSU-.203*VSW)*RGB.z; return (RESULT); } sampler2D _MainTex; half _Hue, _Sat, _Val; fixed4 frag(v2f IN) : SV_Target { fixed4 c = tex2D(_MainTex, IN.texcoord) * IN.color; c.rgb *= c.a; half3 shift = half3(_Hue, _Sat, _Val); return fixed4( shift_col(c, shift), c.a); } Spriteに適用 あとは適当なマテリアルに作成したシェーダーをつけて、SpriteRendererに設定すれば良い（下図）。">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="unity">
+    <meta property="article:published_time" content="2015-01-03T00:00:00+00:00">
+    <meta property="article:modified_time" content="2015-01-03T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ShaderでSpriteの色相をシフトする">
+  <meta name="twitter:description" content="はじめに 前回、Sprite、Texture の 色相をシフトするで、SpriteからTexture2Dを取得して、SetPixelを使って色相をシフトすることをした。
+今回はシェーダーを使って色相をシフトして、下図のように画像の色を変える。
+用意 Unity のダウンロードから ビルトインシェーダーをダウンロードする。インストーラーじゃなくて、右端にあるビルトインシェーダ。この記事は現在最新の4.6.1をダウンロードして記述する。
+解凍したら、DefaultResources　にある Sprites-Default.shaderを元に作成する。これはSpriteを生成するとデフォルトで使われるシェーダーだ。
+適当に名前を Sprites-HSV-Default.shader などにしてUnityのProjectに突っ込んで開始。
+シェーダー名の変更 Shader “Sprites/Default” の箇所を Shader “Sprites/HSV Default” に変更。これで、MaterialのShaderのドロップダウンから Sprites -&gt; HSV Default を選択できるようになる。
+Propertiesの追加 まずはインスペクター上から設定できる項目を増やす。 色相(H)、彩度(S)、明度(V) の 3つを追加したいので、Propertiesを以下のように修正。
+Properties { [PerRendererData] _MainTex (&#34;Sprite Texture&#34;, 2D) = &#34;white&#34; {} _Color (&#34;Tint&#34;, Color) = (1,1,1,1) _Hue (&#34;Hue&#34;, Float) = 0 //色相 _Sat (&#34;Saturation&#34;, Float) = 1 //彩度 _Val (&#34;Value&#34;, Float) = 1 //明度 [MaterialToggle] PixelSnap (&#34;Pixel snap&#34;, Float) = 0 } このシェーダーをマテリアルに設定すると、下図のように Hue、Saturation、Value の値がインスペクターから設定できるようになる。
+frag の修正 テクスチャーの各ピクセルの色に対して色相をシフトするので、fragの処理を修正する。
+ここで、RGBからHSVに変換して計算するのだが、その処理は以下を参照した。
+Problem with getting hue shift shader right.
+追記、修正したコードは以下。
+fixed3 shift_col(fixed3 RGB, half3 shift) { fixed3 RESULT = fixed3(RGB); float VSU = shift.z*shift.y*cos(shift.x*3.14159265/180); float VSW = shift.z*shift.y*sin(shift.x*3.14159265/180); RESULT.x = (.299*shift.z&#43;.701*VSU&#43;.168*VSW)*RGB.x &#43; (.587*shift.z-.587*VSU&#43;.330*VSW)*RGB.y &#43; (.114*shift.z-.114*VSU-.497*VSW)*RGB.z; RESULT.y = (.299*shift.z-.299*VSU-.328*VSW)*RGB.x &#43; (.587*shift.z&#43;.413*VSU&#43;.035*VSW)*RGB.y &#43; (.114*shift.z-.114*VSU&#43;.292*VSW)*RGB.z; RESULT.z = (.299*shift.z-.3*VSU&#43;1.25*VSW)*RGB.x &#43; (.587*shift.z-.588*VSU-1.05*VSW)*RGB.y &#43; (.114*shift.z&#43;.886*VSU-.203*VSW)*RGB.z; return (RESULT); } sampler2D _MainTex; half _Hue, _Sat, _Val; fixed4 frag(v2f IN) : SV_Target { fixed4 c = tex2D(_MainTex, IN.texcoord) * IN.color; c.rgb *= c.a; half3 shift = half3(_Hue, _Sat, _Val); return fixed4( shift_col(c, shift), c.a); } Spriteに適用 あとは適当なマテリアルに作成したシェーダーをつけて、SpriteRendererに設定すれば良い（下図）。">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/unity/2015-01-03-shader-hue-shift/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">ShaderでSpriteの色相をシフトする</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/unity" style="margin-right:10px;">Unity</a>
+                    <time datetime="2015-01-03T00:00:00&#43;00:00" itemprop="datePublished"> 2015/01/03 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <h2 id="はじめに">はじめに</h2>
+<p>前回、<a href="/unity/2015-01-02-sprite-hue-shift/">Sprite、Texture の 色相をシフトする</a>で、SpriteからTexture2Dを取得して、SetPixelを使って色相をシフトすることをした。<br>
+今回はシェーダーを使って色相をシフトして、下図のように画像の色を変える。</p>
+<p><img src="hue-shift-anime.gif" alt="色相をアニメーション"></p>
+<h2 id="用意">用意</h2>
+<p><a href="http://japan.unity3d.com/unity/download/archive" class="blankA" target="_blank" rel="noopener noreferrer">Unity のダウンロード</a>から ビルトインシェーダーをダウンロードする。インストーラーじゃなくて、右端にあるビルトインシェーダ。この記事は現在最新の4.6.1をダウンロードして記述する。</p>
+<p>解凍したら、DefaultResources　にある Sprites-Default.shaderを元に作成する。これはSpriteを生成するとデフォルトで使われるシェーダーだ。<br>
+適当に名前を Sprites-HSV-Default.shader などにしてUnityのProjectに突っ込んで開始。</p>
+<h2 id="シェーダー名の変更">シェーダー名の変更</h2>
+<p>Shader &ldquo;Sprites/Default&rdquo; の箇所を Shader &ldquo;Sprites/HSV Default&rdquo; に変更。これで、MaterialのShaderのドロップダウンから Sprites -&gt; HSV Default を選択できるようになる。</p>
+<h2 id="propertiesの追加">Propertiesの追加</h2>
+<p>まずはインスペクター上から設定できる項目を増やす。 色相(H)、彩度(S)、明度(V) の 3つを追加したいので、Propertiesを以下のように修正。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="n">Properties</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="na"> [PerRendererData]</span> <span class="n">_MainTex</span> <span class="p">(</span><span class="s">&#34;Sprite Texture&#34;</span><span class="p">,</span> <span class="m">2D</span><span class="p">)</span> <span class="p">=</span> <span class="s">&#34;white&#34;</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl"> <span class="n">_Color</span> <span class="p">(</span><span class="s">&#34;Tint&#34;</span><span class="p">,</span> <span class="n">Color</span><span class="p">)</span> <span class="p">=</span> <span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"> <span class="n">_Hue</span> <span class="p">(</span><span class="s">&#34;Hue&#34;</span><span class="p">,</span> <span class="n">Float</span><span class="p">)</span> <span class="p">=</span> <span class="m">0</span>         <span class="c1">//色相</span>
+</span></span><span class="line"><span class="cl"> <span class="n">_Sat</span> <span class="p">(</span><span class="s">&#34;Saturation&#34;</span><span class="p">,</span> <span class="n">Float</span><span class="p">)</span> <span class="p">=</span> <span class="m">1</span>  <span class="c1">//彩度</span>
+</span></span><span class="line"><span class="cl"> <span class="n">_Val</span> <span class="p">(</span><span class="s">&#34;Value&#34;</span><span class="p">,</span> <span class="n">Float</span><span class="p">)</span> <span class="p">=</span> <span class="m">1</span>       <span class="c1">//明度</span>
+</span></span><span class="line"><span class="cl"><span class="na"> [MaterialToggle]</span> <span class="n">PixelSnap</span> <span class="p">(</span><span class="s">&#34;Pixel snap&#34;</span><span class="p">,</span> <span class="n">Float</span><span class="p">)</span> <span class="p">=</span> <span class="m">0</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>このシェーダーをマテリアルに設定すると、下図のように Hue、Saturation、Value の値がインスペクターから設定できるようになる。</p>
+<p><img src="hsv-default-inspector.jpg" alt="Hue、Saturation、Valueのインスペクタ"></p>
+<h2 id="frag-の修正">frag の修正</h2>
+<p>テクスチャーの各ピクセルの色に対して色相をシフトするので、fragの処理を修正する。<br>
+ここで、RGBからHSVに変換して計算するのだが、その処理は以下を参照した。</p>
+<p><a href="http://forum.unity3d.com/threads/problem-with-getting-hue-shift-shader-right.89041/" class="blankA" target="_blank" rel="noopener noreferrer">Problem with getting hue shift shader right.</a></p>
+<p>追記、修正したコードは以下。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="n">fixed3</span> <span class="n">shift_col</span><span class="p">(</span><span class="n">fixed3</span> <span class="n">RGB</span><span class="p">,</span> <span class="n">half3</span> <span class="n">shift</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="n">fixed3</span> <span class="n">RESULT</span> <span class="p">=</span> <span class="n">fixed3</span><span class="p">(</span><span class="n">RGB</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kt">float</span> <span class="n">VSU</span> <span class="p">=</span> <span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">y</span><span class="p">*</span><span class="n">cos</span><span class="p">(</span><span class="n">shift</span><span class="p">.</span><span class="n">x</span><span class="p">*</span><span class="m">3.14159265</span><span class="p">/</span><span class="m">180</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"> <span class="kt">float</span> <span class="n">VSW</span> <span class="p">=</span> <span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">y</span><span class="p">*</span><span class="n">sin</span><span class="p">(</span><span class="n">shift</span><span class="p">.</span><span class="n">x</span><span class="p">*</span><span class="m">3.14159265</span><span class="p">/</span><span class="m">180</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">   
+</span></span><span class="line"><span class="cl"> <span class="n">RESULT</span><span class="p">.</span><span class="n">x</span> <span class="p">=</span> <span class="p">(.</span><span class="m">299</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">+.</span><span class="m">701</span><span class="p">*</span><span class="n">VSU</span><span class="p">+.</span><span class="m">168</span><span class="p">*</span><span class="n">VSW</span><span class="p">)*</span><span class="n">RGB</span><span class="p">.</span><span class="n">x</span>
+</span></span><span class="line"><span class="cl">     <span class="p">+</span> <span class="p">(.</span><span class="m">587</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">-.</span><span class="m">587</span><span class="p">*</span><span class="n">VSU</span><span class="p">+.</span><span class="m">330</span><span class="p">*</span><span class="n">VSW</span><span class="p">)*</span><span class="n">RGB</span><span class="p">.</span><span class="n">y</span>
+</span></span><span class="line"><span class="cl">     <span class="p">+</span> <span class="p">(.</span><span class="m">114</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">-.</span><span class="m">114</span><span class="p">*</span><span class="n">VSU</span><span class="p">-.</span><span class="m">497</span><span class="p">*</span><span class="n">VSW</span><span class="p">)*</span><span class="n">RGB</span><span class="p">.</span><span class="n">z</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">   
+</span></span><span class="line"><span class="cl"> <span class="n">RESULT</span><span class="p">.</span><span class="n">y</span> <span class="p">=</span> <span class="p">(.</span><span class="m">299</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">-.</span><span class="m">299</span><span class="p">*</span><span class="n">VSU</span><span class="p">-.</span><span class="m">328</span><span class="p">*</span><span class="n">VSW</span><span class="p">)*</span><span class="n">RGB</span><span class="p">.</span><span class="n">x</span>
+</span></span><span class="line"><span class="cl">     <span class="p">+</span> <span class="p">(.</span><span class="m">587</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">+.</span><span class="m">413</span><span class="p">*</span><span class="n">VSU</span><span class="p">+.</span><span class="m">035</span><span class="p">*</span><span class="n">VSW</span><span class="p">)*</span><span class="n">RGB</span><span class="p">.</span><span class="n">y</span>
+</span></span><span class="line"><span class="cl">     <span class="p">+</span> <span class="p">(.</span><span class="m">114</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">-.</span><span class="m">114</span><span class="p">*</span><span class="n">VSU</span><span class="p">+.</span><span class="m">292</span><span class="p">*</span><span class="n">VSW</span><span class="p">)*</span><span class="n">RGB</span><span class="p">.</span><span class="n">z</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">   
+</span></span><span class="line"><span class="cl"> <span class="n">RESULT</span><span class="p">.</span><span class="n">z</span> <span class="p">=</span> <span class="p">(.</span><span class="m">299</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">-.</span><span class="m">3</span><span class="p">*</span><span class="n">VSU</span><span class="p">+</span><span class="m">1.25</span><span class="p">*</span><span class="n">VSW</span><span class="p">)*</span><span class="n">RGB</span><span class="p">.</span><span class="n">x</span>
+</span></span><span class="line"><span class="cl">     <span class="p">+</span> <span class="p">(.</span><span class="m">587</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">-.</span><span class="m">588</span><span class="p">*</span><span class="n">VSU</span><span class="p">-</span><span class="m">1.05</span><span class="p">*</span><span class="n">VSW</span><span class="p">)*</span><span class="n">RGB</span><span class="p">.</span><span class="n">y</span>
+</span></span><span class="line"><span class="cl">     <span class="p">+</span> <span class="p">(.</span><span class="m">114</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">+.</span><span class="m">886</span><span class="p">*</span><span class="n">VSU</span><span class="p">-.</span><span class="m">203</span><span class="p">*</span><span class="n">VSW</span><span class="p">)*</span><span class="n">RGB</span><span class="p">.</span><span class="n">z</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">   
+</span></span><span class="line"><span class="cl"><span class="k">return</span> <span class="p">(</span><span class="n">RESULT</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">sampler2D</span> <span class="n">_MainTex</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">half</span> <span class="n">_Hue</span><span class="p">,</span> <span class="n">_Sat</span><span class="p">,</span> <span class="n">_Val</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">fixed4</span> <span class="n">frag</span><span class="p">(</span><span class="n">v2f</span> <span class="n">IN</span><span class="p">)</span> <span class="p">:</span> <span class="n">SV_Target</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"> <span class="n">fixed4</span> <span class="n">c</span> <span class="p">=</span> <span class="n">tex2D</span><span class="p">(</span><span class="n">_MainTex</span><span class="p">,</span> <span class="n">IN</span><span class="p">.</span><span class="n">texcoord</span><span class="p">)</span> <span class="p">*</span> <span class="n">IN</span><span class="p">.</span><span class="n">color</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">c</span><span class="p">.</span><span class="n">rgb</span> <span class="p">*=</span> <span class="n">c</span><span class="p">.</span><span class="n">a</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> <span class="n">half3</span> <span class="n">shift</span> <span class="p">=</span> <span class="n">half3</span><span class="p">(</span><span class="n">_Hue</span><span class="p">,</span> <span class="n">_Sat</span><span class="p">,</span> <span class="n">_Val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">   
+</span></span><span class="line"><span class="cl"> <span class="k">return</span> <span class="n">fixed4</span><span class="p">(</span> <span class="n">shift_col</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">shift</span><span class="p">),</span> <span class="n">c</span><span class="p">.</span><span class="n">a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h2 id="spriteに適用">Spriteに適用</h2>
+<p>あとは適当なマテリアルに作成したシェーダーをつけて、SpriteRendererに設定すれば良い（下図）。</p>
+<p><img src="sprite-hue-material.jpg" alt="マテリアルにshaderを設定"></p>
+<p>スクリプトから色相をシフトして、アニメーションする処理はこうなる。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="k">void</span> <span class="n">Update</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">angle</span> <span class="p">+=</span> <span class="m">60f</span> <span class="p">*</span> <span class="n">Time</span><span class="p">.</span><span class="n">deltaTime</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">renderer</span><span class="p">.</span><span class="n">material</span><span class="p">.</span><span class="n">SetFloat</span><span class="p">(</span><span class="s">&#34;_Hue&#34;</span><span class="p">,</span> <span class="n">angle</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h2 id="シェーダーの全ソース">シェーダーの全ソース</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="n">Shader</span> <span class="s">&#34;Sprites/HSV Default&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"> <span class="n">Properties</span>
+</span></span><span class="line"><span class="cl"> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="na">   [PerRendererData]</span> <span class="n">_MainTex</span> <span class="p">(</span><span class="s">&#34;Sprite Texture&#34;</span><span class="p">,</span> <span class="m">2D</span><span class="p">)</span> <span class="p">=</span> <span class="s">&#34;white&#34;</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">   <span class="n">_Color</span> <span class="p">(</span><span class="s">&#34;Tint&#34;</span><span class="p">,</span> <span class="n">Color</span><span class="p">)</span> <span class="p">=</span> <span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">   <span class="n">_Hue</span> <span class="p">(</span><span class="s">&#34;Hue&#34;</span><span class="p">,</span> <span class="n">Float</span><span class="p">)</span> <span class="p">=</span> <span class="m">0</span>
+</span></span><span class="line"><span class="cl">   <span class="n">_Sat</span> <span class="p">(</span><span class="s">&#34;Saturation&#34;</span><span class="p">,</span> <span class="n">Float</span><span class="p">)</span> <span class="p">=</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">   <span class="n">_Val</span> <span class="p">(</span><span class="s">&#34;Value&#34;</span><span class="p">,</span> <span class="n">Float</span><span class="p">)</span> <span class="p">=</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="na">   [MaterialToggle]</span> <span class="n">PixelSnap</span> <span class="p">(</span><span class="s">&#34;Pixel snap&#34;</span><span class="p">,</span> <span class="n">Float</span><span class="p">)</span> <span class="p">=</span> <span class="m">0</span>
+</span></span><span class="line"><span class="cl"> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> <span class="n">SubShader</span>
+</span></span><span class="line"><span class="cl"> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Tags</span>
+</span></span><span class="line"><span class="cl">   <span class="p">{</span>
+</span></span><span class="line"><span class="cl">     <span class="s">&#34;Queue&#34;</span><span class="p">=</span><span class="s">&#34;Transparent&#34;</span>
+</span></span><span class="line"><span class="cl">     <span class="s">&#34;IgnoreProjector&#34;</span><span class="p">=</span><span class="s">&#34;True&#34;</span>
+</span></span><span class="line"><span class="cl">     <span class="s">&#34;RenderType&#34;</span><span class="p">=</span><span class="s">&#34;Transparent&#34;</span>
+</span></span><span class="line"><span class="cl">     <span class="s">&#34;PreviewType&#34;</span><span class="p">=</span><span class="s">&#34;Plane&#34;</span>
+</span></span><span class="line"><span class="cl">     <span class="s">&#34;CanUseSpriteAtlas&#34;</span><span class="p">=</span><span class="s">&#34;True&#34;</span>
+</span></span><span class="line"><span class="cl">   <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   <span class="n">Cull</span> <span class="n">Off</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Lighting</span> <span class="n">Off</span>
+</span></span><span class="line"><span class="cl">   <span class="n">ZWrite</span> <span class="n">Off</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Fog</span> <span class="p">{</span> <span class="n">Mode</span> <span class="n">Off</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Blend</span> <span class="n">One</span> <span class="n">OneMinusSrcAlpha</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   <span class="n">Pass</span>
+</span></span><span class="line"><span class="cl">   <span class="p">{</span>
+</span></span><span class="line"><span class="cl">   <span class="n">CGPROGRAM</span>
+</span></span><span class="line"><span class="cl">     <span class="cp">#pragma</span> <span class="n">vertex</span> <span class="n">vert</span>
+</span></span><span class="line"><span class="cl">     <span class="cp">#pragma</span> <span class="n">fragment</span> <span class="n">frag</span>
+</span></span><span class="line"><span class="cl">     <span class="cp">#pragma</span> <span class="n">multi_compile</span> <span class="n">DUMMY</span> <span class="n">PIXELSNAP_ON</span>
+</span></span><span class="line"><span class="cl">     <span class="err">#</span><span class="n">include</span> <span class="s">&#34;UnityCG.cginc&#34;</span>
+</span></span><span class="line"><span class="cl">     
+</span></span><span class="line"><span class="cl">     <span class="k">struct</span> <span class="nc">appdata_t</span>
+</span></span><span class="line"><span class="cl">     <span class="p">{</span>
+</span></span><span class="line"><span class="cl">       <span class="n">float4</span> <span class="n">vertex</span>   <span class="p">:</span> <span class="n">POSITION</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">       <span class="n">float4</span> <span class="n">color</span>    <span class="p">:</span> <span class="n">COLOR</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">       <span class="n">float2</span> <span class="n">texcoord</span> <span class="p">:</span> <span class="n">TEXCOORD0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">     <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">     <span class="k">struct</span> <span class="nc">v2f</span>
+</span></span><span class="line"><span class="cl">     <span class="p">{</span>
+</span></span><span class="line"><span class="cl">       <span class="n">float4</span> <span class="n">vertex</span>   <span class="p">:</span> <span class="n">SV_POSITION</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">       <span class="n">fixed4</span> <span class="n">color</span>    <span class="p">:</span> <span class="n">COLOR</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">       <span class="n">half2</span> <span class="n">texcoord</span>  <span class="p">:</span> <span class="n">TEXCOORD0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">     <span class="p">};</span>
+</span></span><span class="line"><span class="cl">     
+</span></span><span class="line"><span class="cl">     <span class="n">fixed4</span> <span class="n">_Color</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">     <span class="n">v2f</span> <span class="n">vert</span><span class="p">(</span><span class="n">appdata_t</span> <span class="n">IN</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">     <span class="p">{</span>
+</span></span><span class="line"><span class="cl">       <span class="n">v2f</span> <span class="n">OUT</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">       <span class="n">OUT</span><span class="p">.</span><span class="n">vertex</span> <span class="p">=</span> <span class="n">mul</span><span class="p">(</span><span class="n">UNITY_MATRIX_MVP</span><span class="p">,</span> <span class="n">IN</span><span class="p">.</span><span class="n">vertex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">       <span class="n">OUT</span><span class="p">.</span><span class="n">texcoord</span> <span class="p">=</span> <span class="n">IN</span><span class="p">.</span><span class="n">texcoord</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">       <span class="n">OUT</span><span class="p">.</span><span class="n">color</span> <span class="p">=</span> <span class="n">IN</span><span class="p">.</span><span class="n">color</span> <span class="p">*</span> <span class="n">_Color</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">       <span class="err">#</span><span class="n">ifdef</span> <span class="n">PIXELSNAP_ON</span>
+</span></span><span class="line"><span class="cl">       <span class="n">OUT</span><span class="p">.</span><span class="n">vertex</span> <span class="p">=</span> <span class="n">UnityPixelSnap</span> <span class="p">(</span><span class="n">OUT</span><span class="p">.</span><span class="n">vertex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">       <span class="cp">#endif</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       <span class="k">return</span> <span class="n">OUT</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">     <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">     <span class="n">fixed3</span> <span class="n">shift_col</span><span class="p">(</span><span class="n">fixed3</span> <span class="n">RGB</span><span class="p">,</span> <span class="n">half3</span> <span class="n">shift</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">     <span class="p">{</span>
+</span></span><span class="line"><span class="cl">     <span class="n">fixed3</span> <span class="n">RESULT</span> <span class="p">=</span> <span class="n">fixed3</span><span class="p">(</span><span class="n">RGB</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">     <span class="kt">float</span> <span class="n">VSU</span> <span class="p">=</span> <span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">y</span><span class="p">*</span><span class="n">cos</span><span class="p">(</span><span class="n">shift</span><span class="p">.</span><span class="n">x</span><span class="p">*</span><span class="m">3.14159265</span><span class="p">/</span><span class="m">180</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">       <span class="kt">float</span> <span class="n">VSW</span> <span class="p">=</span> <span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">y</span><span class="p">*</span><span class="n">sin</span><span class="p">(</span><span class="n">shift</span><span class="p">.</span><span class="n">x</span><span class="p">*</span><span class="m">3.14159265</span><span class="p">/</span><span class="m">180</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">         
+</span></span><span class="line"><span class="cl">       <span class="n">RESULT</span><span class="p">.</span><span class="n">x</span> <span class="p">=</span> <span class="p">(.</span><span class="m">299</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">+.</span><span class="m">701</span><span class="p">*</span><span class="n">VSU</span><span class="p">+.</span><span class="m">168</span><span class="p">*</span><span class="n">VSW</span><span class="p">)*</span><span class="n">RGB</span><span class="p">.</span><span class="n">x</span>
+</span></span><span class="line"><span class="cl">           <span class="p">+</span> <span class="p">(.</span><span class="m">587</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">-.</span><span class="m">587</span><span class="p">*</span><span class="n">VSU</span><span class="p">+.</span><span class="m">330</span><span class="p">*</span><span class="n">VSW</span><span class="p">)*</span><span class="n">RGB</span><span class="p">.</span><span class="n">y</span>
+</span></span><span class="line"><span class="cl">           <span class="p">+</span> <span class="p">(.</span><span class="m">114</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">-.</span><span class="m">114</span><span class="p">*</span><span class="n">VSU</span><span class="p">-.</span><span class="m">497</span><span class="p">*</span><span class="n">VSW</span><span class="p">)*</span><span class="n">RGB</span><span class="p">.</span><span class="n">z</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">         
+</span></span><span class="line"><span class="cl">       <span class="n">RESULT</span><span class="p">.</span><span class="n">y</span> <span class="p">=</span> <span class="p">(.</span><span class="m">299</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">-.</span><span class="m">299</span><span class="p">*</span><span class="n">VSU</span><span class="p">-.</span><span class="m">328</span><span class="p">*</span><span class="n">VSW</span><span class="p">)*</span><span class="n">RGB</span><span class="p">.</span><span class="n">x</span>
+</span></span><span class="line"><span class="cl">           <span class="p">+</span> <span class="p">(.</span><span class="m">587</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">+.</span><span class="m">413</span><span class="p">*</span><span class="n">VSU</span><span class="p">+.</span><span class="m">035</span><span class="p">*</span><span class="n">VSW</span><span class="p">)*</span><span class="n">RGB</span><span class="p">.</span><span class="n">y</span>
+</span></span><span class="line"><span class="cl">           <span class="p">+</span> <span class="p">(.</span><span class="m">114</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">-.</span><span class="m">114</span><span class="p">*</span><span class="n">VSU</span><span class="p">+.</span><span class="m">292</span><span class="p">*</span><span class="n">VSW</span><span class="p">)*</span><span class="n">RGB</span><span class="p">.</span><span class="n">z</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">         
+</span></span><span class="line"><span class="cl">       <span class="n">RESULT</span><span class="p">.</span><span class="n">z</span> <span class="p">=</span> <span class="p">(.</span><span class="m">299</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">-.</span><span class="m">3</span><span class="p">*</span><span class="n">VSU</span><span class="p">+</span><span class="m">1.25</span><span class="p">*</span><span class="n">VSW</span><span class="p">)*</span><span class="n">RGB</span><span class="p">.</span><span class="n">x</span>
+</span></span><span class="line"><span class="cl">           <span class="p">+</span> <span class="p">(.</span><span class="m">587</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">-.</span><span class="m">588</span><span class="p">*</span><span class="n">VSU</span><span class="p">-</span><span class="m">1.05</span><span class="p">*</span><span class="n">VSW</span><span class="p">)*</span><span class="n">RGB</span><span class="p">.</span><span class="n">y</span>
+</span></span><span class="line"><span class="cl">           <span class="p">+</span> <span class="p">(.</span><span class="m">114</span><span class="p">*</span><span class="n">shift</span><span class="p">.</span><span class="n">z</span><span class="p">+.</span><span class="m">886</span><span class="p">*</span><span class="n">VSU</span><span class="p">-.</span><span class="m">203</span><span class="p">*</span><span class="n">VSW</span><span class="p">)*</span><span class="n">RGB</span><span class="p">.</span><span class="n">z</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">         
+</span></span><span class="line"><span class="cl">     <span class="k">return</span> <span class="p">(</span><span class="n">RESULT</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">     <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">     <span class="n">sampler2D</span> <span class="n">_MainTex</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">     <span class="n">half</span> <span class="n">_Hue</span><span class="p">,</span> <span class="n">_Sat</span><span class="p">,</span> <span class="n">_Val</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">     <span class="n">fixed4</span> <span class="n">frag</span><span class="p">(</span><span class="n">v2f</span> <span class="n">IN</span><span class="p">)</span> <span class="p">:</span> <span class="n">SV_Target</span>
+</span></span><span class="line"><span class="cl">     <span class="p">{</span>
+</span></span><span class="line"><span class="cl">       <span class="n">fixed4</span> <span class="n">c</span> <span class="p">=</span> <span class="n">tex2D</span><span class="p">(</span><span class="n">_MainTex</span><span class="p">,</span> <span class="n">IN</span><span class="p">.</span><span class="n">texcoord</span><span class="p">)</span> <span class="p">*</span> <span class="n">IN</span><span class="p">.</span><span class="n">color</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">       <span class="n">c</span><span class="p">.</span><span class="n">rgb</span> <span class="p">*=</span> <span class="n">c</span><span class="p">.</span><span class="n">a</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       <span class="n">half3</span> <span class="n">shift</span> <span class="p">=</span> <span class="n">half3</span><span class="p">(</span><span class="n">_Hue</span><span class="p">,</span> <span class="n">_Sat</span><span class="p">,</span> <span class="n">_Val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">         
+</span></span><span class="line"><span class="cl">       <span class="k">return</span> <span class="n">fixed4</span><span class="p">(</span> <span class="n">shift_col</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">shift</span><span class="p">),</span> <span class="n">c</span><span class="p">.</span><span class="n">a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">     <span class="p">}</span>
+</span></span><span class="line"><span class="cl">   <span class="n">ENDCG</span>
+</span></span><span class="line"><span class="cl">   <span class="p">}</span>
+</span></span><span class="line"><span class="cl"> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h2 id="確認バージョン">確認バージョン</h2>
+<p>Unity 4.6</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

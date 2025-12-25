@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">Laravel-リリースしたサービスの構成 | kido</title>
+<meta property="og:title" content="Laravel-リリースしたサービスの構成 | kido" />
+<meta name="twitter:title" content="Laravel-リリースしたサービスの構成 | kido" />
+<meta itemprop="name" content="Laravel-リリースしたサービスの構成 | kido" />
+<meta name="application-name" content="Laravel-リリースしたサービスの構成 | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/php/2019-12-17-service-env/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/php/2019-12-17-service-env/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="Laravel-リリースしたサービスの構成">
+  <meta property="og:description" content="基本構成 最近、仕事でLaravelを初めて使ってサービスをリリースしました。
+その構成を載せておきたいと思います。
+できるだけ費用を抑えたいのですべて、usリージョンです。
+サーバー
+GCPのGAEスタンダードのPHP7
+DB
+GCPのCloud SQL(MySQL5.7)
+フレームワーク
+Laravel5.8
+エラーレポート
+GCPのStackdriver
+セッション・キャッシュ
+DB
+ここまでは以下のドキュメントに沿ってデプロイしています。
+Run Laravel on Google App Engine standard environment
+GAEにはMemcacheの機能があり、キャッシュはそれを使えば良いと思っていたのですが、PHP7の構成には対応しておらず断念。
+月額が少々するMemorystoreを使用するか、無料枠があるRedis Labsが公式に勧められていますが、一旦DB使用で保留。
+DNS ムームーで取ったらしいドメインをCloud DNSに向けて、管理
+ストレージ Cloud Storageを使用しています。Laravelで使用するには以下のライブラリを使用しました。
+superbalist/laravel-google-cloud-storage
+ブログ機能 要件にブログ機能があったので、サブディレクトリでWordPressを動かしています。
+GAEのサブディレクトリでWordPressを動かす
+Basic認証 開発サーバにアクセス来ると困るということで、ベーシック認証を以下のライブラリでかけています。
+olssonm/l5-very-basic-auth
+Sitemap.xml サイトマップ作成は以下を使用しました。
+laravelium/sitemap
+画像加工 情報が多いので以下を使用しました。
+intervention/image
+ユーザの画像アップロード 以下の問題が発生したので、Firebaseを使用しました。
+GAEに画像をアップロードするのが遅い
+デプロイ また、デプロイ後以下のエラーが発生したので、app.yamlにはそれぞれのキャッシュファイルの保存場所を指定しています。
+Laravel on App Engine Standard: The /srv/bootstrap/cache directory must be present and writable
+APP_SERVICES_CACHE: /tmp/services.php APP_PACKAGES_CACHE: /tmp/packages.php APP_CONFIG_CACHE: /tmp/config.php APP_ROUTES_CACHE: /tmp/routes.php 開発用 Homesteadで開発。
+重いクエリとか見るのに以下のデバッグバーが必須。
+barryvdh/laravel-debugbar">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="php">
+    <meta property="article:published_time" content="2019-12-17T00:00:00+00:00">
+    <meta property="article:modified_time" content="2019-12-17T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Laravel-リリースしたサービスの構成">
+  <meta name="twitter:description" content="基本構成 最近、仕事でLaravelを初めて使ってサービスをリリースしました。
+その構成を載せておきたいと思います。
+できるだけ費用を抑えたいのですべて、usリージョンです。
+サーバー
+GCPのGAEスタンダードのPHP7
+DB
+GCPのCloud SQL(MySQL5.7)
+フレームワーク
+Laravel5.8
+エラーレポート
+GCPのStackdriver
+セッション・キャッシュ
+DB
+ここまでは以下のドキュメントに沿ってデプロイしています。
+Run Laravel on Google App Engine standard environment
+GAEにはMemcacheの機能があり、キャッシュはそれを使えば良いと思っていたのですが、PHP7の構成には対応しておらず断念。
+月額が少々するMemorystoreを使用するか、無料枠があるRedis Labsが公式に勧められていますが、一旦DB使用で保留。
+DNS ムームーで取ったらしいドメインをCloud DNSに向けて、管理
+ストレージ Cloud Storageを使用しています。Laravelで使用するには以下のライブラリを使用しました。
+superbalist/laravel-google-cloud-storage
+ブログ機能 要件にブログ機能があったので、サブディレクトリでWordPressを動かしています。
+GAEのサブディレクトリでWordPressを動かす
+Basic認証 開発サーバにアクセス来ると困るということで、ベーシック認証を以下のライブラリでかけています。
+olssonm/l5-very-basic-auth
+Sitemap.xml サイトマップ作成は以下を使用しました。
+laravelium/sitemap
+画像加工 情報が多いので以下を使用しました。
+intervention/image
+ユーザの画像アップロード 以下の問題が発生したので、Firebaseを使用しました。
+GAEに画像をアップロードするのが遅い
+デプロイ また、デプロイ後以下のエラーが発生したので、app.yamlにはそれぞれのキャッシュファイルの保存場所を指定しています。
+Laravel on App Engine Standard: The /srv/bootstrap/cache directory must be present and writable
+APP_SERVICES_CACHE: /tmp/services.php APP_PACKAGES_CACHE: /tmp/packages.php APP_CONFIG_CACHE: /tmp/config.php APP_ROUTES_CACHE: /tmp/routes.php 開発用 Homesteadで開発。
+重いクエリとか見るのに以下のデバッグバーが必須。
+barryvdh/laravel-debugbar">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/php/2019-12-17-service-env/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">Laravel-リリースしたサービスの構成</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/php" style="margin-right:10px;">PHP</a>
+                    <time datetime="2019-12-17T00:00:00&#43;00:00" itemprop="datePublished"> 2019/12/17 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <h2 id="基本構成">基本構成</h2>
+<p>最近、仕事でLaravelを初めて使ってサービスをリリースしました。<br>
+その構成を載せておきたいと思います。<br>
+できるだけ費用を抑えたいのですべて、usリージョンです。</p>
+<ul>
+<li>
+<p>サーバー<br>
+GCPのGAEスタンダードのPHP7</p>
+</li>
+<li>
+<p>DB<br>
+GCPのCloud SQL(MySQL5.7)</p>
+</li>
+<li>
+<p>フレームワーク<br>
+Laravel5.8</p>
+</li>
+<li>
+<p>エラーレポート<br>
+GCPのStackdriver</p>
+</li>
+<li>
+<p>セッション・キャッシュ<br>
+DB</p>
+</li>
+</ul>
+<p>ここまでは以下のドキュメントに沿ってデプロイしています。<br>
+<a href="https://cloud.google.com/community/tutorials/run-laravel-on-appengine-standard?hl=ja" class="blankA" target="_blank" rel="noopener noreferrer">Run Laravel on Google App Engine standard environment</a></p>
+<p>GAEにはMemcacheの機能があり、キャッシュはそれを使えば良いと思っていたのですが、PHP7の構成には対応しておらず断念。<br>
+月額が少々するMemorystoreを使用するか、無料枠があるRedis Labsが公式に勧められていますが、一旦DB使用で保留。</p>
+<h2 id="dns">DNS</h2>
+<p>ムームーで取ったらしいドメインをCloud DNSに向けて、管理</p>
+<h2 id="ストレージ">ストレージ</h2>
+<p>Cloud Storageを使用しています。Laravelで使用するには以下のライブラリを使用しました。<br>
+<a href="https://github.com/Superbalist/laravel-google-cloud-storage" class="blankA" target="_blank" rel="noopener noreferrer">superbalist/laravel-google-cloud-storage</a></p>
+<h2 id="ブログ機能">ブログ機能</h2>
+<p>要件にブログ機能があったので、サブディレクトリでWordPressを動かしています。<br>
+<a href="wordpress/2019-12-02-gae-wordpress/">GAEのサブディレクトリでWordPressを動かす</a></p>
+<h2 id="basic認証">Basic認証</h2>
+<p>開発サーバにアクセス来ると困るということで、ベーシック認証を以下のライブラリでかけています。<br>
+<a href="https://github.com/olssonm/l5-very-basic-auth" class="blankA" target="_blank" rel="noopener noreferrer">olssonm/l5-very-basic-auth</a></p>
+<h2 id="sitemapxml">Sitemap.xml</h2>
+<p>サイトマップ作成は以下を使用しました。<br>
+<a href="https://gitlab.com/Laravelium/Sitemap" class="blankA" target="_blank" rel="noopener noreferrer">laravelium/sitemap</a></p>
+<h2 id="画像加工">画像加工</h2>
+<p>情報が多いので以下を使用しました。<br>
+<a href="http://image.intervention.io/" class="blankA" target="_blank" rel="noopener noreferrer">intervention/image</a></p>
+<h2 id="ユーザの画像アップロード">ユーザの画像アップロード</h2>
+<p>以下の問題が発生したので、Firebaseを使用しました。<br>
+<a href="/server/2019-12-16-gae-image-upload-slow/">GAEに画像をアップロードするのが遅い</a></p>
+<h2 id="デプロイ">デプロイ</h2>
+<p>また、デプロイ後以下のエラーが発生したので、app.yamlにはそれぞれのキャッシュファイルの保存場所を指定しています。<br>
+<a href="https://stackoverflow.com/questions/56921310/laravel-on-app-engine-standard-the-srv-bootstrap-cache-directory-must-be-prese" class="blankA" target="_blank" rel="noopener noreferrer">Laravel on App Engine Standard: The /srv/bootstrap/cache directory must be present and writable</a></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">APP_SERVICES_CACHE</span><span class="p">:</span><span class="w"> </span><span class="l">/tmp/services.php</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">APP_PACKAGES_CACHE</span><span class="p">:</span><span class="w"> </span><span class="l">/tmp/packages.php</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">APP_CONFIG_CACHE</span><span class="p">:</span><span class="w"> </span><span class="l">/tmp/config.php</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">APP_ROUTES_CACHE</span><span class="p">:</span><span class="w"> </span><span class="l">/tmp/routes.php</span><span class="w">
+</span></span></span></code></pre></div><h2 id="開発用">開発用</h2>
+<p>Homesteadで開発。<br>
+重いクエリとか見るのに以下のデバッグバーが必須。<br>
+<a href="https://github.com/barryvdh/laravel-debugbar" class="blankA" target="_blank" rel="noopener noreferrer">barryvdh/laravel-debugbar</a></p>
+<p>Cloud SQLのテーブルとかを操作したいのでAdminerをLaravelで使用できる以下を導入してます。<br>
+<a href="https://github.com/onecentlin/laravel-adminer" class="blankA" target="_blank" rel="noopener noreferrer">onecentlin/laravel-adminer</a></p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

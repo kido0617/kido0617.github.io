@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">シーンビューにクオリティ設定のスライダーを出すエディタ拡張 | kido</title>
+<meta property="og:title" content="シーンビューにクオリティ設定のスライダーを出すエディタ拡張 | kido" />
+<meta name="twitter:title" content="シーンビューにクオリティ設定のスライダーを出すエディタ拡張 | kido" />
+<meta itemprop="name" content="シーンビューにクオリティ設定のスライダーを出すエディタ拡張 | kido" />
+<meta name="application-name" content="シーンビューにクオリティ設定のスライダーを出すエディタ拡張 | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/unity/2018-04-05-scene-quality/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/unity/2018-04-05-scene-quality/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="シーンビューにクオリティ設定のスライダーを出すエディタ拡張">
+  <meta property="og:description" content="Edit -&gt; Project Settings -&gt; Quality を選択するとQualitySettingsが開き、クオリティを設定できます。
+ただテストするときに毎回これを選択するのは面倒なのでシーンビューにクオリティを変更できるスライダーを表示したいと思います。
+図のような感じです。
+ソースは以下。
+using UnityEditor; using UnityEngine; public class EditorQualitySettings { static int quality = 0; static int tmpQuality = 0; [InitializeOnLoadMethod] static void AddGUI() { SceneView.onSceneGUIDelegate &#43;= OnGUI; quality = tmpQuality = QualitySettings.GetQualityLevel(); } static void OnGUI(SceneView sceneView) { GUI.WindowFunction func = id =&gt; { quality = EditorGUILayout.IntSlider(quality, 0, QualitySettings.names.Length - 1, GUILayout.Width(200)); if (tmpQuality != quality) { QualitySettings.SetQualityLevel(quality); tmpQuality = quality; } }; GUILayout.Window(1, new Rect(0, 15, 200, 40), func, &#34;Quality&#34;); } } 使用バージョン Unity 5.6.4f1">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="unity">
+    <meta property="article:published_time" content="2018-04-05T00:00:00+00:00">
+    <meta property="article:modified_time" content="2018-04-05T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="シーンビューにクオリティ設定のスライダーを出すエディタ拡張">
+  <meta name="twitter:description" content="Edit -&gt; Project Settings -&gt; Quality を選択するとQualitySettingsが開き、クオリティを設定できます。
+ただテストするときに毎回これを選択するのは面倒なのでシーンビューにクオリティを変更できるスライダーを表示したいと思います。
+図のような感じです。
+ソースは以下。
+using UnityEditor; using UnityEngine; public class EditorQualitySettings { static int quality = 0; static int tmpQuality = 0; [InitializeOnLoadMethod] static void AddGUI() { SceneView.onSceneGUIDelegate &#43;= OnGUI; quality = tmpQuality = QualitySettings.GetQualityLevel(); } static void OnGUI(SceneView sceneView) { GUI.WindowFunction func = id =&gt; { quality = EditorGUILayout.IntSlider(quality, 0, QualitySettings.names.Length - 1, GUILayout.Width(200)); if (tmpQuality != quality) { QualitySettings.SetQualityLevel(quality); tmpQuality = quality; } }; GUILayout.Window(1, new Rect(0, 15, 200, 40), func, &#34;Quality&#34;); } } 使用バージョン Unity 5.6.4f1">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/unity/2018-04-05-scene-quality/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">シーンビューにクオリティ設定のスライダーを出すエディタ拡張</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/unity" style="margin-right:10px;">Unity</a>
+                    <time datetime="2018-04-05T00:00:00&#43;00:00" itemprop="datePublished"> 2018/04/05 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <p><code>Edit</code> -&gt; <code>Project Settings</code> -&gt; <code>Quality</code> を選択すると<code>QualitySettings</code>が開き、クオリティを設定できます。<br>
+ただテストするときに毎回これを選択するのは面倒なのでシーンビューにクオリティを変更できるスライダーを表示したいと思います。<br>
+図のような感じです。</p>
+<p><img src="qualitysetting.png" alt="QualitySettingsスライダー"></p>
+<p>ソースは以下。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">UnityEditor</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">EditorQualitySettings</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kd">static</span> <span class="kt">int</span> <span class="n">quality</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">static</span> <span class="kt">int</span> <span class="n">tmpQuality</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="na">
+</span></span></span><span class="line"><span class="cl"><span class="na">  [InitializeOnLoadMethod]</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">static</span> <span class="k">void</span> <span class="n">AddGUI</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">SceneView</span><span class="p">.</span><span class="n">onSceneGUIDelegate</span> <span class="p">+=</span> <span class="n">OnGUI</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">quality</span> <span class="p">=</span> <span class="n">tmpQuality</span> <span class="p">=</span> <span class="n">QualitySettings</span><span class="p">.</span><span class="n">GetQualityLevel</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kd">static</span> <span class="k">void</span> <span class="n">OnGUI</span><span class="p">(</span><span class="n">SceneView</span> <span class="n">sceneView</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GUI</span><span class="p">.</span><span class="n">WindowFunction</span> <span class="n">func</span> <span class="p">=</span> <span class="n">id</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">quality</span> <span class="p">=</span> <span class="n">EditorGUILayout</span><span class="p">.</span><span class="n">IntSlider</span><span class="p">(</span><span class="n">quality</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">QualitySettings</span><span class="p">.</span><span class="n">names</span><span class="p">.</span><span class="n">Length</span> <span class="p">-</span> <span class="m">1</span><span class="p">,</span> <span class="n">GUILayout</span><span class="p">.</span><span class="n">Width</span><span class="p">(</span><span class="m">200</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="n">tmpQuality</span> <span class="p">!=</span> <span class="n">quality</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">QualitySettings</span><span class="p">.</span><span class="n">SetQualityLevel</span><span class="p">(</span><span class="n">quality</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">tmpQuality</span> <span class="p">=</span> <span class="n">quality</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GUILayout</span><span class="p">.</span><span class="n">Window</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="k">new</span> <span class="n">Rect</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">15</span><span class="p">,</span> <span class="m">200</span><span class="p">,</span> <span class="m">40</span><span class="p">),</span> <span class="n">func</span><span class="p">,</span> <span class="s">&#34;Quality&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h2 id="使用バージョン">使用バージョン</h2>
+<p>Unity 5.6.4f1</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

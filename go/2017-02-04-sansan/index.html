@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">Go言語でSansanのAPIを呼ぶ | kido</title>
+<meta property="og:title" content="Go言語でSansanのAPIを呼ぶ | kido" />
+<meta name="twitter:title" content="Go言語でSansanのAPIを呼ぶ | kido" />
+<meta itemprop="name" content="Go言語でSansanのAPIを呼ぶ | kido" />
+<meta name="application-name" content="Go言語でSansanのAPIを呼ぶ | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/go/2017-02-04-sansan/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/go/2017-02-04-sansan/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="Go言語でSansanのAPIを呼ぶ">
+  <meta property="og:description" content="準備 名刺管理のSansanはAPIを公開しており、自分の所有する名刺を検索したりすることができる。
+今回はそのAPIを使って名刺を検索してみる。
+まず、Sansanにログインして「管理者設定」から「外部サービス連携」をクリック。
+APIタブをクリックしたページで、APIキーを発行できる。ちなみにAPI利用にも権限があり、権限がないユーザでは発行できない。
+Go言語で実装 発行したAPIキーを使ってAPIを呼ぶが、方法は至ってシンプル。
+X-Sansan-Api-KeyヘッダにこのAPIキーを入れるだけで良い。
+というわけで、会社名で検索するときの、ソースが以下である。
+package main import ( &#34;encoding/json&#34; &#34;log&#34; &#34;net/http&#34; &#34;net/url&#34; &#34;github.com/davecgh/go-spew/spew&#34; ) const ( apiKey = &#34;xxxxxxxxxxxxxxxxxxxxx&#34; searchURL = &#34;https://api.sansan.com/v1.1/bizCards/search&#34; ) type SansanRes struct { HasMore bool `json:&#34;hasMore&#34;` Data []Card `json:&#34;data&#34;` } //本当はもっといろいろあるけど、ざっくりと type Card struct { LastName string `json:&#34;lastName&#34;` FirstName string `json:&#34;firstName&#34;` Email string `json:&#34;email&#34;` Mobile string `json:&#34;mobile&#34;` Tel string `json:&#34;tel&#34;` DepartmentName string `json:&#34;DepartmentName&#34;` Title string `json:&#34;title&#34;` CompanyName string `json:&#34;companyName&#34;` PostalCode string `json:&#34;postalCode&#34;` Address string `json:&#34;address&#34;` PersonId string `json:&#34;personId&#34;` } func main() { values := url.Values{} values.Add(&#34;companyName&#34;, &#34;test&#34;) //会社名をtestで検索 values.Add(&#34;range&#34;, &#34;all&#34;) //会社全体で持ってる名刺を検索 req, err := http.NewRequest(&#34;GET&#34;, searchURL&#43;&#34;?&#34;&#43;values.Encode(), nil) if err != nil { log.Fatal(&#34;http request error&#34;, err.Error()) } req.Header.Set(&#34;X-Sansan-Api-Key&#34;, apiKey) client := new(http.Client) resp, err := client.Do(req) if err != nil { log.Fatal(err.Error()) } defer resp.Body.Close() dec := json.NewDecoder(resp.Body) var res SansanRes dec.Decode(&amp;res) spew.Dump(res) //表示 }">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="go">
+    <meta property="article:published_time" content="2017-02-04T00:00:00+00:00">
+    <meta property="article:modified_time" content="2017-02-04T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Go言語でSansanのAPIを呼ぶ">
+  <meta name="twitter:description" content="準備 名刺管理のSansanはAPIを公開しており、自分の所有する名刺を検索したりすることができる。
+今回はそのAPIを使って名刺を検索してみる。
+まず、Sansanにログインして「管理者設定」から「外部サービス連携」をクリック。
+APIタブをクリックしたページで、APIキーを発行できる。ちなみにAPI利用にも権限があり、権限がないユーザでは発行できない。
+Go言語で実装 発行したAPIキーを使ってAPIを呼ぶが、方法は至ってシンプル。
+X-Sansan-Api-KeyヘッダにこのAPIキーを入れるだけで良い。
+というわけで、会社名で検索するときの、ソースが以下である。
+package main import ( &#34;encoding/json&#34; &#34;log&#34; &#34;net/http&#34; &#34;net/url&#34; &#34;github.com/davecgh/go-spew/spew&#34; ) const ( apiKey = &#34;xxxxxxxxxxxxxxxxxxxxx&#34; searchURL = &#34;https://api.sansan.com/v1.1/bizCards/search&#34; ) type SansanRes struct { HasMore bool `json:&#34;hasMore&#34;` Data []Card `json:&#34;data&#34;` } //本当はもっといろいろあるけど、ざっくりと type Card struct { LastName string `json:&#34;lastName&#34;` FirstName string `json:&#34;firstName&#34;` Email string `json:&#34;email&#34;` Mobile string `json:&#34;mobile&#34;` Tel string `json:&#34;tel&#34;` DepartmentName string `json:&#34;DepartmentName&#34;` Title string `json:&#34;title&#34;` CompanyName string `json:&#34;companyName&#34;` PostalCode string `json:&#34;postalCode&#34;` Address string `json:&#34;address&#34;` PersonId string `json:&#34;personId&#34;` } func main() { values := url.Values{} values.Add(&#34;companyName&#34;, &#34;test&#34;) //会社名をtestで検索 values.Add(&#34;range&#34;, &#34;all&#34;) //会社全体で持ってる名刺を検索 req, err := http.NewRequest(&#34;GET&#34;, searchURL&#43;&#34;?&#34;&#43;values.Encode(), nil) if err != nil { log.Fatal(&#34;http request error&#34;, err.Error()) } req.Header.Set(&#34;X-Sansan-Api-Key&#34;, apiKey) client := new(http.Client) resp, err := client.Do(req) if err != nil { log.Fatal(err.Error()) } defer resp.Body.Close() dec := json.NewDecoder(resp.Body) var res SansanRes dec.Decode(&amp;res) spew.Dump(res) //表示 }">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/go/2017-02-04-sansan/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">Go言語でSansanのAPIを呼ぶ</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/golang" style="margin-right:10px;">Golang</a>
+                    <time datetime="2017-02-04T00:00:00&#43;00:00" itemprop="datePublished"> 2017/02/04 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <h2 id="準備">準備</h2>
+<p>名刺管理のSansanはAPIを公開しており、自分の所有する名刺を検索したりすることができる。<br>
+今回はそのAPIを使って名刺を検索してみる。<br>
+まず、Sansanにログインして「管理者設定」から「外部サービス連携」をクリック。<br>
+APIタブをクリックしたページで、APIキーを発行できる。ちなみにAPI利用にも権限があり、権限がないユーザでは発行できない。</p>
+<h2 id="go言語で実装">Go言語で実装</h2>
+<p>発行したAPIキーを使ってAPIを呼ぶが、方法は至ってシンプル。<br>
+X-Sansan-Api-KeyヘッダにこのAPIキーを入れるだけで良い。<br>
+というわけで、会社名で検索するときの、ソースが以下である。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;encoding/json&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;log&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;net/http&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;net/url&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/davecgh/go-spew/spew&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">const</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">apiKey</span>    <span class="p">=</span> <span class="s">&#34;xxxxxxxxxxxxxxxxxxxxx&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">searchURL</span> <span class="p">=</span> <span class="s">&#34;https://api.sansan.com/v1.1/bizCards/search&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">SansanRes</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">HasMore</span> <span class="kt">bool</span>   <span class="s">`json:&#34;hasMore&#34;`</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">Data</span>    <span class="p">[]</span><span class="nx">Card</span> <span class="s">`json:&#34;data&#34;`</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//本当はもっといろいろあるけど、ざっくりと</span>
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Card</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">LastName</span>       <span class="kt">string</span> <span class="s">`json:&#34;lastName&#34;`</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">FirstName</span>      <span class="kt">string</span> <span class="s">`json:&#34;firstName&#34;`</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">Email</span>          <span class="kt">string</span> <span class="s">`json:&#34;email&#34;`</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">Mobile</span>         <span class="kt">string</span> <span class="s">`json:&#34;mobile&#34;`</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">Tel</span>            <span class="kt">string</span> <span class="s">`json:&#34;tel&#34;`</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">DepartmentName</span> <span class="kt">string</span> <span class="s">`json:&#34;DepartmentName&#34;`</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">Title</span>          <span class="kt">string</span> <span class="s">`json:&#34;title&#34;`</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">CompanyName</span>    <span class="kt">string</span> <span class="s">`json:&#34;companyName&#34;`</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">PostalCode</span>     <span class="kt">string</span> <span class="s">`json:&#34;postalCode&#34;`</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">Address</span>        <span class="kt">string</span> <span class="s">`json:&#34;address&#34;`</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">PersonId</span>       <span class="kt">string</span> <span class="s">`json:&#34;personId&#34;`</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">values</span> <span class="o">:=</span> <span class="nx">url</span><span class="p">.</span><span class="nx">Values</span><span class="p">{}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">values</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="s">&#34;companyName&#34;</span><span class="p">,</span> <span class="s">&#34;test&#34;</span><span class="p">)</span> <span class="c1">//会社名をtestで検索</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">values</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="s">&#34;range&#34;</span><span class="p">,</span> <span class="s">&#34;all&#34;</span><span class="p">)</span>        <span class="c1">//会社全体で持ってる名刺を検索</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">req</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">NewRequest</span><span class="p">(</span><span class="s">&#34;GET&#34;</span><span class="p">,</span> <span class="nx">searchURL</span><span class="o">+</span><span class="s">&#34;?&#34;</span><span class="o">+</span><span class="nx">values</span><span class="p">.</span><span class="nf">Encode</span><span class="p">(),</span> <span class="kc">nil</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="s">&#34;http request error&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">req</span><span class="p">.</span><span class="nx">Header</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;X-Sansan-Api-Key&#34;</span><span class="p">,</span> <span class="nx">apiKey</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">client</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">defer</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">dec</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">NewDecoder</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">res</span> <span class="nx">SansanRes</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">dec</span><span class="p">.</span><span class="nf">Decode</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">res</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">spew</span><span class="p">.</span><span class="nf">Dump</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="c1">//表示</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>

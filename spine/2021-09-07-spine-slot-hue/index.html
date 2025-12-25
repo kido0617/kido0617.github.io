@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">UnityでSpineのslotのマテリアルを変更する | kido</title>
+<meta property="og:title" content="UnityでSpineのslotのマテリアルを変更する | kido" />
+<meta name="twitter:title" content="UnityでSpineのslotのマテリアルを変更する | kido" />
+<meta itemprop="name" content="UnityでSpineのslotのマテリアルを変更する | kido" />
+<meta name="application-name" content="UnityでSpineのslotのマテリアルを変更する | kido" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="ゲーム制作と技術ブログ">
+<meta itemprop="description" content="ゲーム制作と技術ブログ" />
+<meta property="og:description" content="ゲーム制作と技術ブログ" />
+<meta name="twitter:description" content="ゲーム制作と技術ブログ" />
+
+<meta property="og:locale" content="ja" />
+<meta name="language" content="ja" />
+
+  <link rel="alternate" hreflang="ja" href="https://kido0617.github.io/spine/2021-09-07-spine-slot-hue/" title="" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.8">
+
+    
+    <meta property="og:url" content="https://kido0617.github.io/spine/2021-09-07-spine-slot-hue/">
+  <meta property="og:site_name" content="kido">
+  <meta property="og:title" content="UnityでSpineのslotのマテリアルを変更する">
+  <meta property="og:description" content="概要 Unityで読み込んだSpineで作ったモデルの特定のスロットだけマテリアルを変えたいケースがあります。
+例えば、帽子の色の色相を変えたいとか、髪の毛のコントラストを変えたいなどです。
+その方法について調べたので今回まとめました。
+まず、今回使用するサンプルのSpineのツリーとモデルを以下に示します。
+単純に赤色の四角を2つ用意し、今回はマテリアルを変更する例として片方の色相を変えることを目指します。
+色相を変えるには まず、Unityにインポートしたモデル全体の色相を変える方法を示します。
+インポートした際に生成されるマテリアルのShaderをSpine/Sprite/のShaderに変えます。
+ライティングの有無により違いますが今回はUnlitを使用しました。
+このShaderにはColorAdjustmentの項目があり、これをチェックするとHueの値を変更できます。
+上図のようにHueを0.14にすると下記のように色が変更されます。
+Slotの色相を変える-方法1 Slotの色相を変える方法は2つあり、その1つがSkeletonRendererCustomMaterialsを使用する方法です。
+このコンポーネントをアタッチし、変更したいSlotに別途用意した色相を変更済みのマテリアルを設定するだけで変更可能です。
+上図のようにRed_Lに別途用意したマテリアルを設定すると下図のように片方だけ変わります。
+Slotの色相を変える-方法2 上記方法ではなく、プログラムから色相を変えたいケースがあります。
+上記のSkeletonRendererCustomMaterialsはドキュメントにあるようにプログラムから使用するものではないようです。
+プログラムから変更したい場合はSkeletonRenderer.CustomSlotMaterialsを使用するようです。
+以下に、CustomSlotMaterialsを用いて色相を変更するプログラムを載せます。
+using Spine.Unity; using UnityEngine; public class ChangeHue : MonoBehaviour { public float hue = 0.14f; void Start() { var skeletonRenderer = GetComponent&lt;SkeletonRenderer&gt;(); var SkeletonAnimation = GetComponent&lt;SkeletonAnimation&gt;(); var slot = SkeletonAnimation.Skeleton.FindSlot(&#34;Red_L&#34;); //Red_Lスロットを探す Material m = new Material(GetComponent&lt;MeshRenderer&gt;().material); //現在使用しているMaterialを元に新しいMaterialを生成する m.SetFloat(&#34;_Hue&#34;, hue); skeletonRenderer.CustomSlotMaterials[slot] = m; } } Shaderのパラメータの_Hueというパラメータ名はShaderのファイルを選択すると、インスペクタに表示されます。
+まとめ 今回はスロットのMaterialを変える例として色相を変更しましたが、他の要素を変えるのも要領は同じです。
+2通りの方法、どちらもコンポーネントをアタッチしたモデルのみマテリアルの変更が反映されます。
+使用バージョン Unity 2020.3.11
+Spine 4.0.24">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="spine">
+    <meta property="article:published_time" content="2021-09-07T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-09-07T00:00:00+00:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="UnityでSpineのslotのマテリアルを変更する">
+  <meta name="twitter:description" content="概要 Unityで読み込んだSpineで作ったモデルの特定のスロットだけマテリアルを変えたいケースがあります。
+例えば、帽子の色の色相を変えたいとか、髪の毛のコントラストを変えたいなどです。
+その方法について調べたので今回まとめました。
+まず、今回使用するサンプルのSpineのツリーとモデルを以下に示します。
+単純に赤色の四角を2つ用意し、今回はマテリアルを変更する例として片方の色相を変えることを目指します。
+色相を変えるには まず、Unityにインポートしたモデル全体の色相を変える方法を示します。
+インポートした際に生成されるマテリアルのShaderをSpine/Sprite/のShaderに変えます。
+ライティングの有無により違いますが今回はUnlitを使用しました。
+このShaderにはColorAdjustmentの項目があり、これをチェックするとHueの値を変更できます。
+上図のようにHueを0.14にすると下記のように色が変更されます。
+Slotの色相を変える-方法1 Slotの色相を変える方法は2つあり、その1つがSkeletonRendererCustomMaterialsを使用する方法です。
+このコンポーネントをアタッチし、変更したいSlotに別途用意した色相を変更済みのマテリアルを設定するだけで変更可能です。
+上図のようにRed_Lに別途用意したマテリアルを設定すると下図のように片方だけ変わります。
+Slotの色相を変える-方法2 上記方法ではなく、プログラムから色相を変えたいケースがあります。
+上記のSkeletonRendererCustomMaterialsはドキュメントにあるようにプログラムから使用するものではないようです。
+プログラムから変更したい場合はSkeletonRenderer.CustomSlotMaterialsを使用するようです。
+以下に、CustomSlotMaterialsを用いて色相を変更するプログラムを載せます。
+using Spine.Unity; using UnityEngine; public class ChangeHue : MonoBehaviour { public float hue = 0.14f; void Start() { var skeletonRenderer = GetComponent&lt;SkeletonRenderer&gt;(); var SkeletonAnimation = GetComponent&lt;SkeletonAnimation&gt;(); var slot = SkeletonAnimation.Skeleton.FindSlot(&#34;Red_L&#34;); //Red_Lスロットを探す Material m = new Material(GetComponent&lt;MeshRenderer&gt;().material); //現在使用しているMaterialを元に新しいMaterialを生成する m.SetFloat(&#34;_Hue&#34;, hue); skeletonRenderer.CustomSlotMaterials[slot] = m; } } Shaderのパラメータの_Hueというパラメータ名はShaderのファイルを選択すると、インスペクタに表示されます。
+まとめ 今回はスロットのMaterialを変える例として色相を変更しましたが、他の要素を変えるのも要領は同じです。
+2通りの方法、どちらもコンポーネントをアタッチしたモデルのみマテリアルの変更が反映されます。
+使用バージョン Unity 2020.3.11
+Spine 4.0.24">
+
+
+    
+
+    <link rel="canonical" href="https://kido0617.github.io/spine/2021-09-07-spine-slot-hue/">
+    <link href="/style.min.e390ba7da26222f4dc42a349955d76dbbe44e5ce2535a43de5a70633a0a9ec3c.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    <link href="/css/custom.css?v=1" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="https://kido0617.github.io/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.min.8961c317c5b88b953fe27525839672c9343f1058ab044696ca225656c8ba2ab0.js" integrity="sha256-iWHDF8W4i5U/4nUlg5ZyyTQ/EFirBEaWyiJWVsi6KrA="></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="https://kido0617.github.io/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title>ホーム</title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        技術ブログ
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/pages/career/">
+                        経歴
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">UnityでSpineのslotのマテリアルを変更する</h1>
+                
+                
+                
+                <div class="post-meta">
+                    
+                    <a href="/categories/spine" style="margin-right:10px;">Spine</a>
+                    <time datetime="2021-09-07T00:00:00&#43;00:00" itemprop="datePublished"> 2021/09/07 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <h2 id="概要">概要</h2>
+<p>Unityで読み込んだSpineで作ったモデルの特定のスロットだけマテリアルを変えたいケースがあります。<br>
+例えば、帽子の色の色相を変えたいとか、髪の毛のコントラストを変えたいなどです。<br>
+その方法について調べたので今回まとめました。</p>
+<p>まず、今回使用するサンプルのSpineのツリーとモデルを以下に示します。</p>
+<p><img src="spine-tree.jpg" alt="サンプル"></p>
+<p><img src="original-model.jpg" alt="モデル"></p>
+<p>単純に赤色の四角を2つ用意し、今回はマテリアルを変更する例として片方の色相を変えることを目指します。</p>
+<h2 id="色相を変えるには">色相を変えるには</h2>
+<p>まず、Unityにインポートしたモデル全体の色相を変える方法を示します。<br>
+インポートした際に生成されるマテリアルのShaderを<code>Spine/Sprite/</code>のShaderに変えます。<br>
+ライティングの有無により違いますが今回は<code>Unlit</code>を使用しました。<br>
+このShaderにはColorAdjustmentの項目があり、これをチェックするとHueの値を変更できます。</p>
+<p><img src="change-hue.jpg" alt="マテリアル"></p>
+<p>上図のようにHueを0.14にすると下記のように色が変更されます。</p>
+<p><img src="changed-hue.jpg" alt="Hueチェンジ"></p>
+<h2 id="slotの色相を変える-方法1">Slotの色相を変える-方法1</h2>
+<p>Slotの色相を変える方法は2つあり、その1つが<a href="http://ja.esotericsoftware.com/spine-unity#SkeletonRendererCustomMaterials" class="blankA" target="_blank" rel="noopener noreferrer">SkeletonRendererCustomMaterials</a>を使用する方法です。<br>
+このコンポーネントをアタッチし、変更したいSlotに別途用意した色相を変更済みのマテリアルを設定するだけで変更可能です。</p>
+<p><img src="srcm-inspector.jpg" alt="SkeletonRendererCustomMaterials"></p>
+<p>上図のようにRed_Lに別途用意したマテリアルを設定すると下図のように片方だけ変わります。</p>
+<p><img src="using-srcm.jpg" alt="Red_Lスロットを変更"></p>
+<h2 id="slotの色相を変える-方法2">Slotの色相を変える-方法2</h2>
+<p>上記方法ではなく、プログラムから色相を変えたいケースがあります。<br>
+上記のSkeletonRendererCustomMaterialsはドキュメントにあるようにプログラムから使用するものではないようです。<br>
+プログラムから変更したい場合は<code>SkeletonRenderer.CustomSlotMaterials</code>を使用するようです。<br>
+以下に、CustomSlotMaterialsを用いて色相を変更するプログラムを載せます。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">Spine.Unity</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">ChangeHue</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">public</span> <span class="kt">float</span> <span class="n">hue</span> <span class="p">=</span> <span class="m">0.14f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">void</span> <span class="n">Start</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">var</span> <span class="n">skeletonRenderer</span> <span class="p">=</span> <span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">SkeletonRenderer</span><span class="p">&gt;();</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">var</span> <span class="n">SkeletonAnimation</span> <span class="p">=</span> <span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">SkeletonAnimation</span><span class="p">&gt;();</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">var</span> <span class="n">slot</span> <span class="p">=</span> <span class="n">SkeletonAnimation</span><span class="p">.</span><span class="n">Skeleton</span><span class="p">.</span><span class="n">FindSlot</span><span class="p">(</span><span class="s">&#34;Red_L&#34;</span><span class="p">);</span>           <span class="c1">//Red_Lスロットを探す</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Material</span> <span class="n">m</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Material</span><span class="p">(</span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">MeshRenderer</span><span class="p">&gt;().</span><span class="n">material</span><span class="p">);</span>  <span class="c1">//現在使用しているMaterialを元に新しいMaterialを生成する</span>
+</span></span><span class="line"><span class="cl">    <span class="n">m</span><span class="p">.</span><span class="n">SetFloat</span><span class="p">(</span><span class="s">&#34;_Hue&#34;</span><span class="p">,</span> <span class="n">hue</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">skeletonRenderer</span><span class="p">.</span><span class="n">CustomSlotMaterials</span><span class="p">[</span><span class="n">slot</span><span class="p">]</span> <span class="p">=</span> <span class="n">m</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>Shaderのパラメータの_Hueというパラメータ名はShaderのファイルを選択すると、インスペクタに表示されます。</p>
+<p><img src="shader-file.jpg" alt="パラメータの確認"></p>
+<h2 id="まとめ">まとめ</h2>
+<p>今回はスロットのMaterialを変える例として色相を変更しましたが、他の要素を変えるのも要領は同じです。<br>
+2通りの方法、どちらもコンポーネントをアタッチしたモデルのみマテリアルの変更が反映されます。</p>
+<h2 id="使用バージョン">使用バージョン</h2>
+<p>Unity 2020.3.11<br>
+Spine 4.0.24</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <small class="footer_copyright">© 2025 <a href="/">kido.</a></small>
+</footer>
+
+
+
+
+
+
+
+    
+    <script src="https://kido0617.github.io/js/main.min.4ee188e1744c19816e95a540b2650ed9f033ea0371e74eac8e717355cfca8741.js" integrity="sha256-TuGI4XRMGYFulaVAsmUO2fAz6gNx506sjnFzVc/Kh0E="></script>
+
+    
+
+</body>
+</html>
